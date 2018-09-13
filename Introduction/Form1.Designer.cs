@@ -39,6 +39,7 @@
             this.redToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.greenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.blueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rGBCombineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.blackWhiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sepiaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.brightnessContrastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +50,6 @@
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.paintToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cartoonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rGBCombineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -95,7 +95,7 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenFileUI);
             // 
@@ -140,6 +140,12 @@
             this.blueToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.blueToolStripMenuItem.Text = "Blue";
             // 
+            // rGBCombineToolStripMenuItem
+            // 
+            this.rGBCombineToolStripMenuItem.Name = "rGBCombineToolStripMenuItem";
+            this.rGBCombineToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rGBCombineToolStripMenuItem.Text = "RGB (Combine)";
+            // 
             // blackWhiteToolStripMenuItem
             // 
             this.blackWhiteToolStripMenuItem.Name = "blackWhiteToolStripMenuItem";
@@ -152,7 +158,6 @@
             this.sepiaToolStripMenuItem.Name = "sepiaToolStripMenuItem";
             this.sepiaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sepiaToolStripMenuItem.Text = "Sepia";
-            this.sepiaToolStripMenuItem.Click += new System.EventHandler(this.SepiaToolUI);
             // 
             // brightnessContrastToolStripMenuItem
             // 
@@ -178,42 +183,37 @@
             this.hSVToolStripMenuItem.Name = "hSVToolStripMenuItem";
             this.hSVToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.hSVToolStripMenuItem.Text = "HSV";
+            this.hSVToolStripMenuItem.Click += new System.EventHandler(this.HSVEffectUI);
             // 
             // doubleExposureToolStripMenuItem
             // 
             this.doubleExposureToolStripMenuItem.Name = "doubleExposureToolStripMenuItem";
-            this.doubleExposureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.doubleExposureToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.doubleExposureToolStripMenuItem.Text = "Double Exposure";
             // 
             // blurToolStripMenuItem
             // 
             this.blurToolStripMenuItem.Name = "blurToolStripMenuItem";
-            this.blurToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.blurToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.blurToolStripMenuItem.Text = "Blur";
             // 
             // windowToolStripMenuItem
             // 
             this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
-            this.windowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.windowToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.windowToolStripMenuItem.Text = "Window";
             // 
             // paintToolStripMenuItem
             // 
             this.paintToolStripMenuItem.Name = "paintToolStripMenuItem";
-            this.paintToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.paintToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.paintToolStripMenuItem.Text = "Paint";
             // 
             // cartoonToolStripMenuItem
             // 
             this.cartoonToolStripMenuItem.Name = "cartoonToolStripMenuItem";
-            this.cartoonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cartoonToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.cartoonToolStripMenuItem.Text = "Cartoon";
-            // 
-            // rGBCombineToolStripMenuItem
-            // 
-            this.rGBCombineToolStripMenuItem.Name = "rGBCombineToolStripMenuItem";
-            this.rGBCombineToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.rGBCombineToolStripMenuItem.Text = "RGB (Combine)";
             // 
             // Filter
             // 
@@ -225,7 +225,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Filter";
-            this.Text = "Filter";
+            this.Text = "Image Effects";
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).EndInit();
             this.menuStrip1.ResumeLayout(false);

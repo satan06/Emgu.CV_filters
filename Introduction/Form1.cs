@@ -27,15 +27,13 @@ namespace Introduction
                 imageBoxRs.Image = filter.sourceImage;
             }
         }
-
         private void BWToolUI(object sender, EventArgs e)
         {
             imageBoxRs.Image = filter.BWConvert();
         }
-
-        private void SepiaToolUI(object sender, EventArgs e)
+        private void HSVEffectUI(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.Sepia();
+            imageBox.Image = filter.ChangeBrightness(10);
         }
     }
 }

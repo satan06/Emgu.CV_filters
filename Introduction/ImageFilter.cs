@@ -129,21 +129,22 @@ namespace Introduction
 
             return destImage;
         }
-        public Image<Hsv, byte> ChangeBrightness(double brightness)
+        public Image<Bgr, byte> ChangeBrightness(double brightness = 25)
         {
-            Image<Hsv, byte> hsvImage = sourceImage.Convert<Hsv, byte>();
-            Image<Gray, byte>[] channels;
-            Image<Gray, byte> imgval;
-            Gray color = new Gray(brightness);
-            VectorOfMat vm = new VectorOfMat();
-            Image<Hsv, byte> destImage = null;
+            Image<Bgr, byte> destImage = sourceImage;
 
-            channels = hsvImage.Split();  //split into components
-            channels[2].SetValue(color);
-            imgval = channels[2];         //hsv, so channels[2] is value.
-
-            for (byte ch = 0; ch < channels.Length; ch++) { vm.Push(channels[ch]); }
-            CvInvoke.Merge(vm, destImage);
+            for (int channel = 0; channel < destImage.NumberOfChannels; channel++)
+            {
+                for (int x = 0; x < destImage.Width; x++)
+                {
+                    for (int y = 0; y < destImage.Height; y++)
+                    {
+                        byte color = destImage.Data[y, x, channel];
+                        color += (Byte)brightness;
+                        destImage.Data[y, x, channel] = color;
+                    }
+                }
+            }
 
             return destImage;
         }

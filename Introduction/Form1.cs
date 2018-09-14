@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Emgu.CV.UI;
+using System;
 using System.Windows.Forms;
 
 namespace Introduction
@@ -9,7 +10,10 @@ namespace Introduction
 
         public Filter()
         {
-            InitializeComponent();          
+            InitializeComponent();
+
+            imageBox.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
+            imageBoxRs.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
         }
 
         private void OpenFileUI(object sender, EventArgs e)
@@ -42,6 +46,10 @@ namespace Introduction
         private void GreenChUI(object sender, EventArgs e)
         {
             imageBoxRs.Image = filter.Split(1);
+        }
+        private void BrightToolUI(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ChangeBrightness();
         }
     }
 }

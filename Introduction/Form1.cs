@@ -35,21 +35,31 @@ namespace Introduction
         {
             imageBoxRs.Image = filter.BWConvert();
         }
+        #region BgrFilters
         private void RedChUI(object sender, EventArgs e)
         {
-           imageBoxRs.Image = filter.Split(0);
+           imageBoxRs.Image = filter.Channel(2);
         }
         private void BlueChUI(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.Split(2);
+            imageBoxRs.Image = filter.Channel(0);
         }
         private void GreenChUI(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.Split(1);
+            imageBoxRs.Image = filter.Channel(1);
         }
+        #endregion
         private void BrightToolUI(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.ChangeBrightness();
+            Brightness br = new Brightness();
+
+            br.ShowDialog();
+            imageBoxRs.Image = filter.ChangeBrightness(br.brValue);
+        }
+
+        private void ChCombUI(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ChannelCombine();
         }
     }
 }

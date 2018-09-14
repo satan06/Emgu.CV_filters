@@ -152,6 +152,7 @@
             this.rGBCombineToolStripMenuItem.Name = "rGBCombineToolStripMenuItem";
             this.rGBCombineToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rGBCombineToolStripMenuItem.Text = "RGB (Combine)";
+            this.rGBCombineToolStripMenuItem.Click += new System.EventHandler(this.ChCombUI);
             // 
             // blackWhiteToolStripMenuItem
             // 
@@ -182,37 +183,37 @@
             // hSVToolStripMenuItem
             // 
             this.hSVToolStripMenuItem.Name = "hSVToolStripMenuItem";
-            this.hSVToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.hSVToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.hSVToolStripMenuItem.Text = "HSV";
             // 
             // doubleExposureToolStripMenuItem
             // 
             this.doubleExposureToolStripMenuItem.Name = "doubleExposureToolStripMenuItem";
-            this.doubleExposureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.doubleExposureToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.doubleExposureToolStripMenuItem.Text = "Double Exposure";
             // 
             // blurToolStripMenuItem
             // 
             this.blurToolStripMenuItem.Name = "blurToolStripMenuItem";
-            this.blurToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.blurToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.blurToolStripMenuItem.Text = "Blur";
             // 
             // windowToolStripMenuItem
             // 
             this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
-            this.windowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.windowToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.windowToolStripMenuItem.Text = "Window";
             // 
             // paintToolStripMenuItem
             // 
             this.paintToolStripMenuItem.Name = "paintToolStripMenuItem";
-            this.paintToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.paintToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.paintToolStripMenuItem.Text = "Paint";
             // 
             // cartoonToolStripMenuItem
             // 
             this.cartoonToolStripMenuItem.Name = "cartoonToolStripMenuItem";
-            this.cartoonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cartoonToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.cartoonToolStripMenuItem.Text = "Cartoon";
             // 
             // brightnessToolStripMenuItem

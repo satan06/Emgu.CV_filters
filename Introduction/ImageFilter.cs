@@ -72,7 +72,7 @@ namespace Introduction
                 Denoise();
                 return resultImage;
         }
-        public Image<Gray, byte> Split(byte channelIndex)
+        public Image<Gray, byte> Channel(byte channelIndex)
         {
             if(sourceImage == null) { return null; }
             var channel = sourceImage.Split()[channelIndex];
@@ -84,7 +84,7 @@ namespace Introduction
             VectorOfMat vm = new VectorOfMat();
             Image<Gray, byte> destImage = null;
 
-            for (byte ch = 0; ch < 3; ch++) { vm.Push(Split(ch)); }
+            for (byte ch = 0; ch < 3; ch++) { vm.Push(Channel(ch)); }
             CvInvoke.Merge(vm, destImage);
 
             return destImage;
@@ -120,9 +120,9 @@ namespace Introduction
             Image<Gray, byte> destImage = null;
             List<Image<Gray, byte>> sepChannels = new List<Image<Gray, byte>>();
 
-            Image<Gray, byte> redSep = Split(0) * 0.393 + Split(1) * 0.769 + Split(2) * 0.189; ;
-            Image<Gray, byte> greenSep = Split(0) * 0.343 + Split(1) * 0.686 + Split(2) * 0.168; ;
-            Image<Gray, byte> blueSep = Split(0) * 0.272 + Split(1) * 0.534 + Split(2) * 0.131; ;
+            Image<Gray, byte> redSep = Channel(0) * 0.393 + Channel(1) * 0.769 + Channel(2) * 0.189; ;
+            Image<Gray, byte> greenSep = Channel(0) * 0.343 + Channel(1) * 0.686 + Channel(2) * 0.168; ;
+            Image<Gray, byte> blueSep = Channel(0) * 0.272 + Channel(1) * 0.534 + Channel(2) * 0.131; ;
 
             sepChannels.Add(redSep); sepChannels.Add(greenSep); sepChannels.Add(blueSep);
             destImage = ChannelCombine();
@@ -141,6 +141,25 @@ namespace Introduction
                     {
                         byte color = destImage.Data[y, x, channel];
                         color += (Byte)brightness;
+                        destImage.Data[y, x, channel] = color;
+                    }
+                }
+            }
+
+            return destImage;
+        }
+        public Image<Bgr, byte> ChangeContrast(double contrast = 25)
+        {
+            Image<Bgr, byte> destImage = sourceImage;
+
+            for (int channel = 0; channel < destImage.NumberOfChannels; channel++)
+            {
+                for (int x = 0; x < destImage.Width; x++)
+                {
+                    for (int y = 0; y < destImage.Height; y++)
+                    {
+                        byte color = destImage.Data[y, x, channel];
+                        color *= (Byte)contrast;
                         destImage.Data[y, x, channel] = color;
                     }
                 }

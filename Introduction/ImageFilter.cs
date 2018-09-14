@@ -132,8 +132,8 @@ namespace Introduction
         public Image<Hsv, byte> ChangeBrightness(double brightness)
         {
             Image<Hsv, byte> hsvImage = sourceImage.Convert<Hsv, byte>();
-            Image<Gray, Byte>[] channels;
-            Image<Gray, Byte> imgval;
+            Image<Gray, byte>[] channels;
+            Image<Gray, byte> imgval;
             Gray color = new Gray(brightness);
             VectorOfMat vm = new VectorOfMat();
             Image<Hsv, byte> destImage = null;

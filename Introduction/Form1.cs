@@ -31,9 +31,17 @@ namespace Introduction
         {
             imageBoxRs.Image = filter.BWConvert();
         }
-        private void HSVEffectUI(object sender, EventArgs e)
+        private void RedChUI(object sender, EventArgs e)
         {
-            imageBox.Image = filter.ChangeBrightness(10);
+           imageBoxRs.Image = filter.Split(0);
+        }
+        private void BlueChUI(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Split(2);
+        }
+        private void GreenChUI(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Split(1);
         }
     }
 }

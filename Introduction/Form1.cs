@@ -51,15 +51,19 @@ namespace Introduction
         #endregion
         private void BrightToolUI(object sender, EventArgs e)
         {
-            Brightness br = new Brightness();
-
+            Brightness br = new Brightness(this);
+            br.Owner = this;
             br.ShowDialog();
-            imageBoxRs.Image = filter.ChangeBrightness(br.brValue);
         }
 
-        private void ChCombUI(object sender, EventArgs e)
+        public void UpdateUI(double brValue)
         {
-            imageBoxRs.Image = filter.ChannelCombine();
+            imageBoxRs.Image = filter.ChangeBrightness(brValue);
+        }
+
+        private void SepiaUI(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Sepia();
         }
     }
 }

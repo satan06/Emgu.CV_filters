@@ -72,27 +72,17 @@ namespace Introduction
                 Denoise();
                 return resultImage;
         }
-        public Image<Gray, byte> Split(byte channelIndex)
+        public Image<Gray, byte> Channel(byte channelIndex)
         {
             if(sourceImage == null) { return null; }
             var channel = sourceImage.Split()[channelIndex];
 
             return channel;
         }
-        public Image<Gray, byte> ChannelCombine()
+        public Image<Bgr, byte> ChannelCombine(List<Image<Gray, byte>> channels)
         {
             VectorOfMat vm = new VectorOfMat();
-            Image<Gray, byte> destImage = null;
-
-            for (byte ch = 0; ch < 3; ch++) { vm.Push(Split(ch)); }
-            CvInvoke.Merge(vm, destImage);
-
-            return destImage;
-        }
-        public Image<Gray, byte> ChannelCombine(List<Image<Gray, byte>> channels)
-        {
-            VectorOfMat vm = new VectorOfMat();
-            Image<Gray, byte> destImage = null;
+            Image<Bgr, byte> destImage = new Image<Bgr, byte>(channels[0].Size);
                 
             for (byte ch = 0; ch < channels.Count; ch++) { vm.Push(channels[ch]); }
             CvInvoke.Merge(vm, destImage);
@@ -115,23 +105,45 @@ namespace Introduction
 
             return grayImage;
         }
-        public Image<Gray, byte> Sepia()
+        public Image<Bgr, byte> Sepia()
         {
-            Image<Gray, byte> destImage = null;
-            List<Image<Gray, byte>> sepChannels = new List<Image<Gray, byte>>();
+            Image<Bgr, byte> destImage = sourceImage.Clone();
+            byte blue, green, red;
 
-            Image<Gray, byte> redSep = Split(0) * 0.393 + Split(1) * 0.769 + Split(2) * 0.189; ;
-            Image<Gray, byte> greenSep = Split(0) * 0.343 + Split(1) * 0.686 + Split(2) * 0.168; ;
-            Image<Gray, byte> blueSep = Split(0) * 0.272 + Split(1) * 0.534 + Split(2) * 0.131; ;
+            for (int x = 0; x < destImage.Width; x++)
+            {
+                for (int y = 0; y < destImage.Height; y++)
+                {
+                    blue = destImage.Data[y, x, 0];
+                    green = destImage.Data[y, x, 1];
+                    red = destImage.Data[y, x, 2];
 
-            sepChannels.Add(redSep); sepChannels.Add(greenSep); sepChannels.Add(blueSep);
-            destImage = ChannelCombine();
+                    destImage.Data[y, x, 0] = ColorCheck(blue * 0.272 + green * 0.534 + blue * 0.131);
+                    destImage.Data[y, x, 1] = ColorCheck(blue * 0.349 + green * 0.686 + blue * 0.168);
+                    destImage.Data[y, x, 2] = ColorCheck(blue * 0.393 + green * 0.769 + blue * 0.189);
+                }
+            }
 
             return destImage;
         }
-        public Image<Bgr, byte> ChangeBrightness(double brightness = 25)
+        public Image<Hsv, byte> ChangeBrightness(double brightness = 25)
         {
-            Image<Bgr, byte> destImage = sourceImage;
+            Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
+
+            for (int x = 0; x < destImage.Width; x++)
+            {
+                for (int y = 0; y < destImage.Height; y++)
+                {
+                    byte color = destImage.Data[y, x, 2];
+                    color += (byte)brightness;
+                    destImage.Data[y, x, 2] = color;
+                }
+            }
+            return destImage;
+        }
+        public Image<Bgr, byte> ChangeContrast(double contrast = 25)
+        {
+            Image<Bgr, byte> destImage = sourceImage.Clone();
 
             for (int channel = 0; channel < destImage.NumberOfChannels; channel++)
             {
@@ -140,13 +152,28 @@ namespace Introduction
                     for (int y = 0; y < destImage.Height; y++)
                     {
                         byte color = destImage.Data[y, x, channel];
-                        color += (Byte)brightness;
+                        color *= (Byte)contrast;
                         destImage.Data[y, x, channel] = color;
                     }
                 }
             }
 
             return destImage;
+        }
+        private byte ColorCheck(double color)
+        {
+            if(color > 255)
+            {
+                return 255;
+            }
+            else if(color < 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return (byte)color;
+            }
         }
     }
 }

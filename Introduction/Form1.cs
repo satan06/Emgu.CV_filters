@@ -51,8 +51,10 @@ namespace Introduction
         #endregion
         private void BrightToolUI(object sender, EventArgs e)
         {
-            Brightness br = new Brightness(this);
-            br.Owner = this;
+            Brightness br = new Brightness
+            {
+                Owner = this
+            };
             br.ShowDialog();
         }
 

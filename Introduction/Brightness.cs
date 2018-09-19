@@ -6,22 +6,20 @@ namespace Introduction
 {
     public partial class Brightness : Form
     {
-        public double brValue = 0;
-
         public Brightness()
         {
             InitializeComponent();
-            BrTrackBarUI.Maximum = 20;
-            BrTrackBarUI.Minimum = -20;
-            BrTrackBarUI.SmallChange = 5;
+
+            BrTrackBarUI.Minimum = -100;
+            BrTrackBarUI.Maximum = 100;
+            BrTrackBarUI.SmallChange = 10;
         }
 
         public void BrTrackBarUI_Scroll(object sender, EventArgs e)
         {
             if (Owner is Filter parent)
             {
-                brValue = BrTrackBarUI.Value;
-                parent.UpdateUI(brValue);
+                parent.UpdateUI(BrTrackBarUI.Value);
             }
         }
     }

@@ -66,9 +66,9 @@ namespace Introduction
                         else { color = 255; }
 
                         resultImage.Data[y, x, channel] = color;
-                        }
                     }
                 }
+            }
                 Denoise();
                 return resultImage;
         }
@@ -82,7 +82,7 @@ namespace Introduction
         public Image<Bgr, byte> ChannelCombine(List<Image<Gray, byte>> channels)
         {
             VectorOfMat vm = new VectorOfMat();
-            Image<Bgr, byte> destImage = new Image<Bgr, byte>(channels[0].Size);
+            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
                 
             for (byte ch = 0; ch < channels.Count; ch++) { vm.Push(channels[ch]); }
             CvInvoke.Merge(vm, destImage);
@@ -126,7 +126,22 @@ namespace Introduction
 
             return destImage;
         }
-        public Image<Hsv, byte> ChangeBrightness(double brightness = 25)
+        public Image<Hsv, byte> BrightnessHSV(int brightness = 25)
+        {
+            Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
+
+            for (int x = 0; x < destImage.Width; x++)
+            {
+                for (int y = 0; y < destImage.Height; y++)
+                {
+                    int color = destImage.Data[y, x, 2];
+                    color += brightness;
+                    destImage.Data[y, x, 2] = ColorCheck(color);
+                }
+            }
+            return destImage;
+        }
+        public Image<Hsv, byte> Contrast(double contrast = 5)
         {
             Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
 
@@ -135,26 +150,8 @@ namespace Introduction
                 for (int y = 0; y < destImage.Height; y++)
                 {
                     byte color = destImage.Data[y, x, 2];
-                    color += (byte)brightness;
-                    destImage.Data[y, x, 2] = color;
-                }
-            }
-            return destImage;
-        }
-        public Image<Bgr, byte> ChangeContrast(double contrast = 25)
-        {
-            Image<Bgr, byte> destImage = sourceImage.Clone();
-
-            for (int channel = 0; channel < destImage.NumberOfChannels; channel++)
-            {
-                for (int x = 0; x < destImage.Width; x++)
-                {
-                    for (int y = 0; y < destImage.Height; y++)
-                    {
-                        byte color = destImage.Data[y, x, channel];
-                        color *= (Byte)contrast;
-                        destImage.Data[y, x, channel] = color;
-                    }
+                    color *= (byte)contrast;
+                    destImage.Data[y, x, 1] = color;
                 }
             }
 
@@ -174,6 +171,25 @@ namespace Introduction
             {
                 return (byte)color;
             }
+        }
+        public Image<Bgr, byte> Brightness(int brightness = 25)
+        {
+            Image<Bgr, byte> destImage = sourceImage.Clone();
+            int color;
+
+            for (int channel = 0; channel < destImage.NumberOfChannels; channel++)
+            {
+                for (int x = 0; x < destImage.Width; x++)
+                {
+                    for (int y = 0; y < destImage.Height; y++)
+                    {
+                        color = destImage.Data[y, x, channel];
+                        color += brightness;
+                        destImage.Data[y, x, channel] = ColorCheck(color);
+                    }
+                }
+            }
+            return destImage;
         }
     }
 }

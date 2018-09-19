@@ -35,7 +35,7 @@ namespace Introduction
         {
             imageBoxRs.Image = filter.BWConvert();
         }
-        #region BgrFilters
+        #region ChannelsFilters
         private void RedChUI(object sender, EventArgs e)
         {
            imageBoxRs.Image = filter.Channel(2);
@@ -57,15 +57,17 @@ namespace Introduction
             };
             br.ShowDialog();
         }
-
-        public void UpdateUI(double brValue)
+        public void UpdateUI(int brValue)
         {
-            imageBoxRs.Image = filter.ChangeBrightness(brValue);
+            imageBoxRs.Image = filter.Brightness(brValue);
         }
-
         private void SepiaUI(object sender, EventArgs e)
         {
             imageBoxRs.Image = filter.Sepia();
+        }
+        private void ContrastUI(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Contrast(25);
         }
     }
 }

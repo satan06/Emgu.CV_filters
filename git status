@@ -1,0 +1,48 @@
+*   [33mcommit d10e66a1de1bad4db9e6fb31f6784b0864273e50[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+[31m|[m[32m\[m  Merge: b06193e 01dd989
+[31m|[m [32m|[m Author: Michael <panmihaurkin@icloud.com>
+[31m|[m [32m|[m Date:   Wed Sep 19 11:19:31 2018 +0700
+[31m|[m [32m|[m 
+[31m|[m [32m|[m     Merge branch 'br_dev'
+[31m|[m [32m|[m 
+[31m|[m * [33mcommit 01dd989aa530e820974d19364156af7940855108[m[33m ([m[1;31morigin/br_dev[m[33m, [m[1;32mbr_dev[m[33m)[m
+[31m|[m [32m|[m Author: Michael <panmihaurkin@icloud.com>
+[31m|[m [32m|[m Date:   Wed Sep 19 11:18:04 2018 +0700
+[31m|[m [32m|[m 
+[31m|[m [32m|[m     Fixed brightness func
+[31m|[m [32m|[m 
+[31m|[m * [33mcommit 6c1ff7b9c7ebe1a4f4db3050f19fbcc8ff7b8896[m
+[31m|[m [32m|[m Author: Michael <panmihaurkin@icloud.com>
+[31m|[m [32m|[m Date:   Wed Sep 19 10:52:31 2018 +0700
+[31m|[m [32m|[m 
+[31m|[m [32m|[m     Fixed sepia func
+[31m|[m [32m|[m 
+[31m|[m * [33mcommit fa0766076935afbe81c0412842a1cda97b054f16[m
+[31m|[m[31m/[m  Author: Michael <panmihaurkin@icloud.com>
+[31m|[m   Date:   Fri Sep 14 14:05:21 2018 +0700
+[31m|[m   
+[31m|[m       Added separate form for br-nes
+[31m|[m 
+* [33mcommit b06193e46f443a6a1ac6498457ec39c60128137c[m[33m ([m[1;31morigin/filter_dev[m[33m, [m[1;32mfilter_dev[m[33m)[m
+[32m|[m Author: Michael <panmihaurkin@icloud.com>
+[32m|[m Date:   Fri Sep 14 12:38:11 2018 +0700
+[32m|[m 
+[32m|[m     Brightness funct remastered
+[32m|[m 
+* [33mcommit 3b6e44518a1b231839edfac687265cea51a484b9[m
+[32m|[m Author: Michael <panmihaurkin@icloud.com>
+[32m|[m Date:   Fri Sep 14 11:54:51 2018 +0700
+[32m|[m 
+[32m|[m     Added channels split UI
+[32m|[m 
+* [33mcommit 5f1ee4cbc1c53a6d8500cb9f18360eb74d32310d[m
+[32m|[m Author: Michael <panmihaurkin@icloud.com>
+[32m|[m Date:   Thu Sep 13 22:40:05 2018 +0700
+[32m|[m 
+[32m|[m     Added basic brightness function
+[32m|[m 
+* [33mcommit ef7e5978e932cbe9118bec1339c0665ae9c110e7[m
+  Author: Michael <panmihaurkin@icloud.com>
+  Date:   Thu Sep 13 19:06:16 2018 +0700
+  
+      Basic filters

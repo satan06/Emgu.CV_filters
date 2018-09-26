@@ -195,7 +195,8 @@ namespace Introduction
             {
                 for (int y = 0; y < destImage.Height; y++)
                 {
-                    double color = destImage.Data[y, x, (int)channel];
+                    double color = destImage.Data[y, x, (int)channel] + value;  
+
                     if (channel == 0)
                         destImage.Data[y, x, (int)channel] = ColorCheck(color, 0, 180);
                     else
@@ -204,6 +205,30 @@ namespace Introduction
                 }
             }
             return destImage;
+        }
+        public Image<Bgr, byte> Addition(Image<Bgr, byte> image)
+        {
+            Image<Bgr, byte> result = sourceImage.Clone();
+            int color;
+
+            for (int channel = 0; channel < result.NumberOfChannels; channel++)
+            {
+                for (int x = 0; x < result.Width; x++)
+                {
+                    for (int y = 0; y < result.Height; y++)
+                    {
+                        color = result.Data[y, x, channel] + image.Data[y, x, channel];
+                        result.Data[y, x, channel] = ColorCheck(color, 0, 255);
+                    }
+                }
+            }
+            return result;
+        }
+        private byte SplitOperaton(char ch, double val, double subval)
+        {
+            if (ch == '+') { return (byte)(val + subval); }
+            else if (ch == '-') { return (byte)(val - subval); }
+            else { return (byte)(val * subval); }
         }
     }
 }

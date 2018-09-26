@@ -150,7 +150,7 @@
             // rGBCombineToolStripMenuItem
             // 
             this.rGBCombineToolStripMenuItem.Name = "rGBCombineToolStripMenuItem";
-            this.rGBCombineToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rGBCombineToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.rGBCombineToolStripMenuItem.Text = "RGB (Combine)";
             // 
             // blackWhiteToolStripMenuItem
@@ -228,6 +228,7 @@
             this.contrastToolStripMenuItem.Name = "contrastToolStripMenuItem";
             this.contrastToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.contrastToolStripMenuItem.Text = "Contrast";
+            this.contrastToolStripMenuItem.Click += new System.EventHandler(this.ContrastUI);
             // 
             // Filter
             // 

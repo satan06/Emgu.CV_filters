@@ -15,6 +15,13 @@ namespace Introduction
         public double cannyThresholdLinking = 40.0;
         #endregion
 
+        public enum HSV : byte
+        {
+            hue,
+            saturation,
+            value
+        }
+
         public void OpenFile (string fileNmae)
         {
             sourceImage = new Image<Bgr, byte>(fileNmae).Resize(640, 480, Inter.Linear);
@@ -66,9 +73,9 @@ namespace Introduction
                         else { color = 255; }
 
                         resultImage.Data[y, x, channel] = color;
-                        }
                     }
                 }
+            }
                 Denoise();
                 return resultImage;
         }
@@ -82,7 +89,7 @@ namespace Introduction
         public Image<Bgr, byte> ChannelCombine(List<Image<Gray, byte>> channels)
         {
             VectorOfMat vm = new VectorOfMat();
-            Image<Bgr, byte> destImage = new Image<Bgr, byte>(channels[0].Size);
+            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
                 
             for (byte ch = 0; ch < channels.Count; ch++) { vm.Push(channels[ch]); }
             CvInvoke.Merge(vm, destImage);
@@ -118,15 +125,15 @@ namespace Introduction
                     green = destImage.Data[y, x, 1];
                     red = destImage.Data[y, x, 2];
 
-                    destImage.Data[y, x, 0] = ColorCheck(blue * 0.272 + green * 0.534 + blue * 0.131);
-                    destImage.Data[y, x, 1] = ColorCheck(blue * 0.349 + green * 0.686 + blue * 0.168);
-                    destImage.Data[y, x, 2] = ColorCheck(blue * 0.393 + green * 0.769 + blue * 0.189);
+                    destImage.Data[y, x, 0] = ColorCheck(blue * 0.272 + green * 0.534 + blue * 0.131, 0 , 255);
+                    destImage.Data[y, x, 1] = ColorCheck(blue * 0.349 + green * 0.686 + blue * 0.168, 0, 255);
+                    destImage.Data[y, x, 2] = ColorCheck(blue * 0.393 + green * 0.769 + blue * 0.189, 0, 255);
                 }
             }
 
             return destImage;
         }
-        public Image<Hsv, byte> ChangeBrightness(double brightness = 25)
+        public Image<Hsv, byte> BrightnessHSV(int brightness = 25)
         {
             Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
 
@@ -134,14 +141,35 @@ namespace Introduction
             {
                 for (int y = 0; y < destImage.Height; y++)
                 {
-                    byte color = destImage.Data[y, x, 2];
-                    color += (byte)brightness;
-                    destImage.Data[y, x, 2] = color;
+                    int color = destImage.Data[y, x, 2];
+                    color += brightness;
+                    destImage.Data[y, x, 2] = ColorCheck(color, 0, 100);
                 }
             }
             return destImage;
         }
-        public Image<Bgr, byte> ChangeContrast(double contrast = 25)
+        public Image<Hsv, byte> Contrast(int contrast = 5)
+        {
+            Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
+
+            for (int x = 0; x < destImage.Width; x++)
+            {
+                for (int y = 0; y < destImage.Height; y++)
+                {
+                    int color = destImage.Data[y, x, 2];
+                    color *= contrast;
+                    destImage.Data[y, x, 1] = ColorCheck(color, 0, 255);
+                }
+            }
+            return destImage;
+        }
+        private byte ColorCheck(double color, double min, double max)
+        {
+            if (color < min) { return (byte)min; }
+            else if (color > max) { return (byte)max; }
+            else { return (byte)color; }
+        }
+        public Image<Bgr, byte> Brightness(int brightness = 25)
         {
             Image<Bgr, byte> destImage = sourceImage.Clone();
 
@@ -151,29 +179,56 @@ namespace Introduction
                 {
                     for (int y = 0; y < destImage.Height; y++)
                     {
-                        byte color = destImage.Data[y, x, channel];
-                        color *= (Byte)contrast;
-                        destImage.Data[y, x, channel] = color;
+                        int color = destImage.Data[y, x, channel];
+                        color += brightness;
+                        destImage.Data[y, x, channel] = ColorCheck(color, 0, 255);
                     }
                 }
             }
-
             return destImage;
         }
-        private byte ColorCheck(double color)
+        public Image<Hsv, byte> HSVFilter(double value, HSV channel)
         {
-            if(color > 255)
+            Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
+
+            for (int x = 0; x < destImage.Width; x++)
             {
-                return 255;
+                for (int y = 0; y < destImage.Height; y++)
+                {
+                    double color = destImage.Data[y, x, (int)channel] + value;  
+
+                    if (channel == 0)
+                        destImage.Data[y, x, (int)channel] = ColorCheck(color, 0, 180);
+                    else
+                        destImage.Data[y, x, (int)channel] = ColorCheck(color, 0, 100);
+
+                }
             }
-            else if(color < 0)
+            return destImage;
+        }
+        public Image<Bgr, byte> Addition(Image<Bgr, byte> image)
+        {
+            Image<Bgr, byte> result = sourceImage.Clone();
+            int color;
+
+            for (int channel = 0; channel < result.NumberOfChannels; channel++)
             {
-                return 0;
+                for (int x = 0; x < result.Width; x++)
+                {
+                    for (int y = 0; y < result.Height; y++)
+                    {
+                        color = result.Data[y, x, channel] + image.Data[y, x, channel];
+                        result.Data[y, x, channel] = ColorCheck(color, 0, 255);
+                    }
+                }
             }
-            else
-            {
-                return (byte)color;
-            }
+            return result;
+        }
+        private byte SplitOperaton(char ch, double val, double subval)
+        {
+            if (ch == '+') { return (byte)(val + subval); }
+            else if (ch == '-') { return (byte)(val - subval); }
+            else { return (byte)(val * subval); }
         }
     }
 }

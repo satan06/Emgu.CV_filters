@@ -15,7 +15,6 @@ namespace Introduction
             imageBox.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
             imageBoxRs.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
         }
-
         private void OpenFileUI(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();

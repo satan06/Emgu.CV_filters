@@ -15,6 +15,13 @@ namespace Introduction
         public double cannyThresholdLinking = 40.0;
         #endregion
 
+        public enum HSV : byte
+        {
+            hue,
+            saturation,
+            value
+        }
+
         public void OpenFile (string fileNmae)
         {
             sourceImage = new Image<Bgr, byte>(fileNmae).Resize(640, 480, Inter.Linear);
@@ -118,9 +125,9 @@ namespace Introduction
                     green = destImage.Data[y, x, 1];
                     red = destImage.Data[y, x, 2];
 
-                    destImage.Data[y, x, 0] = ColorCheck(blue * 0.272 + green * 0.534 + blue * 0.131);
-                    destImage.Data[y, x, 1] = ColorCheck(blue * 0.349 + green * 0.686 + blue * 0.168);
-                    destImage.Data[y, x, 2] = ColorCheck(blue * 0.393 + green * 0.769 + blue * 0.189);
+                    destImage.Data[y, x, 0] = ColorCheck(blue * 0.272 + green * 0.534 + blue * 0.131, 0 , 255);
+                    destImage.Data[y, x, 1] = ColorCheck(blue * 0.349 + green * 0.686 + blue * 0.168, 0, 255);
+                    destImage.Data[y, x, 2] = ColorCheck(blue * 0.393 + green * 0.769 + blue * 0.189, 0, 255);
                 }
             }
 
@@ -136,12 +143,12 @@ namespace Introduction
                 {
                     int color = destImage.Data[y, x, 2];
                     color += brightness;
-                    destImage.Data[y, x, 2] = ColorCheck(color);
+                    destImage.Data[y, x, 2] = ColorCheck(color, 0, 100);
                 }
             }
             return destImage;
         }
-        public Image<Hsv, byte> Contrast(double contrast = 5)
+        public Image<Hsv, byte> Contrast(int contrast = 5)
         {
             Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
 
@@ -149,33 +156,22 @@ namespace Introduction
             {
                 for (int y = 0; y < destImage.Height; y++)
                 {
-                    byte color = destImage.Data[y, x, 2];
-                    color *= (byte)contrast;
-                    destImage.Data[y, x, 1] = color;
+                    int color = destImage.Data[y, x, 2];
+                    color *= contrast;
+                    destImage.Data[y, x, 1] = ColorCheck(color, 0, 255);
                 }
             }
-
             return destImage;
         }
-        private byte ColorCheck(double color)
+        private byte ColorCheck(double color, double min, double max)
         {
-            if(color > 255)
-            {
-                return 255;
-            }
-            else if(color < 0)
-            {
-                return 0;
-            }
-            else
-            {
-                return (byte)color;
-            }
+            if (color < min) { return (byte)min; }
+            else if (color > max) { return (byte)max; }
+            else { return (byte)color; }
         }
         public Image<Bgr, byte> Brightness(int brightness = 25)
         {
             Image<Bgr, byte> destImage = sourceImage.Clone();
-            int color;
 
             for (int channel = 0; channel < destImage.NumberOfChannels; channel++)
             {
@@ -183,10 +179,22 @@ namespace Introduction
                 {
                     for (int y = 0; y < destImage.Height; y++)
                     {
-                        color = destImage.Data[y, x, channel];
+                        int color = destImage.Data[y, x, channel];
                         color += brightness;
-                        destImage.Data[y, x, channel] = ColorCheck(color);
+                        destImage.Data[y, x, channel] = ColorCheck(color, 0, 255);
                     }
+                }
+            }
+            return destImage;
+        }
+        public Image<Hsv, byte> HSVFilter(double value, HSV channel)
+        {
+            Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
+
+            for (int x = 0; x < destImage.Width; x++)
+            {
+                for (int y = 0; y < destImage.Height; y++)
+                {
                 }
             }
             return destImage;

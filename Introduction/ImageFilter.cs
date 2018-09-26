@@ -195,6 +195,12 @@ namespace Introduction
             {
                 for (int y = 0; y < destImage.Height; y++)
                 {
+                    double color = destImage.Data[y, x, (int)channel];
+                    if (channel == 0)
+                        destImage.Data[y, x, (int)channel] = ColorCheck(color, 0, 180);
+                    else
+                        destImage.Data[y, x, (int)channel] = ColorCheck(color, 0, 100);
+
                 }
             }
             return destImage;

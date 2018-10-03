@@ -130,7 +130,7 @@ namespace Introduction
 
         public Image<Bgr, byte> Sepia()
         {
-            Image<Bgr, byte> destImage = sourceImage.Clone();
+            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
             byte blue, green, red;
 
             EachPixel((channel, width, height, color) => 
@@ -179,7 +179,7 @@ namespace Introduction
 
         public Image<Bgr, byte> Brightness(int value = 25)
         {
-            Image<Bgr, byte> destImage = sourceImage.Clone();
+            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
@@ -197,12 +197,16 @@ namespace Introduction
 
             EachPixel((channel, width, height, color) =>
             {
-                if(hsv == 0)
-                    destImage.Data[width, height, (int)hsv] = 
+                if (hsv == 0)
+                {
+                    destImage.Data[width, height, (int)hsv] =
                     ColorCheck(destImage.Data[width, height, (int)hsv] + value, 0, 180);
+                }
                 else
+                {
                     destImage.Data[width, height, (int)hsv] =
                     ColorCheck(destImage.Data[width, height, (int)hsv] + value, 0, 100);
+                }
             });
 
             return destImage;
@@ -210,7 +214,7 @@ namespace Introduction
 
         public Image<Bgr, byte> Operation(char ch, Image<Bgr, byte> image)
         {
-            Image<Bgr, byte> result = sourceImage.Clone();
+            Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {

@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.imageBox = new Emgu.CV.UI.ImageBox();
             this.imageBoxRs = new Emgu.CV.UI.ImageBox();
+            this.ImageLoad = new System.Windows.Forms.Button();
+            this.textEvent = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.SuspendLayout();
@@ -48,18 +50,40 @@
             // imageBoxRs
             // 
             this.imageBoxRs.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.imageBoxRs.Location = new System.Drawing.Point(373, 12);
+            this.imageBoxRs.Location = new System.Drawing.Point(371, 12);
             this.imageBoxRs.Name = "imageBoxRs";
             this.imageBoxRs.Size = new System.Drawing.Size(315, 274);
             this.imageBoxRs.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageBoxRs.TabIndex = 3;
             this.imageBoxRs.TabStop = false;
             // 
+            // ImageLoad
+            // 
+            this.ImageLoad.Location = new System.Drawing.Point(692, 12);
+            this.ImageLoad.Name = "ImageLoad";
+            this.ImageLoad.Size = new System.Drawing.Size(75, 23);
+            this.ImageLoad.TabIndex = 4;
+            this.ImageLoad.Text = "Load";
+            this.ImageLoad.UseVisualStyleBackColor = true;
+            this.ImageLoad.Click += new System.EventHandler(this.OpenNewImage);
+            // 
+            // textEvent
+            // 
+            this.textEvent.Location = new System.Drawing.Point(693, 41);
+            this.textEvent.Name = "textEvent";
+            this.textEvent.Size = new System.Drawing.Size(75, 76);
+            this.textEvent.TabIndex = 5;
+            this.textEvent.Text = "Test Event";
+            this.textEvent.UseVisualStyleBackColor = true;
+            this.textEvent.Click += new System.EventHandler(this.TestEvent);
+            // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(856, 480);
+            this.ClientSize = new System.Drawing.Size(780, 298);
+            this.Controls.Add(this.textEvent);
+            this.Controls.Add(this.ImageLoad);
             this.Controls.Add(this.imageBoxRs);
             this.Controls.Add(this.imageBox);
             this.Name = "Filter";
@@ -74,6 +98,8 @@
 
         private Emgu.CV.UI.ImageBox imageBox;
         private Emgu.CV.UI.ImageBox imageBoxRs;
+        private System.Windows.Forms.Button ImageLoad;
+        private System.Windows.Forms.Button textEvent;
     }
 }
 

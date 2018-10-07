@@ -4,21 +4,23 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Introduction
 {
     public class ImageFilter
     {
         public Image<Bgr, byte> sourceImage;
+        public Image<Bgr, byte> tempImage;
 
         public enum HSV : byte
         {
-            hue,
-            saturation,
-            value
+            Hue,
+            Saturation,
+            Value
         }
 
-        private delegate void Func<T1, T2, T3, T4>(T1 channel, T2 width, T3 height, T4 color);
+        private delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
 
         private void EachPixel(Func<int, int, int, byte> action)
         {
@@ -34,86 +36,132 @@ namespace Introduction
             }
         }
 
-        public void OpenFile (string fileNmae)
+        /// <summary>
+        /// Opens new image
+        /// </summary>
+        /// <param name="fileName">Path to image</param>
+        /// <param name="container">Where to put image. Use
+        /// <see cref="sourceImage"></see>
+        /// to work with main sourse image. Use
+        /// <see cref="tempImage"></see>
+        /// to load temp image and work with booleans
+        /// </param>
+        public void OpenFile(string fileName, ref Image<Bgr, byte> container)
         {
-            sourceImage = new Image<Bgr, byte>(fileNmae).Resize(640, 480, Inter.Linear);
+            container = new Image<Bgr, byte>(fileName).Resize(640, 480, Inter.Linear);
+
+            if(sourceImage != null && tempImage != null)
+                MessageBox.Show("Correct! \nPath: " + fileName);
         }
 
-        public Image<Gray, byte> ToGray()
+        private Image<Gray, byte> ToGray()
         {
-            if (sourceImage == null) { return null; }
+            if (sourceImage == null)
+            {
+                return null;
+            }
 
             Image<Gray, byte> grayImage = sourceImage.Convert<Gray, byte>();
             return grayImage;
         }
 
-        public Image<Bgr, byte> Denoise()
+        /// <summary>
+        /// Reduces noises on the image
+        /// </summary>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        public Image<Bgr, byte> Denoise(Image<Bgr, byte> image)
         {
-            if (sourceImage == null) { return null; }
+            if (image == null)
+            {
+                return null;
+            }
 
-            var destImage = sourceImage.PyrDown().PyrUp();
-
+            var destImage = image.PyrDown().PyrUp();
             return destImage;
         }
 
+        /// <summary>
+        /// Imposes a canny effect on the image
+        /// </summary>
+        /// <param name="threshold">Result image threshold value</param>
+        /// <param name="thresholdLinking">Intensity of linking edges</param>
+        /// <returns></returns>
         public Image<Gray, byte> CannyFilter(double threshold = 80.0, double thresholdLinking = 40.0)
         {
-            if (sourceImage == null) { return null; }
-
+            if (sourceImage == null)
+            {
+                return null;
+            }
             var cannyEdges = sourceImage.Canny(threshold, thresholdLinking);
-            Denoise();
 
             return cannyEdges;
         }
-
+        /// <summary>
+        /// Imposes a cell shading effect on the image
+        /// </summary>
         public Image<Bgr, byte> CellShading()
         {
-            if (sourceImage == null) { return null; }
+            if (sourceImage == null)
+            {
+                return null;
+            }
 
             var cannyEdgesBgr = CannyFilter().Convert<Bgr, byte>();
             var resultImage = sourceImage.Sub(cannyEdgesBgr);
 
-            for (int channel = 0; channel < resultImage.NumberOfChannels; channel++)
+            EachPixel((channel, width, height, color) =>
             {
-                for (int x = 0; x < resultImage.Width; x++)
-                {
-                    for (int y = 0; y < resultImage.Height; y++)
-                    {
-                        byte color = resultImage.Data[y, x, channel];
+                resultImage.Data[width, height, channel] = CellShadingCheck(resultImage.Data[width, height, channel]);
+            });
 
-                        if (color <= 50) { color = 0; }
-                        else if (color <= 100) { color = 25; }
-                        else if (color <= 150) { color = 180; }
-                        else if (color <= 200) { color = 210; }
-                        else { color = 255; }
-
-                        resultImage.Data[y, x, channel] = color;
-                    }
-                }
-            }
-                Denoise();
-                return resultImage;
+            Denoise(resultImage);
+            return resultImage;
         }
 
-        public Image<Gray, byte> Channel(byte channelIndex)
+        private byte CellShadingCheck(byte color)
         {
-            if(sourceImage == null) { return null; }
-            var channel = sourceImage.Split()[channelIndex];
+            var condArg0 = (color <= 50) ? 0 : 
+                            (color <= 100) ? 25 : 
+                            (color <= 150) ? 180 : 
+                            (color <= 200) ? 210 : 255;
 
+            return (byte)condArg0; 
+        }
+
+        public Image<Gray, byte> ChannelSplit(byte channelIndex)
+        {
+            if(sourceImage == null)
+            {
+                return null;
+            }
+
+            var channel = sourceImage.Split()[channelIndex];
             return channel;
         }
-
+        /// <summary>
+        /// Combines image channels all together in one particular image
+        /// </summary>
+        /// <param name="channels">Array of image channels</param>
+        // Testing: OK
         public Image<Bgr, byte> ChannelCombine(List<Image<Gray, byte>> channels)
         {
             VectorOfMat vm = new VectorOfMat();
             Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
                 
-            for (byte ch = 0; ch < channels.Count; ch++) { vm.Push(channels[ch]); }
+            for (byte ch = 0; ch < channels.Count; ch++)
+            {
+                vm.Push(channels[ch]);
+            }
             CvInvoke.Merge(vm, destImage);
             
             return destImage;
         }
 
+        /// <summary>
+        /// Converts this image into black and white copy
+        /// </summary>
+        // Testing: OK
         public Image<Gray, byte> ConvertToBW()
         {
             if (sourceImage == null) { return null; }
@@ -128,7 +176,11 @@ namespace Introduction
             return grayImage;
         }
 
-        public Image<Bgr, byte> Sepia()
+        /// <summary>
+        /// Imposes a sepia effect on the image
+        /// </summary>
+        // Testing: OK
+        public Image<Bgr, byte> Sepia() 
         {
             Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
             byte blue, green, red;
@@ -147,9 +199,14 @@ namespace Introduction
             return destImage;
         }
 
-        public Image<Hsv, byte> Contrast(int value = 5)
+        /// <summary>
+        /// Changes constrast of the image
+        /// </summary>
+        /// /// <param name="value">Intensity value.</param>
+        // Testing: SKIPPED
+        public Image<Bgr, byte> Contrast(double value = 5.0)
         {
-            Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
+            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
@@ -163,21 +220,16 @@ namespace Introduction
 
         private byte ColorCheck(double color, double min, double max)
         {
-            if (color < min)
-            {
-                return (byte)min;
-            }
-            else if (color > max)
-            {
-                return (byte)max;
-            }
-            else
-            {
-                return (byte)color;
-            }
+            var condition = (color < min) ? min : (color > max) ? max : color;
+            return (byte)condition;
         }
 
-        public Image<Bgr, byte> Brightness(int value = 25)
+        /// <summary>
+        /// Changes brightness of the image
+        /// </summary>
+        /// /// <param name="value">Intensity value.</param>
+        // Testing: SKIPPED
+        public Image<Bgr, byte> Brightness(double value = 25.0)
         {
             Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
 
@@ -191,6 +243,12 @@ namespace Introduction
             return destImage;
         }
 
+        /// <summary>
+        /// Changes selected HSV channel of the image
+        /// </summary>
+        /// <param name="value">Intensity value</param>
+        /// <param name="hsv">The HSV channel</param>
+        // Testing: OK
         public Image<Hsv, byte> HSVFilter(double value, HSV hsv)
         {
             Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
@@ -212,20 +270,44 @@ namespace Introduction
             return destImage;
         }
 
-        public Image<Bgr, byte> Operation(char ch, Image<Bgr, byte> image)
+        /// <summary>
+        /// Performs boolean operation with another image
+        /// </summary>
+        /// <param name="ch">Addition or substraction operator</param>
+        /// <param name="image">Second image for operation</param>
+        public Image<Bgr, byte> BooleanOperation(Image<Bgr, byte> image, char ch)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
-                color = SplitOperaton(ch, result.Data[width, height, channel], image.Data[width, height, channel]);
+                color = SetOperaton(ch, result.Data[width, height, channel]* 0.7, image.Data[width, height, channel]* 0.3);
                 result.Data[width, height, channel] = color;
             });
 
             return result;
         }
 
-        private byte SplitOperaton(char ch, double val, double subval)
+        /// <summary>
+        /// Performs intersection operation with another image
+        /// </summary>
+        /// <param name="image">Second image for operation</param>
+        public Image<Bgr, byte> Intersection(Image<Bgr, byte> image)
+        {
+            Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
+
+            EachPixel((channel, width, height, color) =>
+            {
+                if (image.Data[width, height, channel] == 0)
+                {
+                    result.Data[width, height, channel] = 0;
+                }
+            });
+
+            return result;
+        }
+
+        private byte SetOperaton(char ch, double val, double subval)
         {
             if (ch == '+')
             {
@@ -233,12 +315,9 @@ namespace Introduction
             }
             else if (ch == '-')
             {
-                return ColorCheck(val + subval, 0, 255);
+                return ColorCheck(val - subval, 0, 255);
             }
-            else
-            {
-                return ColorCheck(val + subval, 0, 255);
-            }
+            throw new Exception("Wrong operation");
         }
     }
 }

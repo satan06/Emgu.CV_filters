@@ -19,9 +19,12 @@ namespace Introduction
 
         private void LoaderCheck(string fileName, bool isSource)
         {
+            int width = 640, height = 480; 
+
             if (isSource)
             {
                 filter.OpenFile(fileName, ref filter.sourceImage);
+                filter.ResizeImage(filter.sourceImage, width, height);
             }
             else
             {

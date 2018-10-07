@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace Introduction
 {
+    /// <summary>
+    /// Represents class with simple image filter effects
+    /// </summary>
     public class ImageFilter
     {
         public Image<Bgr, byte> sourceImage;
@@ -48,10 +51,12 @@ namespace Introduction
         /// </param>
         public void OpenFile(string fileName, ref Image<Bgr, byte> container)
         {
-            container = new Image<Bgr, byte>(fileName).Resize(640, 480, Inter.Linear);
+            container = new Image<Bgr, byte>(fileName);
+        }
 
-            if(sourceImage != null && tempImage != null)
-                MessageBox.Show("Correct! \nPath: " + fileName);
+        public void ResizeImage(Image<Bgr, byte> image, int wight, int height)
+        {
+            image.Resize(wight, height, Inter.Linear);
         }
 
         private Image<Gray, byte> ToGray()
@@ -164,7 +169,10 @@ namespace Introduction
         // Testing: OK
         public Image<Gray, byte> ConvertToBW()
         {
-            if (sourceImage == null) { return null; }
+            if (sourceImage == null)
+            {
+                return null;
+            }
             Image<Gray, byte> grayImage = new Image<Gray, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) => 

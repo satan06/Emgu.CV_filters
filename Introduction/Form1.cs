@@ -51,7 +51,7 @@ namespace Introduction
         {
             // Test functional here
             LoadI(false);
-            imageBoxRs.Image = filter.BooleanOperation('+');
+            imageBoxRs.Image = filter.Intersection();
         }
 
         private void OpenNewImage(object sender, EventArgs e)

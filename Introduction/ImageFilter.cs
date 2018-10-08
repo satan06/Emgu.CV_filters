@@ -23,6 +23,12 @@ namespace Introduction
             Value
         }
 
+        public enum Boolean
+        {
+            Add,
+            Substract
+        }
+
         private delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
 
         private void EachPixel(Func<int, int, int, byte> action)
@@ -49,6 +55,7 @@ namespace Introduction
         /// <see cref="tempImage"></see>
         /// to load temp image and work with booleans
         /// </param>
+        /// <overload>Opens new image and resizes it</overload>
         public void OpenFile(string fileName, ref Image<Bgr, byte> container)
         {
             container = new Image<Bgr, byte>(fileName);
@@ -282,14 +289,13 @@ namespace Introduction
         /// Performs boolean operation with another image
         /// </summary>
         /// <param name="ch">Addition or substraction operator</param>
-        /// <param name="image">Second image for operation</param>
-        public Image<Bgr, byte> BooleanOperation(char ch)
+        public Image<Bgr, byte> BooleanOperation(Boolean b)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
-                color = SetOperaton(ch, sourceImage.Data[width, height, channel]* 0.7, 
+                color = SetOperaton(b, sourceImage.Data[width, height, channel]* 0.7, 
                         tempImage.Data[width, height, channel]* 0.7);
                 result.Data[width, height, channel] = color;
             });
@@ -300,29 +306,32 @@ namespace Introduction
         /// <summary>
         /// Performs intersection operation with another image
         /// </summary>
-        /// <param name="image">Second image for operation</param>
-        public Image<Bgr, byte> Intersection(Image<Bgr, byte> image)
+        public Image<Bgr, byte> Intersection()
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
-                if (image.Data[width, height, channel] == 0)
+                if (tempImage.Data[width, height, channel] == 0)
                 {
                     result.Data[width, height, channel] = 0;
+                }
+                else if(tempImage.Data[width, height, channel] > 0)
+                {
+                    result.Data[width, height, channel] = sourceImage.Data[width, height, channel];
                 }
             });
 
             return result;
         }
 
-        private byte SetOperaton(char ch, double val, double subval)
+        private byte SetOperaton(Boolean b, double val, double subval)
         {
-            if (ch == '+')
+            if (b == Boolean.Add)
             {
                 return ColorCheck(val + subval, 0, 255);
             }
-            else if (ch == '-')
+            else if (b == Boolean.Substract)
             {
                 return ColorCheck(val - subval, 0, 255);
             }

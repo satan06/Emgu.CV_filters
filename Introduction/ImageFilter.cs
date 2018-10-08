@@ -7,228 +7,452 @@ using System.Collections.Generic;
 
 namespace Introduction
 {
+    /// <summary>
+    /// Represents class with simple image filter effects
+    /// </summary>
     public class ImageFilter
     {
         public Image<Bgr, byte> sourceImage;
-        #region CannyThreshold
-        public double cannyThreshold = 80.0;
-        public double cannyThresholdLinking = 40.0;
-        #endregion
-
-        public enum HSV : byte
+        public Image<Bgr, byte> tempImage;
+        
+        // Pixel image traversal
+        private void EachPixel(Data.Func<int, int, int, byte> action)
         {
-            hue,
-            saturation,
-            value
+            for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
+            {
+                for (int x = 0; x < sourceImage.Width; x++)
+                {
+                    for (int y = 0; y < sourceImage.Height; y++)
+                    {
+                        action(channel, y, x, sourceImage.Data[y, x, channel]);
+                    }
+                }
+            }
         }
 
-        public void OpenFile (string fileNmae)
+        /// <summary>
+        /// Opens new image
+        /// </summary>
+        /// <param name="fileName">Path to image</param>
+        /// <param name="container">Where to put image. Use
+        /// <see cref="sourceImage"></see>
+        /// to work with main sourse image. Use
+        /// <see cref="tempImage"></see>
+        /// to load temp image and work with booleans (e.g.)
+        /// </param>
+        /// <overload>Opens new image and resizes it</overload>
+        public void OpenFile(string fileName, ref Image<Bgr, byte> container)
         {
-            sourceImage = new Image<Bgr, byte>(fileNmae).Resize(640, 480, Inter.Linear);
+            container = new Image<Bgr, byte>(fileName);
         }
-        public Image<Gray, byte> ToGray()
+
+        public void OpenFile(string fileName, ref Image<Bgr, byte> container, int width, int height)
         {
-            if (sourceImage == null) { return null; }
+            container = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
+        }
+
+        private Image<Gray, byte> ToGray()
+        {
+            if (sourceImage == null)
+            {
+                return null;
+            }
 
             Image<Gray, byte> grayImage = sourceImage.Convert<Gray, byte>();
             return grayImage;
         }
-        public Image<Bgr, byte> Denoise()
+
+        /// <summary>
+        /// Reduces noises on the image
+        /// </summary>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        // Testing: OK
+        public Image<Bgr, byte> Denoise(Image<Bgr, byte> image)
         {
-            if (sourceImage == null) { return null; }
+            if (image == null)
+            {
+                return null;
+            }
 
-            var tempImage = sourceImage.PyrDown();
-            var destImage = tempImage.PyrUp();
-
+            var destImage = image.PyrDown().PyrUp();
             return destImage;
         }
-        public Image<Gray, byte> CannyFilter()
-        {
-            if (sourceImage == null) { return null; }
 
-            var cannyEdges = sourceImage.Canny(cannyThreshold, cannyThresholdLinking);
-            Denoise();
+        /// <summary>
+        /// Imposes a canny effect on the image
+        /// </summary>
+        /// <param name="threshold">Result image threshold value</param>
+        /// <param name="thresholdLinking">Intensity of linking edges</param>
+        /// <returns></returns>
+        // Testing: OK
+        public Image<Gray, byte> CannyFilter(double threshold = 80.0, double thresholdLinking = 40.0)
+        {
+            if (sourceImage == null)
+            {
+                return null;
+            }
+            var cannyEdges = sourceImage.Canny(threshold, thresholdLinking);
 
             return cannyEdges;
         }
+        /// <summary>
+        /// Imposes a cell shading effect on the image
+        /// </summary>
+        // Testing: OK
         public Image<Bgr, byte> CellShading()
         {
-            if (sourceImage == null) { return null; }
+            if (sourceImage == null)
+            {
+                return null;
+            }
 
             var cannyEdgesBgr = CannyFilter().Convert<Bgr, byte>();
             var resultImage = sourceImage.Sub(cannyEdgesBgr);
 
-            for (int channel = 0; channel < resultImage.NumberOfChannels; channel++)
+            EachPixel((channel, width, height, color) =>
             {
-                for (int x = 0; x < resultImage.Width; x++)
-                {
-                    for (int y = 0; y < resultImage.Height; y++)
-                    {
-                        byte color = resultImage.Data[y, x, channel];
+                resultImage.Data[width, height, channel] = CellShadingCheck(resultImage.Data[width, height, channel]);
+            });
 
-                        if (color <= 50) { color = 0; }
-                        else if (color <= 100) { color = 25; }
-                        else if (color <= 150) { color = 180; }
-                        else if (color <= 200) { color = 210; }
-                        else { color = 255; }
-
-                        resultImage.Data[y, x, channel] = color;
-                    }
-                }
-            }
-                Denoise();
-                return resultImage;
+            Denoise(resultImage);
+            return resultImage;
         }
-        public Image<Gray, byte> Channel(byte channelIndex)
-        {
-            if(sourceImage == null) { return null; }
-            var channel = sourceImage.Split()[channelIndex];
 
+        public Image<Gray, byte> ChannelSplit(byte channelIndex)
+        {
+            if(sourceImage == null)
+            {
+                return null;
+            }
+
+            var channel = sourceImage.Split()[channelIndex];
             return channel;
         }
+
+        /// <summary>
+        /// Combines image channels all together in one particular image
+        /// </summary>
+        /// <param name="channels">Array of image channels</param>
+        // Testing: OK
         public Image<Bgr, byte> ChannelCombine(List<Image<Gray, byte>> channels)
         {
             VectorOfMat vm = new VectorOfMat();
             Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
                 
-            for (byte ch = 0; ch < channels.Count; ch++) { vm.Push(channels[ch]); }
+            for (byte ch = 0; ch < channels.Count; ch++)
+            {
+                vm.Push(channels[ch]);
+            }
             CvInvoke.Merge(vm, destImage);
             
             return destImage;
         }
-        public Image<Gray, byte> BWConvert()
-        {
-            if (sourceImage == null) { return null; }
-            Image<Gray, byte> grayImage = new Image<Gray, byte>(sourceImage.Size);
 
-            for (int x = 0; x < grayImage.Width; x++)
+        /// <summary>
+        /// Converts this image into black and white copy
+        /// </summary>
+        // Testing: OK
+        public Image<Gray, byte> ConvertToBW(Image<Bgr, byte> img)
+        {
+            if (img == null)
             {
-                for (int y = 0; y < grayImage.Height; y++)
-                {
-                    grayImage.Data[y, x, 0] = Convert.ToByte(0.299 * sourceImage.Data[y, x, 2] + 0.587 *
-                    sourceImage.Data[y, x, 1] + 0.114 * sourceImage.Data[y, x, 0]);
-                }
+                return null;
             }
+            Image<Gray, byte> grayImage = new Image<Gray, byte>(img.Size);
+
+            EachPixel((channel, width, height, color) => 
+            {
+                grayImage.Data[width, height, 0] = Convert.ToByte(0.299 * img.Data[width, height, 2] + 
+                                                                  0.587 * img.Data[width, height, 1] + 
+                                                                  0.114 * img.Data[width, height, 0]);
+            });
 
             return grayImage;
         }
-        public Image<Bgr, byte> Sepia()
+
+        /// <summary>
+        /// Imposes a sepia effect on the image
+        /// </summary>
+        // Testing: OK
+        public Image<Bgr, byte> Sepia() 
         {
-            Image<Bgr, byte> destImage = sourceImage.Clone();
+            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
             byte blue, green, red;
 
-            for (int x = 0; x < destImage.Width; x++)
+            EachPixel((channel, width, height, color) => 
             {
-                for (int y = 0; y < destImage.Height; y++)
-                {
-                    blue = destImage.Data[y, x, 0];
-                    green = destImage.Data[y, x, 1];
-                    red = destImage.Data[y, x, 2];
+                blue = sourceImage.Data[width, height, 0];
+                green = sourceImage.Data[width, height, 1];
+                red = sourceImage.Data[width, height, 2];
 
-                    destImage.Data[y, x, 0] = ColorCheck(blue * 0.272 + green * 0.534 + blue * 0.131, 0 , 255);
-                    destImage.Data[y, x, 1] = ColorCheck(blue * 0.349 + green * 0.686 + blue * 0.168, 0, 255);
-                    destImage.Data[y, x, 2] = ColorCheck(blue * 0.393 + green * 0.769 + blue * 0.189, 0, 255);
-                }
-            }
+                destImage.Data[width, height, 0] = ColorCheck(blue * 0.272 + green * 0.534 + blue * 0.131, 0, 255);
+                destImage.Data[width, height, 1] = ColorCheck(blue * 0.349 + green * 0.686 + blue * 0.168, 0, 255);
+                destImage.Data[width, height, 2] = ColorCheck(blue * 0.393 + green * 0.769 + blue * 0.189, 0, 255);
+            });
 
             return destImage;
         }
-        public Image<Hsv, byte> BrightnessHSV(int brightness = 25)
+
+        /// <summary>
+        /// Changes constrast of the image
+        /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="image">Image to work with</param>
+        /// /// <param name="value">Intensity value.</param>
+        // Testing: OK
+        public Image<T, byte> Contrast<T>(Image<T, byte> img, double value = 5.0) where T : struct, IColor
+        {
+            Image<T, byte> destImage = new Image<T, byte>(sourceImage.Size);
+            double pixel;
+
+            EachPixel((channel, width, height, color) =>
+            {
+                pixel = img.Data[width, height, channel] * value;
+                destImage.Data[width, height, channel] = ColorCheck(pixel, 0, 255);
+            });
+
+            return destImage;
+        }
+
+        /// <summary>
+        /// Changes brightness of the image
+        /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="image">Image to work with</param>
+        /// /// <param name="value">Intensity value.</param>
+        // Testing: OK
+        public Image<T, byte> Brightness<T>(Image<T, byte> img, double value = 25.0) where T : struct, IColor
+        {
+            Image<T, byte> destImage = new Image<T, byte>(sourceImage.Size);
+            double pixel;
+
+            EachPixel((channel, width, height, color) =>
+            {
+                pixel = img.Data[width, height, channel] + value;
+                destImage.Data[width, height, channel] = ColorCheck(pixel, 0, 255);
+            });
+
+            return destImage;
+        }
+
+        /// <summary>
+        /// Changes selected HSV channel of the image
+        /// </summary>
+        /// <param name="value">Intensity value</param>
+        /// <param name="hsv">The HSV channel</param>
+        // Testing: OK
+        public Image<Hsv, byte> HSVFilter(double value, Data.HSV hsv)
         {
             Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
 
-            for (int x = 0; x < destImage.Width; x++)
+            EachPixel((channel, width, height, color) =>
             {
-                for (int y = 0; y < destImage.Height; y++)
+                if (hsv == 0)
                 {
-                    int color = destImage.Data[y, x, 2];
-                    color += brightness;
-                    destImage.Data[y, x, 2] = ColorCheck(color, 0, 100);
+                    destImage.Data[width, height, (int)hsv] =
+                    ColorCheck(destImage.Data[width, height, (int)hsv] + value, 0, 180);
                 }
-            }
+                else
+                {
+                    destImage.Data[width, height, (int)hsv] =
+                    ColorCheck(destImage.Data[width, height, (int)hsv] + value, 0, 100);
+                }
+            });
+
             return destImage;
         }
-        public Image<Hsv, byte> Contrast(int contrast = 5)
-        {
-            Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
 
-            for (int x = 0; x < destImage.Width; x++)
+        /// <summary>
+        /// Performs boolean operation with another image
+        /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="img">Image to work with</param>
+        /// <param name="b">Addition or substruction operation</param>
+        /// <param name="value">Effect intensity</param>
+        // Testing: OK
+        public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Data.Boolean b, double value) where T : struct, IColor
+        {
+            Image<T, byte> result = new Image<T, byte>(sourceImage.Size);
+
+            EachPixel((channel, width, height, color) =>
             {
-                for (int y = 0; y < destImage.Height; y++)
-                {
-                    int color = destImage.Data[y, x, 2];
-                    color *= contrast;
-                    destImage.Data[y, x, 1] = ColorCheck(color, 0, 255);
-                }
-            }
-            return destImage;
-        }
-        private byte ColorCheck(double color, double min, double max)
-        {
-            if (color < min) { return (byte)min; }
-            else if (color > max) { return (byte)max; }
-            else { return (byte)color; }
-        }
-        public Image<Bgr, byte> Brightness(int brightness = 25)
-        {
-            Image<Bgr, byte> destImage = sourceImage.Clone();
+                color = SetOperaton(b, img.Data[width, height, channel] * Math.Abs(value - 1), 
+                        tempImage.Data[width, height, channel] * value);
+                result.Data[width, height, channel] = color;
+            });
 
-            for (int channel = 0; channel < destImage.NumberOfChannels; channel++)
-            {
-                for (int x = 0; x < destImage.Width; x++)
-                {
-                    for (int y = 0; y < destImage.Height; y++)
-                    {
-                        int color = destImage.Data[y, x, channel];
-                        color += brightness;
-                        destImage.Data[y, x, channel] = ColorCheck(color, 0, 255);
-                    }
-                }
-            }
-            return destImage;
-        }
-        public Image<Hsv, byte> HSVFilter(double value, HSV channel)
-        {
-            Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
-
-            for (int x = 0; x < destImage.Width; x++)
-            {
-                for (int y = 0; y < destImage.Height; y++)
-                {
-                    double color = destImage.Data[y, x, (int)channel] + value;  
-
-                    if (channel == 0)
-                        destImage.Data[y, x, (int)channel] = ColorCheck(color, 0, 180);
-                    else
-                        destImage.Data[y, x, (int)channel] = ColorCheck(color, 0, 100);
-
-                }
-            }
-            return destImage;
-        }
-        public Image<Bgr, byte> Addition(Image<Bgr, byte> image)
-        {
-            Image<Bgr, byte> result = sourceImage.Clone();
-            int color;
-
-            for (int channel = 0; channel < result.NumberOfChannels; channel++)
-            {
-                for (int x = 0; x < result.Width; x++)
-                {
-                    for (int y = 0; y < result.Height; y++)
-                    {
-                        color = result.Data[y, x, channel] + image.Data[y, x, channel];
-                        result.Data[y, x, channel] = ColorCheck(color, 0, 255);
-                    }
-                }
-            }
             return result;
         }
-        private byte SplitOperaton(char ch, double val, double subval)
+
+        /// <summary>
+        /// Performs intersection operation with another image
+        /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="image">Image to work with</param>
+        /// <returns></returns>
+        // Testing: OK
+        public Image<T, byte> Intersection<T>(Image<T, byte> img) where T : struct, IColor
         {
-            if (ch == '+') { return (byte)(val + subval); }
-            else if (ch == '-') { return (byte)(val - subval); }
-            else { return (byte)(val * subval); }
+            Image<T, byte> result = new Image<T, byte>(img.Size);
+
+            EachPixel((channel, width, height, color) =>
+            {
+                if (tempImage.Data[width, height, channel] == 0)
+                {
+                    result.Data[width, height, channel] = 0;
+                }
+                else if(tempImage.Data[width, height, channel] > 0)
+                {
+                    result.Data[width, height, channel] = sourceImage.Data[width, height, channel];
+                }
+            });
+
+            return result;
         }
+
+        /// <summary>
+        /// Performs watercolor effect in the image
+        /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="img">Image to work with</param>
+        /// <param name="brightness">Brightness value</param>
+        /// <param name="contrast">Contrast value</param>
+        /// <param name="intens">Sub Image intensity</param>
+        // Testing: OK
+        public Image<T, byte> WaterColor<T>(Image<T, byte> img, double brightness, double contrast, double intens) where T : struct, IColor
+        {
+            Image<T, byte> result = new Image<T, byte>(img.Size);
+
+            result = MedianBlur(result);
+            result = Brightness(img, brightness);
+            result = Contrast(result, contrast);
+            result = BooleanOperation(result, Data.Boolean.Add, intens);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Performs median blur effect on the image
+        /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="img">Image to work with</param>
+        // Testing: OK
+        public Image<T, byte> MedianBlur<T>(Image<T, byte> img) where T : struct, IColor
+        {
+            List<byte> pixels = new List<byte>();
+            const int coreInd = 4; 
+
+            for (byte channel = 0; channel < img.NumberOfChannels; channel++)
+            {
+                for (int x = 1; x < img.Width - 1; x++)
+                {
+                    for (int y = 1; y < img.Height - 1; y++)
+                    {
+                        for (sbyte i = -1; i < 2; i++)
+                        {
+                            for (sbyte j = -1; j < 2; j++)
+                            {
+                                pixels.Add(sourceImage.Data[y + j, x + i, channel]);
+                            }
+                        }
+
+                        pixels.Sort();
+                        img.Data[y, x, channel] = pixels[coreInd];
+
+                        pixels.Clear();
+                    }
+                }
+            }
+
+            return img;
+        }
+
+        /// <summary>
+        /// Performs window filter effect
+        /// </summary>
+        /// <param name="matrix">Specified matrix</param>
+        // Testing: OK
+        public Image<Bgr, byte> WindowFilter(int[,] matrix)
+        {
+            Image<Gray, byte> result = ConvertToBW(sourceImage);
+            Image<Gray, byte> temp = ConvertToBW(sourceImage);
+            double value = 0;
+
+            if(matrix == null)
+            {
+                throw new Exception("Matrix is empty!");
+            }
+            for (byte channel = 0; channel < result.NumberOfChannels; channel++)
+            {
+                for (int x = 1; x < result.Width - 1; x++)
+                {
+                    for (int y = 1; y < result.Height - 1; y++)
+                    {
+                        for (sbyte i = -1; i < 2; i++)
+                        {
+                            for (sbyte j = -1; j < 2; j++)
+                            {
+                                value += temp.Data[y + j, x + i, channel] * matrix[i + 1, j + 1];
+                            }
+                        }
+
+                        result.Data[y, x, channel] = ColorCheck(value, 0, 255);
+                        value = 0;
+                    }
+                }
+            }
+
+            return result.Convert<Bgr, byte>();
+        }
+
+        /// <summary>
+        /// Performs cartoon filter effect on the image
+        /// </summary>
+        /// <param name="img">Source image</param>
+        /// <param name="thresholdValue">Threshold value</param>
+        // Testing: OK
+        public Image<Bgr, byte> CartoonFIlter(Image<Bgr, byte> img, int thresholdValue)
+        {
+            var bwImage= ConvertToBW(img);
+            var blurImage = MedianBlur(bwImage);
+            var binImage = blurImage.ThresholdAdaptive(new Gray(100), AdaptiveThresholdType.MeanC, 
+                                                       ThresholdType.Binary, thresholdValue, new Gray(0.03));
+            tempImage = binImage.Convert<Bgr, byte>();
+            var result = Intersection(sourceImage);
+
+            return result;
+        }
+
+        #region Additional methods
+        private byte SetOperaton(Data.Boolean b, double val, double subval)
+        {
+            if (b == Data.Boolean.Add)
+            {
+                return ColorCheck(val + subval, 0, 255);
+            }
+            else if (b == Data.Boolean.Substract)
+            {
+                return ColorCheck(val - subval, 0, 255);
+            }
+            throw new Exception("Wrong operation");
+        }
+
+        private byte CellShadingCheck(byte color)
+        {
+            var condArg0 = (color <= 50) ? 0 :
+                            (color <= 100) ? 25 :
+                            (color <= 150) ? 180 :
+                            (color <= 200) ? 210 : 255;
+
+            return (byte)condArg0;
+        }
+
+        private byte ColorCheck(double color, double min, double max)
+        {
+            var condition = (color < min) ? min : (color > max) ? max : color;
+            return (byte)condition;
+        }
+        #endregion
     }
 }

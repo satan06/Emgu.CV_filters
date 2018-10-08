@@ -119,16 +119,6 @@ namespace Introduction
             return resultImage;
         }
 
-        private byte CellShadingCheck(byte color)
-        {
-            var condArg0 = (color <= 50) ? 0 : 
-                            (color <= 100) ? 25 : 
-                            (color <= 150) ? 180 : 
-                            (color <= 200) ? 210 : 255;
-
-            return (byte)condArg0; 
-        }
-
         public Image<Gray, byte> ChannelSplit(byte channelIndex)
         {
             if(sourceImage == null)
@@ -223,12 +213,6 @@ namespace Introduction
             });
 
             return destImage;
-        }
-
-        private byte ColorCheck(double color, double min, double max)
-        {
-            var condition = (color < min) ? min : (color > max) ? max : color;
-            return (byte)condition;
         }
 
         /// <summary>
@@ -422,6 +406,25 @@ namespace Introduction
             return result.Convert<Bgr, byte>();
         }
 
+        /// <summary>
+        /// Performs cartoon filter effect on the image
+        /// </summary>
+        /// <param name="img">Source image</param>
+        /// <param name="thresholdValue">Threshold value</param>
+        // Testing: OK
+        public Image<Bgr, byte> CartoonFIlter(Image<Bgr, byte> img, int thresholdValue)
+        {
+            var bwImage= ConvertToBW(img);
+            var blurImage = MedianBlur(bwImage);
+            var binImage = blurImage.ThresholdAdaptive(new Gray(100), AdaptiveThresholdType.MeanC, 
+                                                       ThresholdType.Binary, thresholdValue, new Gray(0.03));
+            tempImage = binImage.Convert<Bgr, byte>();
+            var result = Intersection(sourceImage);
+
+            return result;
+        }
+
+        #region Additional methods
         private byte SetOperaton(Data.Boolean b, double val, double subval)
         {
             if (b == Data.Boolean.Add)
@@ -434,5 +437,22 @@ namespace Introduction
             }
             throw new Exception("Wrong operation");
         }
+
+        private byte CellShadingCheck(byte color)
+        {
+            var condArg0 = (color <= 50) ? 0 :
+                            (color <= 100) ? 25 :
+                            (color <= 150) ? 180 :
+                            (color <= 200) ? 210 : 255;
+
+            return (byte)condArg0;
+        }
+
+        private byte ColorCheck(double color, double min, double max)
+        {
+            var condition = (color < min) ? min : (color > max) ? max : color;
+            return (byte)condition;
+        }
+        #endregion
     }
 }

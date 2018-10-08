@@ -29,6 +29,8 @@ namespace Introduction
             else
             {
                 filter.OpenFile(fileName, ref filter.tempImage);
+                filter.ResizeImage(filter.tempImage, width, height);
+
             }
         }
 
@@ -51,6 +53,8 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
+            //LoadI(false);
+            imageBoxRs.Image = filter.Brightness();
         }
 
         private void OpenNewImage(object sender, EventArgs e)

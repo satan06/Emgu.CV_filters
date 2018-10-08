@@ -211,16 +211,16 @@ namespace Introduction
         /// Changes constrast of the image
         /// </summary>
         /// /// <param name="value">Intensity value.</param>
-        // Testing: SKIPPED
+        // Testing: OK
         public Image<Bgr, byte> Contrast(double value = 5.0)
         {
             Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
+            double pixel;
 
             EachPixel((channel, width, height, color) =>
             {
-                color = destImage.Data[width, height, channel];
-                color *= ColorCheck(value, 0, 255);
-                destImage.Data[width, height, channel] = color;
+                pixel = sourceImage.Data[width, height, channel] * value;
+                destImage.Data[width, height, channel] = ColorCheck(pixel, 0, 255);
             });
 
             return destImage;
@@ -240,12 +240,12 @@ namespace Introduction
         public Image<Bgr, byte> Brightness(double value = 25.0)
         {
             Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
+            double pixel;
 
             EachPixel((channel, width, height, color) =>
             {
-                color = destImage.Data[width, height, channel];
-                color += ColorCheck(value, 0, 255);                
-                destImage.Data[width, height, channel] = color;
+                pixel = sourceImage.Data[width, height, channel] + value;
+                destImage.Data[width, height, channel] = ColorCheck(pixel, 0, 255);
             });
 
             return destImage;

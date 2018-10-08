@@ -54,9 +54,9 @@ namespace Introduction
             container = new Image<Bgr, byte>(fileName);
         }
 
-        public void ResizeImage(Image<Bgr, byte> image, int wight, int height)
+        public void OpenFile(string fileName, ref Image<Bgr, byte> container, int width, int height)
         {
-            image.Resize(wight, height, Inter.Linear);
+            container = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
         }
 
         private Image<Gray, byte> ToGray()
@@ -236,7 +236,7 @@ namespace Introduction
         /// Changes brightness of the image
         /// </summary>
         /// /// <param name="value">Intensity value.</param>
-        // Testing: SKIPPED
+        // Testing: OK
         public Image<Bgr, byte> Brightness(double value = 25.0)
         {
             Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
@@ -283,13 +283,14 @@ namespace Introduction
         /// </summary>
         /// <param name="ch">Addition or substraction operator</param>
         /// <param name="image">Second image for operation</param>
-        public Image<Bgr, byte> BooleanOperation(Image<Bgr, byte> image, char ch)
+        public Image<Bgr, byte> BooleanOperation(char ch)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
-                color = SetOperaton(ch, result.Data[width, height, channel]* 0.7, image.Data[width, height, channel]* 0.3);
+                color = SetOperaton(ch, sourceImage.Data[width, height, channel]* 0.7, 
+                        tempImage.Data[width, height, channel]* 0.7);
                 result.Data[width, height, channel] = color;
             });
 

@@ -23,14 +23,11 @@ namespace Introduction
 
             if (isSource)
             {
-                filter.OpenFile(fileName, ref filter.sourceImage);
-                filter.ResizeImage(filter.sourceImage, width, height);
+                filter.OpenFile(fileName, ref filter.sourceImage, width, height);
             }
             else
             {
-                filter.OpenFile(fileName, ref filter.tempImage);
-                filter.ResizeImage(filter.tempImage, width, height);
-
+                filter.OpenFile(fileName, ref filter.tempImage, width, height);
             }
         }
 
@@ -53,8 +50,8 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
-            //LoadI(false);
-            imageBoxRs.Image = filter.Brightness();
+            LoadI(false);
+            imageBoxRs.Image = filter.BooleanOperation('+');
         }
 
         private void OpenNewImage(object sender, EventArgs e)

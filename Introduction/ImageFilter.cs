@@ -4,7 +4,6 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace Introduction
 {
@@ -15,23 +14,9 @@ namespace Introduction
     {
         public Image<Bgr, byte> sourceImage;
         public Image<Bgr, byte> tempImage;
-
-        public enum HSV : byte
-        {
-            Hue,
-            Saturation,
-            Value
-        }
-
-        public enum Boolean
-        {
-            Add,
-            Substract
-        }
-
-        private delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
-
-        private void EachPixel(Func<int, int, int, byte> action)
+        
+        // Pixel image traversal
+        private void EachPixel(Data.Func<int, int, int, byte> action)
         {
             for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
             {
@@ -53,7 +38,7 @@ namespace Introduction
         /// <see cref="sourceImage"></see>
         /// to work with main sourse image. Use
         /// <see cref="tempImage"></see>
-        /// to load temp image and work with booleans
+        /// to load temp image and work with booleans (e.g.)
         /// </param>
         /// <overload>Opens new image and resizes it</overload>
         public void OpenFile(string fileName, ref Image<Bgr, byte> container)
@@ -178,18 +163,19 @@ namespace Introduction
         /// Converts this image into black and white copy
         /// </summary>
         // Testing: OK
-        public Image<Gray, byte> ConvertToBW()
+        public Image<Gray, byte> ConvertToBW(Image<Bgr, byte> img)
         {
-            if (sourceImage == null)
+            if (img == null)
             {
                 return null;
             }
-            Image<Gray, byte> grayImage = new Image<Gray, byte>(sourceImage.Size);
+            Image<Gray, byte> grayImage = new Image<Gray, byte>(img.Size);
 
             EachPixel((channel, width, height, color) => 
             {
-                grayImage.Data[width, height, 0] = Convert.ToByte(0.299 * sourceImage.Data[width, height, 2] + 0.587 *
-                sourceImage.Data[width, height, 1] + 0.114 * sourceImage.Data[width, height, 0]);
+                grayImage.Data[width, height, 0] = Convert.ToByte(0.299 * img.Data[width, height, 2] + 
+                                                                  0.587 * img.Data[width, height, 1] + 
+                                                                  0.114 * img.Data[width, height, 0]);
             });
 
             return grayImage;
@@ -272,7 +258,7 @@ namespace Introduction
         /// <param name="value">Intensity value</param>
         /// <param name="hsv">The HSV channel</param>
         // Testing: OK
-        public Image<Hsv, byte> HSVFilter(double value, HSV hsv)
+        public Image<Hsv, byte> HSVFilter(double value, Data.HSV hsv)
         {
             Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
 
@@ -299,15 +285,15 @@ namespace Introduction
         /// <typeparam name="T">Image type</typeparam>
         /// <param name="img">Image to work with</param>
         /// <param name="b">Addition or substruction operation</param>
-        /// <param name="value">Sub image intensity</param>
+        /// <param name="value">Effect intensity</param>
         // Testing: OK
-        public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Boolean b, double value) where T : struct, IColor
+        public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Data.Boolean b, double value) where T : struct, IColor
         {
             Image<T, byte> result = new Image<T, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
-                color = SetOperaton(b, img.Data[width, height, channel], 
+                color = SetOperaton(b, img.Data[width, height, channel] * Math.Abs(value - 1), 
                         tempImage.Data[width, height, channel] * value);
                 result.Data[width, height, channel] = color;
             });
@@ -354,22 +340,95 @@ namespace Introduction
         {
             Image<T, byte> result = new Image<T, byte>(img.Size);
 
-            //Add Median Blur effect
-
+            result = MedianBlur(result);
             result = Brightness(img, brightness);
             result = Contrast(result, contrast);
-            result = BooleanOperation(result, Boolean.Add, intens);
+            result = BooleanOperation(result, Data.Boolean.Add, intens);
 
             return result;
         }
 
-        private byte SetOperaton(Boolean b, double val, double subval)
+        /// <summary>
+        /// Performs median blur effect on the image
+        /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="img">Image to work with</param>
+        // Testing: OK
+        public Image<T, byte> MedianBlur<T>(Image<T, byte> img) where T : struct, IColor
         {
-            if (b == Boolean.Add)
+            List<byte> pixels = new List<byte>();
+            const int coreInd = 4; 
+
+            for (byte channel = 0; channel < img.NumberOfChannels; channel++)
+            {
+                for (int x = 1; x < img.Width - 1; x++)
+                {
+                    for (int y = 1; y < img.Height - 1; y++)
+                    {
+                        for (sbyte i = -1; i < 2; i++)
+                        {
+                            for (sbyte j = -1; j < 2; j++)
+                            {
+                                pixels.Add(sourceImage.Data[y + j, x + i, channel]);
+                            }
+                        }
+
+                        pixels.Sort();
+                        img.Data[y, x, channel] = pixels[coreInd];
+
+                        pixels.Clear();
+                    }
+                }
+            }
+
+            return img;
+        }
+
+        /// <summary>
+        /// Performs window filter effect
+        /// </summary>
+        /// <param name="matrix">Specified matrix</param>
+        // Testing: OK
+        public Image<Bgr, byte> WindowFilter(int[,] matrix)
+        {
+            Image<Gray, byte> result = ConvertToBW(sourceImage);
+            Image<Gray, byte> temp = ConvertToBW(sourceImage);
+            double value = 0;
+
+            if(matrix == null)
+            {
+                throw new Exception("Matrix is empty!");
+            }
+            for (byte channel = 0; channel < result.NumberOfChannels; channel++)
+            {
+                for (int x = 1; x < result.Width - 1; x++)
+                {
+                    for (int y = 1; y < result.Height - 1; y++)
+                    {
+                        for (sbyte i = -1; i < 2; i++)
+                        {
+                            for (sbyte j = -1; j < 2; j++)
+                            {
+                                value += temp.Data[y + j, x + i, channel] * matrix[i + 1, j + 1];
+                            }
+                        }
+
+                        result.Data[y, x, channel] = ColorCheck(value, 0, 255);
+                        value = 0;
+                    }
+                }
+            }
+
+            return result.Convert<Bgr, byte>();
+        }
+
+        private byte SetOperaton(Data.Boolean b, double val, double subval)
+        {
+            if (b == Data.Boolean.Add)
             {
                 return ColorCheck(val + subval, 0, 255);
             }
-            else if (b == Boolean.Substract)
+            else if (b == Data.Boolean.Substract)
             {
                 return ColorCheck(val - subval, 0, 255);
             }

@@ -50,8 +50,6 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
-            LoadI(false);
-            imageBoxRs.Image = filter.Intersection();
         }
 
         private void OpenNewImage(object sender, EventArgs e)

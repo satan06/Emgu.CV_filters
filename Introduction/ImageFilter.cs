@@ -82,6 +82,7 @@ namespace Introduction
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
+        // Testing: OK
         public Image<Bgr, byte> Denoise(Image<Bgr, byte> image)
         {
             if (image == null)
@@ -99,6 +100,7 @@ namespace Introduction
         /// <param name="threshold">Result image threshold value</param>
         /// <param name="thresholdLinking">Intensity of linking edges</param>
         /// <returns></returns>
+        // Testing: OK
         public Image<Gray, byte> CannyFilter(double threshold = 80.0, double thresholdLinking = 40.0)
         {
             if (sourceImage == null)
@@ -112,6 +114,7 @@ namespace Introduction
         /// <summary>
         /// Imposes a cell shading effect on the image
         /// </summary>
+        // Testing: OK
         public Image<Bgr, byte> CellShading()
         {
             if (sourceImage == null)
@@ -151,6 +154,7 @@ namespace Introduction
             var channel = sourceImage.Split()[channelIndex];
             return channel;
         }
+
         /// <summary>
         /// Combines image channels all together in one particular image
         /// </summary>
@@ -217,16 +221,18 @@ namespace Introduction
         /// <summary>
         /// Changes constrast of the image
         /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="image">Image to work with</param>
         /// /// <param name="value">Intensity value.</param>
         // Testing: OK
-        public Image<Bgr, byte> Contrast(double value = 5.0)
+        public Image<T, byte> Contrast<T>(Image<T, byte> img, double value = 5.0) where T : struct, IColor
         {
-            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
+            Image<T, byte> destImage = new Image<T, byte>(sourceImage.Size);
             double pixel;
 
             EachPixel((channel, width, height, color) =>
             {
-                pixel = sourceImage.Data[width, height, channel] * value;
+                pixel = img.Data[width, height, channel] * value;
                 destImage.Data[width, height, channel] = ColorCheck(pixel, 0, 255);
             });
 
@@ -242,16 +248,18 @@ namespace Introduction
         /// <summary>
         /// Changes brightness of the image
         /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="image">Image to work with</param>
         /// /// <param name="value">Intensity value.</param>
         // Testing: OK
-        public Image<Bgr, byte> Brightness(double value = 25.0)
+        public Image<T, byte> Brightness<T>(Image<T, byte> img, double value = 25.0) where T : struct, IColor
         {
-            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
+            Image<T, byte> destImage = new Image<T, byte>(sourceImage.Size);
             double pixel;
 
             EachPixel((channel, width, height, color) =>
             {
-                pixel = sourceImage.Data[width, height, channel] + value;
+                pixel = img.Data[width, height, channel] + value;
                 destImage.Data[width, height, channel] = ColorCheck(pixel, 0, 255);
             });
 
@@ -288,15 +296,19 @@ namespace Introduction
         /// <summary>
         /// Performs boolean operation with another image
         /// </summary>
-        /// <param name="ch">Addition or substraction operator</param>
-        public Image<Bgr, byte> BooleanOperation(Boolean b)
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="img">Image to work with</param>
+        /// <param name="b">Addition or substruction operation</param>
+        /// <param name="value">Sub image intensity</param>
+        // Testing: OK
+        public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Boolean b, double value) where T : struct, IColor
         {
-            Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
+            Image<T, byte> result = new Image<T, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
-                color = SetOperaton(b, sourceImage.Data[width, height, channel]* 0.7, 
-                        tempImage.Data[width, height, channel]* 0.7);
+                color = SetOperaton(b, img.Data[width, height, channel], 
+                        tempImage.Data[width, height, channel] * value);
                 result.Data[width, height, channel] = color;
             });
 
@@ -306,9 +318,13 @@ namespace Introduction
         /// <summary>
         /// Performs intersection operation with another image
         /// </summary>
-        public Image<Bgr, byte> Intersection()
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="image">Image to work with</param>
+        /// <returns></returns>
+        // Testing: OK
+        public Image<T, byte> Intersection<T>(Image<T, byte> img) where T : struct, IColor
         {
-            Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
+            Image<T, byte> result = new Image<T, byte>(img.Size);
 
             EachPixel((channel, width, height, color) =>
             {
@@ -321,6 +337,28 @@ namespace Introduction
                     result.Data[width, height, channel] = sourceImage.Data[width, height, channel];
                 }
             });
+
+            return result;
+        }
+
+        /// <summary>
+        /// Performs watercolor effect in the image
+        /// </summary>
+        /// <typeparam name="T">Image type</typeparam>
+        /// <param name="img">Image to work with</param>
+        /// <param name="brightness">Brightness value</param>
+        /// <param name="contrast">Contrast value</param>
+        /// <param name="intens">Sub Image intensity</param>
+        // Testing: OK
+        public Image<T, byte> WaterColor<T>(Image<T, byte> img, double brightness, double contrast, double intens) where T : struct, IColor
+        {
+            Image<T, byte> result = new Image<T, byte>(img.Size);
+
+            //Add Median Blur effect
+
+            result = Brightness(img, brightness);
+            result = Contrast(result, contrast);
+            result = BooleanOperation(result, Boolean.Add, intens);
 
             return result;
         }

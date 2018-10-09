@@ -396,7 +396,7 @@ namespace Introduction
         /// </summary>
         /// <param name="img">Source image</param>
         /// <param name="thresholdValue">Threshold value</param>
-        public Image<Bgr, byte> CartoonFIlter(Image<Bgr, byte> img, int thresholdValue)
+        public Image<Bgr, byte> CartoonFilter(Image<Bgr, byte> img, int thresholdValue)
         {
             var bwImage= ConvertToBW(img);
             var blurImage = MedianBlur(bwImage);

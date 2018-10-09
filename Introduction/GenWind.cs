@@ -1,5 +1,6 @@
 ﻿using Emgu.CV.UI;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Introduction
@@ -18,10 +19,11 @@ namespace Introduction
         public Filter()
         {
             InitializeComponent();
+            Width = WindowRelaxModeWidth;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
 
             imageBox.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
             imageBoxRs.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
-            Width = WindowRelaxModeWidth;
         }
 
         private void LoaderCheck(string fileName, bool isSource)
@@ -104,6 +106,48 @@ namespace Introduction
         {
             Width = WindowRelaxModeWidth;
             BrContrPanel.Visible = false;
+        }
+
+        private void WinFilter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            WindowFilterPanel.Visible = true;
+        }
+
+        private void WinFilterClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            WindowFilterPanel.Visible = false;
+        }
+
+        private void WinFilterSharpen(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WindowFilter(Data.Sharp);
+        }
+
+        private void WinFilterEmbos(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WindowFilter(Data.Embos);
+        }
+
+        private void WinFilterEdges(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WindowFilter(Data.Edges);
+        }
+
+        private void WinFilerCustomMatSend(object sender, EventArgs e)
+        {
+            int[,] edTemp = { { (int)MatArg0.Value, (int)MatArg1.Value, (int)MatArg2.Value },
+                              { (int)MatArg3.Value, (int)MatArg4.Value, (int)MatArg5.Value },
+                              { (int)MatArg6.Value, (int)MatArg7.Value, (int)MatArg8.Value } };
+
+            Data.Custom = edTemp;
+
+            if(Data.Custom == null)
+            {
+                return;
+            }
+            imageBoxRs.Image = filter.WindowFilter(Data.Custom);
         }
     }
 }

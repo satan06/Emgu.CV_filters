@@ -19,7 +19,7 @@ namespace Introduction
 
         private void LoaderCheck(string fileName, bool isSource)
         {
-            int width = 640, height = 480; 
+            int width = 500, height = 500; 
 
             if (isSource)
             {

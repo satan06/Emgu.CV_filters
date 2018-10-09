@@ -67,7 +67,6 @@ namespace Introduction
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        // Testing: OK
         public Image<Bgr, byte> Denoise(Image<Bgr, byte> image)
         {
             if (image == null)
@@ -85,7 +84,6 @@ namespace Introduction
         /// <param name="threshold">Result image threshold value</param>
         /// <param name="thresholdLinking">Intensity of linking edges</param>
         /// <returns></returns>
-        // Testing: OK
         public Image<Gray, byte> CannyFilter(double threshold = 80.0, double thresholdLinking = 40.0)
         {
             if (sourceImage == null)
@@ -99,7 +97,6 @@ namespace Introduction
         /// <summary>
         /// Imposes a cell shading effect on the image
         /// </summary>
-        // Testing: OK
         public Image<Bgr, byte> CellShading()
         {
             if (sourceImage == null)
@@ -134,7 +131,6 @@ namespace Introduction
         /// Combines image channels all together in one particular image
         /// </summary>
         /// <param name="channels">Array of image channels</param>
-        // Testing: OK
         public Image<Bgr, byte> ChannelCombine(List<Image<Gray, byte>> channels)
         {
             VectorOfMat vm = new VectorOfMat();
@@ -152,7 +148,6 @@ namespace Introduction
         /// <summary>
         /// Converts this image into black and white copy
         /// </summary>
-        // Testing: OK
         public Image<Gray, byte> ConvertToBW(Image<Bgr, byte> img)
         {
             if (img == null)
@@ -174,7 +169,6 @@ namespace Introduction
         /// <summary>
         /// Imposes a sepia effect on the image
         /// </summary>
-        // Testing: OK
         public Image<Bgr, byte> Sepia() 
         {
             Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
@@ -221,7 +215,6 @@ namespace Introduction
         /// <typeparam name="T">Image type</typeparam>
         /// <param name="image">Image to work with</param>
         /// /// <param name="value">Intensity value.</param>
-        // Testing: OK
         public Image<T, byte> Brightness<T>(Image<T, byte> img, double value = 25.0) where T : struct, IColor
         {
             Image<T, byte> destImage = new Image<T, byte>(sourceImage.Size);
@@ -290,8 +283,6 @@ namespace Introduction
         /// </summary>
         /// <typeparam name="T">Image type</typeparam>
         /// <param name="image">Image to work with</param>
-        /// <returns></returns>
-        // Testing: OK
         public Image<T, byte> Intersection<T>(Image<T, byte> img) where T : struct, IColor
         {
             Image<T, byte> result = new Image<T, byte>(img.Size);
@@ -319,7 +310,6 @@ namespace Introduction
         /// <param name="brightness">Brightness value</param>
         /// <param name="contrast">Contrast value</param>
         /// <param name="intens">Sub Image intensity</param>
-        // Testing: OK
         public Image<T, byte> WaterColor<T>(Image<T, byte> img, double brightness, double contrast, double intens) where T : struct, IColor
         {
             Image<T, byte> result = new Image<T, byte>(img.Size);
@@ -337,7 +327,6 @@ namespace Introduction
         /// </summary>
         /// <typeparam name="T">Image type</typeparam>
         /// <param name="img">Image to work with</param>
-        // Testing: OK
         public Image<T, byte> MedianBlur<T>(Image<T, byte> img) where T : struct, IColor
         {
             List<byte> pixels = new List<byte>();
@@ -372,7 +361,6 @@ namespace Introduction
         /// Performs window filter effect
         /// </summary>
         /// <param name="matrix">Specified matrix</param>
-        // Testing: OK
         public Image<Bgr, byte> WindowFilter(int[,] matrix)
         {
             Image<Gray, byte> result = ConvertToBW(sourceImage);
@@ -411,13 +399,13 @@ namespace Introduction
         /// </summary>
         /// <param name="img">Source image</param>
         /// <param name="thresholdValue">Threshold value</param>
-        // Testing: OK
         public Image<Bgr, byte> CartoonFIlter(Image<Bgr, byte> img, int thresholdValue)
         {
             var bwImage= ConvertToBW(img);
             var blurImage = MedianBlur(bwImage);
             var binImage = blurImage.ThresholdAdaptive(new Gray(100), AdaptiveThresholdType.MeanC, 
-                                                       ThresholdType.Binary, thresholdValue, new Gray(0.03));
+                                                       ThresholdType.Binary, ThresholdNormalize(thresholdValue), 
+                                                       new Gray(0.03));
             tempImage = binImage.Convert<Bgr, byte>();
             var result = Intersection(sourceImage);
 
@@ -453,6 +441,12 @@ namespace Introduction
             var condition = (color < min) ? min : (color > max) ? max : color;
             return (byte)condition;
         }
+
+        private int ThresholdNormalize(int value)
+        {
+            return (value < 1) ? 3 : (value % 2 != 1) ? ++value : 0;
+        }
+
         #endregion
     }
 }

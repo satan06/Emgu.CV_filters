@@ -194,7 +194,6 @@ namespace Introduction
         /// <typeparam name="T">Image type</typeparam>
         /// <param name="image">Image to work with</param>
         /// /// <param name="value">Intensity value.</param>
-        // Testing: OK
         public Image<T, byte> Contrast<T>(Image<T, byte> img, double value = 5.0) where T : struct, IColor
         {
             Image<T, byte> destImage = new Image<T, byte>(sourceImage.Size);
@@ -234,7 +233,6 @@ namespace Introduction
         /// </summary>
         /// <param name="value">Intensity value</param>
         /// <param name="hsv">The HSV channel</param>
-        // Testing: OK
         public Image<Hsv, byte> HSVFilter(double value, Data.HSV hsv)
         {
             Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
@@ -263,7 +261,6 @@ namespace Introduction
         /// <param name="img">Image to work with</param>
         /// <param name="b">Addition or substruction operation</param>
         /// <param name="value">Effect intensity</param>
-        // Testing: OK
         public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Data.Boolean b, double value) where T : struct, IColor
         {
             Image<T, byte> result = new Image<T, byte>(sourceImage.Size);

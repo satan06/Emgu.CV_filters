@@ -172,5 +172,50 @@ namespace Introduction
         {
             imageBoxRs.Image = filter.MedianBlur(filter.sourceImage);
         }
+
+        private void WaterColorFilter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            WaterColorPanel.Visible = true;
+
+            WaterColorBr.Enabled = false;
+            WaterColorCtr.Enabled = false;
+            WaterColorMask.Enabled = false;
+        }
+
+        private void WaterColorMaskScroll(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value, 
+                                                 (double)WaterColorCtr.Value, WaterColorMask.Value);
+        }
+
+        private void WaterColorCtrChanged(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+                                     (double)WaterColorCtr.Value, WaterColorMask.Value);
+        }
+
+        private void WaterColorBrChanged(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+                                     (double)WaterColorCtr.Value, WaterColorMask.Value);
+        }
+
+        private void WaterColorMaskLoadDown(object sender, EventArgs e)
+        {
+            LoadI(false);
+            WaterColorMaskLoad.Text = "Change Image";
+            WaterColorBr.Enabled = true;
+            WaterColorCtr.Enabled = true;
+            WaterColorMask.Enabled = true;
+            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+                                     (double)WaterColorCtr.Value, WaterColorMask.Value);
+        }
+
+        private void WaterColorClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            WaterColorPanel.Visible = false;
+        }
     }
 }

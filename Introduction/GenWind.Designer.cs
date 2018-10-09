@@ -79,6 +79,18 @@
             this.cartoonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CartFilterThreshold = new System.Windows.Forms.NumericUpDown();
             this.blurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.watercolorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.WaterColorPanel = new System.Windows.Forms.Panel();
+            this.WaterColorBr = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.button7 = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.WaterColorCtr = new System.Windows.Forms.NumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.WaterColorMask = new System.Windows.Forms.TrackBar();
+            this.label17 = new System.Windows.Forms.Label();
+            this.WaterColorMaskLoad = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -101,6 +113,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.MatArg6)).BeginInit();
             this.CartnFilterPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CartFilterThreshold)).BeginInit();
+            this.WaterColorPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.WaterColorBr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.WaterColorCtr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.WaterColorMask)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox
@@ -252,7 +268,8 @@
             this.brightnessContrastToolStripMenuItem,
             this.windowFilterToolStripMenuItem,
             this.cartoonToolStripMenuItem,
-            this.blurToolStripMenuItem});
+            this.blurToolStripMenuItem,
+            this.watercolorToolStripMenuItem});
             this.FToolStripMenuItem.Name = "FToolStripMenuItem";
             this.FToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.FToolStripMenuItem.Text = "Filter";
@@ -352,6 +369,7 @@
             // 
             this.WindowFilterPanel.BackColor = System.Drawing.SystemColors.Menu;
             this.WindowFilterPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WindowFilterPanel.Controls.Add(this.CartnFilterPanel);
             this.WindowFilterPanel.Controls.Add(this.button6);
             this.WindowFilterPanel.Controls.Add(this.label9);
             this.WindowFilterPanel.Controls.Add(this.MatArg8);
@@ -536,7 +554,7 @@
             this.CartnFilterPanel.Controls.Add(this.label12);
             this.CartnFilterPanel.Controls.Add(this.CartnFilterCloseButton);
             this.CartnFilterPanel.Controls.Add(this.label13);
-            this.CartnFilterPanel.Location = new System.Drawing.Point(670, 27);
+            this.CartnFilterPanel.Location = new System.Drawing.Point(-1, -1);
             this.CartnFilterPanel.Name = "CartnFilterPanel";
             this.CartnFilterPanel.Size = new System.Drawing.Size(149, 146);
             this.CartnFilterPanel.TabIndex = 23;
@@ -599,12 +617,143 @@
             this.blurToolStripMenuItem.Text = "Blur";
             this.blurToolStripMenuItem.Click += new System.EventHandler(this.BlurFIlter);
             // 
+            // watercolorToolStripMenuItem
+            // 
+            this.watercolorToolStripMenuItem.Name = "watercolorToolStripMenuItem";
+            this.watercolorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.watercolorToolStripMenuItem.Text = "Watercolor";
+            this.watercolorToolStripMenuItem.Click += new System.EventHandler(this.WaterColorFilter);
+            // 
+            // WaterColorPanel
+            // 
+            this.WaterColorPanel.BackColor = System.Drawing.SystemColors.Menu;
+            this.WaterColorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WaterColorPanel.Controls.Add(this.WaterColorMaskLoad);
+            this.WaterColorPanel.Controls.Add(this.label17);
+            this.WaterColorPanel.Controls.Add(this.WaterColorMask);
+            this.WaterColorPanel.Controls.Add(this.label16);
+            this.WaterColorPanel.Controls.Add(this.WaterColorCtr);
+            this.WaterColorPanel.Controls.Add(this.label15);
+            this.WaterColorPanel.Controls.Add(this.WaterColorBr);
+            this.WaterColorPanel.Controls.Add(this.label11);
+            this.WaterColorPanel.Controls.Add(this.button7);
+            this.WaterColorPanel.Controls.Add(this.label14);
+            this.WaterColorPanel.Location = new System.Drawing.Point(670, 27);
+            this.WaterColorPanel.Name = "WaterColorPanel";
+            this.WaterColorPanel.Size = new System.Drawing.Size(149, 240);
+            this.WaterColorPanel.TabIndex = 24;
+            this.WaterColorPanel.Visible = false;
+            // 
+            // WaterColorBr
+            // 
+            this.WaterColorBr.Location = new System.Drawing.Point(83, 90);
+            this.WaterColorBr.Name = "WaterColorBr";
+            this.WaterColorBr.Size = new System.Drawing.Size(54, 20);
+            this.WaterColorBr.TabIndex = 23;
+            this.WaterColorBr.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.WaterColorBr.ValueChanged += new System.EventHandler(this.WaterColorBrChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(23, 92);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(56, 13);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "Brightness";
+            // 
+            // button7
+            // 
+            this.button7.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.button7.FlatAppearance.BorderSize = 0;
+            this.button7.Location = new System.Drawing.Point(126, -1);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(22, 22);
+            this.button7.TabIndex = 7;
+            this.button7.Text = "X";
+            this.button7.UseVisualStyleBackColor = false;
+            this.button7.Click += new System.EventHandler(this.WaterColorClose);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(3, 11);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(59, 13);
+            this.label14.TabIndex = 0;
+            this.label14.Text = "Watercolor";
+            // 
+            // WaterColorCtr
+            // 
+            this.WaterColorCtr.Location = new System.Drawing.Point(83, 121);
+            this.WaterColorCtr.Name = "WaterColorCtr";
+            this.WaterColorCtr.Size = new System.Drawing.Size(54, 20);
+            this.WaterColorCtr.TabIndex = 25;
+            this.WaterColorCtr.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.WaterColorCtr.ValueChanged += new System.EventHandler(this.WaterColorCtrChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(31, 123);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(46, 13);
+            this.label15.TabIndex = 24;
+            this.label15.Text = "Contrast";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(66, 163);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(75, 13);
+            this.label16.TabIndex = 26;
+            this.label16.Text = "Mask Intensity";
+            // 
+            // WaterColorMask
+            // 
+            this.WaterColorMask.Location = new System.Drawing.Point(37, 183);
+            this.WaterColorMask.Maximum = 9;
+            this.WaterColorMask.Minimum = 1;
+            this.WaterColorMask.Name = "WaterColorMask";
+            this.WaterColorMask.Size = new System.Drawing.Size(104, 45);
+            this.WaterColorMask.TabIndex = 27;
+            this.WaterColorMask.Value = 1;
+            this.WaterColorMask.Scroll += new System.EventHandler(this.WaterColorMaskScroll);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(104, 35);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(33, 13);
+            this.label17.TabIndex = 28;
+            this.label17.Text = "Mask";
+            // 
+            // WaterColorMaskLoad
+            // 
+            this.WaterColorMaskLoad.Location = new System.Drawing.Point(50, 51);
+            this.WaterColorMaskLoad.Name = "WaterColorMaskLoad";
+            this.WaterColorMaskLoad.Size = new System.Drawing.Size(85, 23);
+            this.WaterColorMaskLoad.TabIndex = 29;
+            this.WaterColorMaskLoad.Text = "Load Image";
+            this.WaterColorMaskLoad.UseVisualStyleBackColor = true;
+            this.WaterColorMaskLoad.Click += new System.EventHandler(this.WaterColorMaskLoadDown);
+            // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 319);
-            this.Controls.Add(this.CartnFilterPanel);
+            this.Controls.Add(this.WaterColorPanel);
             this.Controls.Add(this.WindowFilterPanel);
             this.Controls.Add(this.BrContrPanel);
             this.Controls.Add(this.HSVPanel);
@@ -642,6 +791,11 @@
             this.CartnFilterPanel.ResumeLayout(false);
             this.CartnFilterPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CartFilterThreshold)).EndInit();
+            this.WaterColorPanel.ResumeLayout(false);
+            this.WaterColorPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.WaterColorBr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.WaterColorCtr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.WaterColorMask)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -699,6 +853,18 @@
         private System.Windows.Forms.ToolStripMenuItem cartoonToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown CartFilterThreshold;
         private System.Windows.Forms.ToolStripMenuItem blurToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem watercolorToolStripMenuItem;
+        private System.Windows.Forms.Panel WaterColorPanel;
+        private System.Windows.Forms.NumericUpDown WaterColorCtr;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.NumericUpDown WaterColorBr;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TrackBar WaterColorMask;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button WaterColorMaskLoad;
+        private System.Windows.Forms.Label label17;
     }
 }
 

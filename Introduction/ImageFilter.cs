@@ -261,14 +261,14 @@ namespace Introduction
         /// <param name="img">Image to work with</param>
         /// <param name="b">Addition or substruction operation</param>
         /// <param name="value">Effect intensity</param>
-        public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Data.Boolean b, double value) where T : struct, IColor
+        public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Data.Boolean b, int value) where T : struct, IColor
         {
             Image<T, byte> result = new Image<T, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
-                color = SetOperaton(b, img.Data[width, height, channel] * Math.Abs(value - 1), 
-                        tempImage.Data[width, height, channel] * value);
+                color = SetOperaton(b, img.Data[width, height, channel] * Math.Abs(Normalize(value) - 1), 
+                        tempImage.Data[width, height, channel] * Normalize(value));
                 result.Data[width, height, channel] = color;
             });
 
@@ -307,7 +307,7 @@ namespace Introduction
         /// <param name="brightness">Brightness value</param>
         /// <param name="contrast">Contrast value</param>
         /// <param name="intens">Sub Image intensity</param>
-        public Image<T, byte> WaterColor<T>(Image<T, byte> img, double brightness, double contrast, double intens) where T : struct, IColor
+        public Image<T, byte> WaterColor<T>(Image<T, byte> img, double brightness, double contrast, int intens) where T : struct, IColor
         {
             Image<T, byte> result = new Image<T, byte>(img.Size);
 
@@ -442,6 +442,11 @@ namespace Introduction
         private int ThresholdNormalize(int value)
         {
             return (value <= 1) ? 3 : (value % 2 != 1) ? ++value : value;
+        }
+
+        private double Normalize(int value)
+        {
+            return (value <= 1) ? 0.1 : (value >= 9) ? 0.9 : value * 0.1;
         }
 
         #endregion

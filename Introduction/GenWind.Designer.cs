@@ -45,6 +45,14 @@
             this.hSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
+            this.BrContrPanel = new System.Windows.Forms.Panel();
+            this.BrContrCloseButton = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.ContrTrackbar = new System.Windows.Forms.TrackBar();
+            this.label7 = new System.Windows.Forms.Label();
+            this.BrTrackbar = new System.Windows.Forms.TrackBar();
+            this.label8 = new System.Windows.Forms.Label();
+            this.brightnessContrastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -52,6 +60,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.SaturTrackbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ValueTrackbar)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.BrContrPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ContrTrackbar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BrTrackbar)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox
@@ -76,6 +87,7 @@
             // 
             // HSVPanel
             // 
+            this.HSVPanel.BackColor = System.Drawing.SystemColors.Menu;
             this.HSVPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.HSVPanel.Controls.Add(this.button1);
             this.HSVPanel.Controls.Add(this.label4);
@@ -89,6 +101,7 @@
             this.HSVPanel.Name = "HSVPanel";
             this.HSVPanel.Size = new System.Drawing.Size(149, 274);
             this.HSVPanel.TabIndex = 4;
+            this.HSVPanel.Visible = false;
             // 
             // label1
             // 
@@ -163,7 +176,7 @@
             this.filterToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(831, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(824, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -178,7 +191,8 @@
             // filterToolStripMenuItem
             // 
             this.filterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.hSVToolStripMenuItem});
+            this.hSVToolStripMenuItem,
+            this.brightnessContrastToolStripMenuItem});
             this.filterToolStripMenuItem.Name = "filterToolStripMenuItem";
             this.filterToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.filterToolStripMenuItem.Text = "Filter";
@@ -209,17 +223,103 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.HSVClose);
             // 
+            // BrContrPanel
+            // 
+            this.BrContrPanel.BackColor = System.Drawing.SystemColors.Menu;
+            this.BrContrPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.BrContrPanel.Controls.Add(this.BrContrCloseButton);
+            this.BrContrPanel.Controls.Add(this.label6);
+            this.BrContrPanel.Controls.Add(this.ContrTrackbar);
+            this.BrContrPanel.Controls.Add(this.label7);
+            this.BrContrPanel.Controls.Add(this.BrTrackbar);
+            this.BrContrPanel.Controls.Add(this.label8);
+            this.BrContrPanel.Location = new System.Drawing.Point(670, 27);
+            this.BrContrPanel.Name = "BrContrPanel";
+            this.BrContrPanel.Size = new System.Drawing.Size(149, 274);
+            this.BrContrPanel.TabIndex = 8;
+            this.BrContrPanel.Visible = false;
+            // 
+            // BrContrCloseButton
+            // 
+            this.BrContrCloseButton.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.BrContrCloseButton.FlatAppearance.BorderSize = 0;
+            this.BrContrCloseButton.Location = new System.Drawing.Point(126, -1);
+            this.BrContrCloseButton.Name = "BrContrCloseButton";
+            this.BrContrCloseButton.Size = new System.Drawing.Size(22, 22);
+            this.BrContrCloseButton.TabIndex = 7;
+            this.BrContrCloseButton.Text = "X";
+            this.BrContrCloseButton.UseVisualStyleBackColor = false;
+            this.BrContrCloseButton.Click += new System.EventHandler(this.BrContrClose);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(95, 132);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(46, 13);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "Contrast";
+            // 
+            // ContrTrackbar
+            // 
+            this.ContrTrackbar.Location = new System.Drawing.Point(1, 153);
+            this.ContrTrackbar.Maximum = 25;
+            this.ContrTrackbar.Minimum = -25;
+            this.ContrTrackbar.Name = "ContrTrackbar";
+            this.ContrTrackbar.Size = new System.Drawing.Size(143, 45);
+            this.ContrTrackbar.SmallChange = 5;
+            this.ContrTrackbar.TabIndex = 3;
+            this.ContrTrackbar.Scroll += new System.EventHandler(this.ContrScroll);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(85, 65);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(56, 13);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "Brightness";
+            // 
+            // BrTrackbar
+            // 
+            this.BrTrackbar.Location = new System.Drawing.Point(1, 84);
+            this.BrTrackbar.Maximum = 25;
+            this.BrTrackbar.Minimum = -25;
+            this.BrTrackbar.Name = "BrTrackbar";
+            this.BrTrackbar.Size = new System.Drawing.Size(143, 45);
+            this.BrTrackbar.SmallChange = 5;
+            this.BrTrackbar.TabIndex = 1;
+            this.BrTrackbar.Scroll += new System.EventHandler(this.BrightScroll);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 11);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(100, 13);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "Brightness/Contrast";
+            // 
+            // brightnessContrastToolStripMenuItem
+            // 
+            this.brightnessContrastToolStripMenuItem.Name = "brightnessContrastToolStripMenuItem";
+            this.brightnessContrastToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.brightnessContrastToolStripMenuItem.Text = "Brightness/Contrast";
+            this.brightnessContrastToolStripMenuItem.Click += new System.EventHandler(this.BrContrFilter);
+            // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(831, 319);
+            this.ClientSize = new System.Drawing.Size(824, 319);
+            this.Controls.Add(this.BrContrPanel);
             this.Controls.Add(this.HSVPanel);
             this.Controls.Add(this.imageBoxRs);
             this.Controls.Add(this.imageBox);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Filter";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Image Effects";
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).EndInit();
@@ -230,6 +330,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ValueTrackbar)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.BrContrPanel.ResumeLayout(false);
+            this.BrContrPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ContrTrackbar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BrTrackbar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -253,6 +357,14 @@
         private System.Windows.Forms.ToolStripMenuItem filterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hSVToolStripMenuItem;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel BrContrPanel;
+        private System.Windows.Forms.Button BrContrCloseButton;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TrackBar ContrTrackbar;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TrackBar BrTrackbar;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ToolStripMenuItem brightnessContrastToolStripMenuItem;
     }
 }
 

@@ -12,13 +12,16 @@ namespace Introduction
         public int width = 640;
         public int height = 480;
 
+        public int windowPanelModeWidth = 840;
+        public int windowRelaxModeWidth = 685;
+
         public Filter()
         {
             InitializeComponent();
 
             imageBox.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
             imageBoxRs.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
-            HSVPanel.Visible = false;
+            Width = windowRelaxModeWidth;
         }
 
         private void LoaderCheck(string fileName, bool isSource)
@@ -56,11 +59,13 @@ namespace Introduction
 
         private void HSVFIlter(object sender, EventArgs e)
         {
+            Width = windowPanelModeWidth;
             HSVPanel.Visible = true;
         }
 
         private void HSVClose(object sender, EventArgs e)
         {
+            Width = windowRelaxModeWidth;
             HSVPanel.Visible = false;
         }
 
@@ -77,6 +82,28 @@ namespace Introduction
         private void ValueScroll(object sender, EventArgs e)
         {
             imageBoxRs.Image = filter.HSVFilter(ValueTrackbar.Value, Data.HSV.Value);
+        }
+
+        private void BrightScroll(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Brightness(filter.sourceImage, BrTrackbar.Value);
+        }
+
+        private void ContrScroll(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Contrast(filter.sourceImage, ContrTrackbar.Value);
+        }
+
+        private void BrContrFilter(object sender, EventArgs e)
+        {
+            Width = windowPanelModeWidth;
+            BrContrPanel.Visible = true;
+        }
+
+        private void BrContrClose(object sender, EventArgs e)
+        {
+            Width = windowRelaxModeWidth;
+            BrContrPanel.Visible = false;
         }
     }
 }

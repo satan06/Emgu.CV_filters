@@ -72,6 +72,12 @@
             this.MatArg6 = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
+            this.CartnFilterPanel = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.CartnFilterCloseButton = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
+            this.cartoonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CartFilterThreshold = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -92,6 +98,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.MatArg8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MatArg7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MatArg6)).BeginInit();
+            this.CartnFilterPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CartFilterThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox
@@ -241,7 +249,8 @@
             this.FToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.hSVToolStripMenuItem,
             this.brightnessContrastToolStripMenuItem,
-            this.windowFilterToolStripMenuItem});
+            this.windowFilterToolStripMenuItem,
+            this.cartoonToolStripMenuItem});
             this.FToolStripMenuItem.Name = "FToolStripMenuItem";
             this.FToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.FToolStripMenuItem.Text = "Filter";
@@ -387,12 +396,13 @@
             // 
             // button3
             // 
+            this.button3.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.button3.Location = new System.Drawing.Point(18, 64);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(56, 23);
             this.button3.TabIndex = 8;
             this.button3.Text = "Sharpen";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.WinFilterSharpen);
             // 
             // label5
@@ -406,22 +416,24 @@
             // 
             // button4
             // 
+            this.button4.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.button4.Location = new System.Drawing.Point(80, 64);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(56, 23);
             this.button4.TabIndex = 10;
             this.button4.Text = "Embos";
-            this.button4.UseVisualStyleBackColor = true;
+            this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.WinFilterEmbos);
             // 
             // button5
             // 
+            this.button5.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.button5.Location = new System.Drawing.Point(47, 93);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(56, 23);
             this.button5.TabIndex = 11;
             this.button5.Text = "Edges";
-            this.button5.UseVisualStyleBackColor = true;
+            this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.WinFilterEdges);
             // 
             // windowFilterToolStripMenuItem
@@ -505,19 +517,85 @@
             // 
             // button6
             // 
+            this.button6.BackColor = System.Drawing.SystemColors.Info;
             this.button6.Location = new System.Drawing.Point(80, 240);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(53, 23);
             this.button6.TabIndex = 22;
             this.button6.Text = "Send";
-            this.button6.UseVisualStyleBackColor = true;
+            this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.WinFilerCustomMatSend);
+            // 
+            // CartnFilterPanel
+            // 
+            this.CartnFilterPanel.BackColor = System.Drawing.SystemColors.Menu;
+            this.CartnFilterPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CartnFilterPanel.Controls.Add(this.CartFilterThreshold);
+            this.CartnFilterPanel.Controls.Add(this.label12);
+            this.CartnFilterPanel.Controls.Add(this.CartnFilterCloseButton);
+            this.CartnFilterPanel.Controls.Add(this.label13);
+            this.CartnFilterPanel.Location = new System.Drawing.Point(670, 27);
+            this.CartnFilterPanel.Name = "CartnFilterPanel";
+            this.CartnFilterPanel.Size = new System.Drawing.Size(149, 146);
+            this.CartnFilterPanel.TabIndex = 23;
+            this.CartnFilterPanel.Visible = false;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(23, 48);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(54, 13);
+            this.label12.TabIndex = 9;
+            this.label12.Text = "Threshold";
+            // 
+            // CartnFilterCloseButton
+            // 
+            this.CartnFilterCloseButton.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CartnFilterCloseButton.FlatAppearance.BorderSize = 0;
+            this.CartnFilterCloseButton.Location = new System.Drawing.Point(126, -1);
+            this.CartnFilterCloseButton.Name = "CartnFilterCloseButton";
+            this.CartnFilterCloseButton.Size = new System.Drawing.Size(22, 22);
+            this.CartnFilterCloseButton.TabIndex = 7;
+            this.CartnFilterCloseButton.Text = "X";
+            this.CartnFilterCloseButton.UseVisualStyleBackColor = false;
+            this.CartnFilterCloseButton.Click += new System.EventHandler(this.CartnFilterClose);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(3, 11);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(44, 13);
+            this.label13.TabIndex = 0;
+            this.label13.Text = "Cartoon";
+            // 
+            // cartoonToolStripMenuItem
+            // 
+            this.cartoonToolStripMenuItem.Name = "cartoonToolStripMenuItem";
+            this.cartoonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cartoonToolStripMenuItem.Text = "Cartoon";
+            this.cartoonToolStripMenuItem.Click += new System.EventHandler(this.CartnFilter);
+            // 
+            // CartFilterThreshold
+            // 
+            this.CartFilterThreshold.Location = new System.Drawing.Point(83, 46);
+            this.CartFilterThreshold.Name = "CartFilterThreshold";
+            this.CartFilterThreshold.Size = new System.Drawing.Size(54, 20);
+            this.CartFilterThreshold.TabIndex = 23;
+            this.CartFilterThreshold.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.CartFilterThreshold.ValueChanged += new System.EventHandler(this.CartFilterThresholdChanged);
             // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 319);
+            this.Controls.Add(this.CartnFilterPanel);
             this.Controls.Add(this.WindowFilterPanel);
             this.Controls.Add(this.BrContrPanel);
             this.Controls.Add(this.HSVPanel);
@@ -552,6 +630,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.MatArg8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MatArg7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MatArg6)).EndInit();
+            this.CartnFilterPanel.ResumeLayout(false);
+            this.CartnFilterPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CartFilterThreshold)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -602,6 +683,12 @@
         private System.Windows.Forms.NumericUpDown MatArg0;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Panel CartnFilterPanel;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button CartnFilterCloseButton;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ToolStripMenuItem cartoonToolStripMenuItem;
+        private System.Windows.Forms.NumericUpDown CartFilterThreshold;
     }
 }
 

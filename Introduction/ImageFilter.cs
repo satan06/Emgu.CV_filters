@@ -441,7 +441,7 @@ namespace Introduction
 
         private int ThresholdNormalize(int value)
         {
-            return (value < 1) ? 3 : (value % 2 != 1) ? ++value : 0;
+            return (value <= 1) ? 3 : (value % 2 != 1) ? ++value : value;
         }
 
         #endregion

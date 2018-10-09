@@ -149,5 +149,23 @@ namespace Introduction
             }
             imageBoxRs.Image = filter.WindowFilter(Data.Custom);
         }
+
+        private void CartnFilterClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            CartnFilterPanel.Visible = false;
+        }
+
+        private void CartnFilter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            CartnFilterPanel.Visible = true;
+            imageBoxRs.Image = filter.CartoonFilter(filter.sourceImage, (int)CartFilterThreshold.Value);
+        }
+
+        private void CartFilterThresholdChanged(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.CartoonFilter(filter.sourceImage, (int)CartFilterThreshold.Value);
+        }
     }
 }

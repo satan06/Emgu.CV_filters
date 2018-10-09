@@ -23,6 +23,16 @@
             Add,
             Substract
         }
+
+        /// <summary>
+        /// BGR channels 
+        /// </summary>
+        public enum BGR : byte
+        {
+            Blue,
+            Green,
+            Red
+        }
         #endregion
         #region Window filter matrixes
         /// <summary>

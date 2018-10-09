@@ -91,6 +91,26 @@
             this.WaterColorMask = new System.Windows.Forms.TrackBar();
             this.label17 = new System.Windows.Forms.Label();
             this.WaterColorMaskLoad = new System.Windows.Forms.Button();
+            this.BooleansPanel = new System.Windows.Forms.Panel();
+            this.BooleansMaskLoad = new System.Windows.Forms.Button();
+            this.label18 = new System.Windows.Forms.Label();
+            this.BooleansMask = new System.Windows.Forms.TrackBar();
+            this.label19 = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
+            this.label22 = new System.Windows.Forms.Label();
+            this.booleansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.additionExeptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.intersectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BooleansAddBut = new System.Windows.Forms.Button();
+            this.label20 = new System.Windows.Forms.Label();
+            this.BooleansSubstrBut = new System.Windows.Forms.Button();
+            this.othersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sepiaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.blackWhiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.channelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.redToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.blueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.greenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -117,6 +137,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.WaterColorBr)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WaterColorCtr)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WaterColorMask)).BeginInit();
+            this.BooleansPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BooleansMask)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox
@@ -269,7 +291,10 @@
             this.windowFilterToolStripMenuItem,
             this.cartoonToolStripMenuItem,
             this.blurToolStripMenuItem,
-            this.watercolorToolStripMenuItem});
+            this.watercolorToolStripMenuItem,
+            this.booleansToolStripMenuItem,
+            this.othersToolStripMenuItem,
+            this.channelsToolStripMenuItem});
             this.FToolStripMenuItem.Name = "FToolStripMenuItem";
             this.FToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.FToolStripMenuItem.Text = "Filter";
@@ -369,7 +394,6 @@
             // 
             this.WindowFilterPanel.BackColor = System.Drawing.SystemColors.Menu;
             this.WindowFilterPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.WindowFilterPanel.Controls.Add(this.CartnFilterPanel);
             this.WindowFilterPanel.Controls.Add(this.button6);
             this.WindowFilterPanel.Controls.Add(this.label9);
             this.WindowFilterPanel.Controls.Add(this.MatArg8);
@@ -554,7 +578,7 @@
             this.CartnFilterPanel.Controls.Add(this.label12);
             this.CartnFilterPanel.Controls.Add(this.CartnFilterCloseButton);
             this.CartnFilterPanel.Controls.Add(this.label13);
-            this.CartnFilterPanel.Location = new System.Drawing.Point(-1, -1);
+            this.CartnFilterPanel.Location = new System.Drawing.Point(670, 27);
             this.CartnFilterPanel.Name = "CartnFilterPanel";
             this.CartnFilterPanel.Size = new System.Drawing.Size(149, 146);
             this.CartnFilterPanel.TabIndex = 23;
@@ -638,7 +662,7 @@
             this.WaterColorPanel.Controls.Add(this.label11);
             this.WaterColorPanel.Controls.Add(this.button7);
             this.WaterColorPanel.Controls.Add(this.label14);
-            this.WaterColorPanel.Location = new System.Drawing.Point(670, 27);
+            this.WaterColorPanel.Location = new System.Drawing.Point(668, 27);
             this.WaterColorPanel.Name = "WaterColorPanel";
             this.WaterColorPanel.Size = new System.Drawing.Size(149, 240);
             this.WaterColorPanel.TabIndex = 24;
@@ -748,11 +772,199 @@
             this.WaterColorMaskLoad.UseVisualStyleBackColor = true;
             this.WaterColorMaskLoad.Click += new System.EventHandler(this.WaterColorMaskLoadDown);
             // 
+            // BooleansPanel
+            // 
+            this.BooleansPanel.BackColor = System.Drawing.SystemColors.Menu;
+            this.BooleansPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.BooleansPanel.Controls.Add(this.BooleansSubstrBut);
+            this.BooleansPanel.Controls.Add(this.label20);
+            this.BooleansPanel.Controls.Add(this.BooleansAddBut);
+            this.BooleansPanel.Controls.Add(this.BooleansMaskLoad);
+            this.BooleansPanel.Controls.Add(this.label18);
+            this.BooleansPanel.Controls.Add(this.BooleansMask);
+            this.BooleansPanel.Controls.Add(this.label19);
+            this.BooleansPanel.Controls.Add(this.button9);
+            this.BooleansPanel.Controls.Add(this.label22);
+            this.BooleansPanel.Location = new System.Drawing.Point(670, 27);
+            this.BooleansPanel.Name = "BooleansPanel";
+            this.BooleansPanel.Size = new System.Drawing.Size(149, 223);
+            this.BooleansPanel.TabIndex = 30;
+            this.BooleansPanel.Visible = false;
+            // 
+            // BooleansMaskLoad
+            // 
+            this.BooleansMaskLoad.Location = new System.Drawing.Point(50, 51);
+            this.BooleansMaskLoad.Name = "BooleansMaskLoad";
+            this.BooleansMaskLoad.Size = new System.Drawing.Size(85, 23);
+            this.BooleansMaskLoad.TabIndex = 29;
+            this.BooleansMaskLoad.Text = "Load Image";
+            this.BooleansMaskLoad.UseVisualStyleBackColor = true;
+            this.BooleansMaskLoad.Click += new System.EventHandler(this.BooleansMaskLoadDown);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(104, 35);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(33, 13);
+            this.label18.TabIndex = 28;
+            this.label18.Text = "Mask";
+            // 
+            // BooleansMask
+            // 
+            this.BooleansMask.Location = new System.Drawing.Point(31, 180);
+            this.BooleansMask.Maximum = 9;
+            this.BooleansMask.Minimum = 1;
+            this.BooleansMask.Name = "BooleansMask";
+            this.BooleansMask.Size = new System.Drawing.Size(104, 45);
+            this.BooleansMask.TabIndex = 27;
+            this.BooleansMask.Value = 5;
+            this.BooleansMask.Scroll += new System.EventHandler(this.BooleansMaskScroll);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(60, 160);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(75, 13);
+            this.label19.TabIndex = 26;
+            this.label19.Text = "Mask Intensity";
+            // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.button9.FlatAppearance.BorderSize = 0;
+            this.button9.Location = new System.Drawing.Point(126, -1);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(22, 22);
+            this.button9.TabIndex = 7;
+            this.button9.Text = "X";
+            this.button9.UseVisualStyleBackColor = false;
+            this.button9.Click += new System.EventHandler(this.BooleansFilterClose);
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(3, 11);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(51, 13);
+            this.label22.TabIndex = 0;
+            this.label22.Text = "Booleans";
+            // 
+            // booleansToolStripMenuItem
+            // 
+            this.booleansToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.additionExeptionToolStripMenuItem,
+            this.intersectionToolStripMenuItem});
+            this.booleansToolStripMenuItem.Name = "booleansToolStripMenuItem";
+            this.booleansToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.booleansToolStripMenuItem.Text = "Booleans";
+            // 
+            // additionExeptionToolStripMenuItem
+            // 
+            this.additionExeptionToolStripMenuItem.Name = "additionExeptionToolStripMenuItem";
+            this.additionExeptionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.additionExeptionToolStripMenuItem.Text = "Addition/Exeption";
+            this.additionExeptionToolStripMenuItem.Click += new System.EventHandler(this.BooleansFilter);
+            // 
+            // intersectionToolStripMenuItem
+            // 
+            this.intersectionToolStripMenuItem.Name = "intersectionToolStripMenuItem";
+            this.intersectionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.intersectionToolStripMenuItem.Text = "Intersection";
+            this.intersectionToolStripMenuItem.Click += new System.EventHandler(this.IntersectionFilter);
+            // 
+            // BooleansAddBut
+            // 
+            this.BooleansAddBut.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.BooleansAddBut.Location = new System.Drawing.Point(31, 120);
+            this.BooleansAddBut.Name = "BooleansAddBut";
+            this.BooleansAddBut.Size = new System.Drawing.Size(39, 23);
+            this.BooleansAddBut.TabIndex = 30;
+            this.BooleansAddBut.Text = "Add";
+            this.BooleansAddBut.UseVisualStyleBackColor = false;
+            this.BooleansAddBut.Click += new System.EventHandler(this.BooleansAddDown);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(82, 99);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(53, 13);
+            this.label20.TabIndex = 31;
+            this.label20.Text = "Operation";
+            // 
+            // BooleansSubstrBut
+            // 
+            this.BooleansSubstrBut.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.BooleansSubstrBut.Location = new System.Drawing.Point(76, 120);
+            this.BooleansSubstrBut.Name = "BooleansSubstrBut";
+            this.BooleansSubstrBut.Size = new System.Drawing.Size(61, 23);
+            this.BooleansSubstrBut.TabIndex = 32;
+            this.BooleansSubstrBut.Text = "Substract";
+            this.BooleansSubstrBut.UseVisualStyleBackColor = false;
+            this.BooleansSubstrBut.Click += new System.EventHandler(this.BooleansSubstrDown);
+            // 
+            // othersToolStripMenuItem
+            // 
+            this.othersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sepiaToolStripMenuItem,
+            this.blackWhiteToolStripMenuItem});
+            this.othersToolStripMenuItem.Name = "othersToolStripMenuItem";
+            this.othersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.othersToolStripMenuItem.Text = "Others";
+            // 
+            // sepiaToolStripMenuItem
+            // 
+            this.sepiaToolStripMenuItem.Name = "sepiaToolStripMenuItem";
+            this.sepiaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sepiaToolStripMenuItem.Text = "Sepia";
+            this.sepiaToolStripMenuItem.Click += new System.EventHandler(this.SepiaFilter);
+            // 
+            // blackWhiteToolStripMenuItem
+            // 
+            this.blackWhiteToolStripMenuItem.Name = "blackWhiteToolStripMenuItem";
+            this.blackWhiteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.blackWhiteToolStripMenuItem.Text = "Black/White";
+            this.blackWhiteToolStripMenuItem.Click += new System.EventHandler(this.BlackWhiteFilter);
+            // 
+            // channelsToolStripMenuItem
+            // 
+            this.channelsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.redToolStripMenuItem,
+            this.blueToolStripMenuItem,
+            this.greenToolStripMenuItem});
+            this.channelsToolStripMenuItem.Name = "channelsToolStripMenuItem";
+            this.channelsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.channelsToolStripMenuItem.Text = "Channels";
+            // 
+            // redToolStripMenuItem
+            // 
+            this.redToolStripMenuItem.Name = "redToolStripMenuItem";
+            this.redToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.redToolStripMenuItem.Text = "Red";
+            this.redToolStripMenuItem.Click += new System.EventHandler(this.ChannelSplitRed);
+            // 
+            // blueToolStripMenuItem
+            // 
+            this.blueToolStripMenuItem.Name = "blueToolStripMenuItem";
+            this.blueToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.blueToolStripMenuItem.Text = "Blue";
+            this.blueToolStripMenuItem.Click += new System.EventHandler(this.ChannelSplitBlue);
+            // 
+            // greenToolStripMenuItem
+            // 
+            this.greenToolStripMenuItem.Name = "greenToolStripMenuItem";
+            this.greenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.greenToolStripMenuItem.Text = "Green";
+            // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 319);
+            this.Controls.Add(this.CartnFilterPanel);
+            this.Controls.Add(this.BooleansPanel);
             this.Controls.Add(this.WaterColorPanel);
             this.Controls.Add(this.WindowFilterPanel);
             this.Controls.Add(this.BrContrPanel);
@@ -796,6 +1008,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.WaterColorBr)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.WaterColorCtr)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.WaterColorMask)).EndInit();
+            this.BooleansPanel.ResumeLayout(false);
+            this.BooleansPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BooleansMask)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -865,6 +1080,26 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button WaterColorMaskLoad;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Panel BooleansPanel;
+        private System.Windows.Forms.Button BooleansMaskLoad;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TrackBar BooleansMask;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.ToolStripMenuItem booleansToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem additionExeptionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem intersectionToolStripMenuItem;
+        private System.Windows.Forms.Button BooleansAddBut;
+        private System.Windows.Forms.Button BooleansSubstrBut;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.ToolStripMenuItem othersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sepiaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem blackWhiteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem channelsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem redToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem blueToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem greenToolStripMenuItem;
     }
 }
 

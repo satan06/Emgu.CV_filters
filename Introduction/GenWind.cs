@@ -16,6 +16,8 @@ namespace Introduction
         public int WindowPanelModeWidth { get; set; } = 840;
         public int WindowRelaxModeWidth { get; set; } = 690;
 
+        private int BooleansIntens { get; set; } = 5;
+
         public Filter()
         {
             InitializeComponent();
@@ -176,8 +178,9 @@ namespace Introduction
         private void WaterColorFilter(object sender, EventArgs e)
         {
             Width = WindowPanelModeWidth;
-            WaterColorPanel.Visible = true;
 
+            WaterColorMaskLoad.Text = "Load Image";
+            WaterColorPanel.Visible = true;
             WaterColorBr.Enabled = false;
             WaterColorCtr.Enabled = false;
             WaterColorMask.Enabled = false;
@@ -216,6 +219,78 @@ namespace Introduction
         {
             Width = WindowRelaxModeWidth;
             WaterColorPanel.Visible = false;
+        }
+
+        private void BooleansMaskLoadDown(object sender, EventArgs e)
+        {
+            LoadI(false);
+            BooleansMaskLoad.Text = "Change Image";
+            BooleansMask.Enabled = true;
+            BooleansAddBut.Enabled = true;
+            BooleansSubstrBut.Enabled = true;
+        }
+
+        private void BooleansFilterClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            BooleansPanel.Visible = false;
+        }
+
+        private void BooleansFilter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+
+            BooleansMaskLoad.Text = "Load Image";
+            BooleansPanel.Visible = true;
+            BooleansMask.Enabled = false;
+            BooleansAddBut.Enabled = false;
+            BooleansSubstrBut.Enabled = false;
+        }
+
+        private void BooleansMaskScroll(object sender, EventArgs e)
+        {
+            BooleansIntens = BooleansMask.Value;
+        }
+
+        private void BooleansAddDown(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.BooleanOperation(filter.sourceImage, Data.Boolean.Add, BooleansIntens);
+        }
+
+        private void BooleansSubstrDown(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.BooleanOperation(filter.sourceImage, Data.Boolean.Substract, BooleansIntens);
+        }
+
+        private void IntersectionFilter(object sender, EventArgs e)
+        {
+            LoadI(false);
+            imageBoxRs.Image = filter.Intersection(filter.sourceImage);
+        }
+
+        private void SepiaFilter(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Sepia();
+        }
+
+        private void BlackWhiteFilter(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ConvertToBW(filter.sourceImage);
+        }
+
+        private void ChannelSplitRed(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Red);
+        }
+
+        private void ChannelSplitBlue(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Green);
+        }
+
+        private void ChannelSplitGreen(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Blue);
         }
     }
 }

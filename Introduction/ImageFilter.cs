@@ -116,15 +116,15 @@ namespace Introduction
             return resultImage;
         }
 
-        public Image<Gray, byte> ChannelSplit(byte channelIndex)
+        public Image<Gray, byte> ChannelSplit(Data.BGR channel)
         {
             if(sourceImage == null)
             {
                 return null;
             }
 
-            var channel = sourceImage.Split()[channelIndex];
-            return channel;
+            var ch = sourceImage.Split()[(int)channel];
+            return ch;
         }
 
         /// <summary>

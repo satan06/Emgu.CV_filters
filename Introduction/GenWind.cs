@@ -1,5 +1,6 @@
 ﻿using Emgu.CV.UI;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Introduction
@@ -9,9 +10,19 @@ namespace Introduction
         private ImageFilter filter = new ImageFilter();
         private string filterParam = "File Image (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
 
+        public int ImageWidth { get; set; } = 640;
+        public int ImageHeight { get; set; } = 480;
+
+        public int WindowPanelModeWidth { get; set; } = 840;
+        public int WindowRelaxModeWidth { get; set; } = 690;
+
+        private int BooleansIntens { get; set; } = 5;
+
         public Filter()
         {
             InitializeComponent();
+            Width = WindowRelaxModeWidth;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
 
             imageBox.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
             imageBoxRs.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
@@ -19,15 +30,13 @@ namespace Introduction
 
         private void LoaderCheck(string fileName, bool isSource)
         {
-            int width = 500, height = 500; 
-
             if (isSource)
             {
-                filter.OpenFile(fileName, ref filter.sourceImage, width, height);
+                filter.OpenFile(fileName, ref filter.sourceImage, ImageWidth, ImageHeight);
             }
             else
             {
-                filter.OpenFile(fileName, ref filter.tempImage, width, height);
+                filter.OpenFile(fileName, ref filter.tempImage, ImageWidth, ImageHeight);
             }
         }
 
@@ -47,14 +56,241 @@ namespace Introduction
             }
         }
 
-        private void TestEvent(object sender, EventArgs e)
-        {
-            // Test functional here
-        }
-
-        private void OpenNewImage(object sender, EventArgs e)
+        private void OpenImage(object sender, EventArgs e)
         {
             LoadI(true);
+        }
+
+        private void HSVFIlter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            HSVPanel.Visible = true;
+        }
+
+        private void HSVClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            HSVPanel.Visible = false;
+        }
+
+        private void HueScroll(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.HSVFilter(HueTrackbar.Value, Data.HSV.Hue);
+        }
+
+        private void SaturScroll(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.HSVFilter(SaturTrackbar.Value, Data.HSV.Saturation);
+        }
+
+        private void ValueScroll(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.HSVFilter(ValueTrackbar.Value, Data.HSV.Value);
+        }
+
+        private void BrightScroll(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Brightness(filter.sourceImage, BrTrackbar.Value);
+        }
+
+        private void ContrScroll(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Contrast(filter.sourceImage, ContrTrackbar.Value);
+        }
+
+        private void BrContrFilter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            BrContrPanel.Visible = true;
+        }
+
+        private void BrContrClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            BrContrPanel.Visible = false;
+        }
+
+        private void WinFilter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            WindowFilterPanel.Visible = true;
+        }
+
+        private void WinFilterClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            WindowFilterPanel.Visible = false;
+        }
+
+        private void WinFilterSharpen(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WindowFilter(Data.Sharp);
+        }
+
+        private void WinFilterEmbos(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WindowFilter(Data.Embos);
+        }
+
+        private void WinFilterEdges(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WindowFilter(Data.Edges);
+        }
+
+        private void WinFilerCustomMatSend(object sender, EventArgs e)
+        {
+            int[,] edTemp = { { (int)MatArg0.Value, (int)MatArg1.Value, (int)MatArg2.Value },
+                              { (int)MatArg3.Value, (int)MatArg4.Value, (int)MatArg5.Value },
+                              { (int)MatArg6.Value, (int)MatArg7.Value, (int)MatArg8.Value } };
+
+            Data.Custom = edTemp;
+
+            if(Data.Custom == null)
+            {
+                return;
+            }
+            imageBoxRs.Image = filter.WindowFilter(Data.Custom);
+        }
+
+        private void CartnFilterClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            CartnFilterPanel.Visible = false;
+        }
+
+        private void CartnFilter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            CartnFilterPanel.Visible = true;
+            imageBoxRs.Image = filter.CartoonFilter(filter.sourceImage, (int)CartFilterThreshold.Value);
+        }
+
+        private void CartFilterThresholdChanged(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.CartoonFilter(filter.sourceImage, (int)CartFilterThreshold.Value);
+        }
+
+        private void BlurFIlter(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.MedianBlur(filter.sourceImage);
+        }
+
+        private void WaterColorFilter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+
+            WaterColorMaskLoad.Text = "Load Image";
+            WaterColorPanel.Visible = true;
+            WaterColorBr.Enabled = false;
+            WaterColorCtr.Enabled = false;
+            WaterColorMask.Enabled = false;
+        }
+
+        private void WaterColorMaskScroll(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value, 
+                                                 (double)WaterColorCtr.Value, WaterColorMask.Value);
+        }
+
+        private void WaterColorCtrChanged(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+                                     (double)WaterColorCtr.Value, WaterColorMask.Value);
+        }
+
+        private void WaterColorBrChanged(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+                                     (double)WaterColorCtr.Value, WaterColorMask.Value);
+        }
+
+        private void WaterColorMaskLoadDown(object sender, EventArgs e)
+        {
+            LoadI(false);
+            WaterColorMaskLoad.Text = "Change Image";
+            WaterColorBr.Enabled = true;
+            WaterColorCtr.Enabled = true;
+            WaterColorMask.Enabled = true;
+            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+                                     (double)WaterColorCtr.Value, WaterColorMask.Value);
+        }
+
+        private void WaterColorClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            WaterColorPanel.Visible = false;
+        }
+
+        private void BooleansMaskLoadDown(object sender, EventArgs e)
+        {
+            LoadI(false);
+            BooleansMaskLoad.Text = "Change Image";
+            BooleansMask.Enabled = true;
+            BooleansAddBut.Enabled = true;
+            BooleansSubstrBut.Enabled = true;
+        }
+
+        private void BooleansFilterClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            BooleansPanel.Visible = false;
+        }
+
+        private void BooleansFilter(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+
+            BooleansMaskLoad.Text = "Load Image";
+            BooleansPanel.Visible = true;
+            BooleansMask.Enabled = false;
+            BooleansAddBut.Enabled = false;
+            BooleansSubstrBut.Enabled = false;
+        }
+
+        private void BooleansMaskScroll(object sender, EventArgs e)
+        {
+            BooleansIntens = BooleansMask.Value;
+        }
+
+        private void BooleansAddDown(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.BooleanOperation(filter.sourceImage, Data.Boolean.Add, BooleansIntens);
+        }
+
+        private void BooleansSubstrDown(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.BooleanOperation(filter.sourceImage, Data.Boolean.Substract, BooleansIntens);
+        }
+
+        private void IntersectionFilter(object sender, EventArgs e)
+        {
+            LoadI(false);
+            imageBoxRs.Image = filter.Intersection(filter.sourceImage);
+        }
+
+        private void SepiaFilter(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.Sepia();
+        }
+
+        private void BlackWhiteFilter(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ConvertToBW(filter.sourceImage);
+        }
+
+        private void ChannelSplitRed(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Red);
+        }
+
+        private void ChannelSplitBlue(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Green);
+        }
+
+        private void ChannelSplitGreen(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Blue);
         }
     }
 }

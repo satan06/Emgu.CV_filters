@@ -116,15 +116,15 @@ namespace Introduction
             return resultImage;
         }
 
-        public Image<Gray, byte> ChannelSplit(byte channelIndex)
+        public Image<Gray, byte> ChannelSplit(Data.BGR channel)
         {
             if(sourceImage == null)
             {
                 return null;
             }
 
-            var channel = sourceImage.Split()[channelIndex];
-            return channel;
+            var ch = sourceImage.Split()[(int)channel];
+            return ch;
         }
 
         /// <summary>
@@ -194,7 +194,6 @@ namespace Introduction
         /// <typeparam name="T">Image type</typeparam>
         /// <param name="image">Image to work with</param>
         /// /// <param name="value">Intensity value.</param>
-        // Testing: OK
         public Image<T, byte> Contrast<T>(Image<T, byte> img, double value = 5.0) where T : struct, IColor
         {
             Image<T, byte> destImage = new Image<T, byte>(sourceImage.Size);
@@ -234,7 +233,6 @@ namespace Introduction
         /// </summary>
         /// <param name="value">Intensity value</param>
         /// <param name="hsv">The HSV channel</param>
-        // Testing: OK
         public Image<Hsv, byte> HSVFilter(double value, Data.HSV hsv)
         {
             Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
@@ -263,15 +261,14 @@ namespace Introduction
         /// <param name="img">Image to work with</param>
         /// <param name="b">Addition or substruction operation</param>
         /// <param name="value">Effect intensity</param>
-        // Testing: OK
-        public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Data.Boolean b, double value) where T : struct, IColor
+        public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Data.Boolean b, int value) where T : struct, IColor
         {
             Image<T, byte> result = new Image<T, byte>(sourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
-                color = SetOperaton(b, img.Data[width, height, channel] * Math.Abs(value - 1), 
-                        tempImage.Data[width, height, channel] * value);
+                color = SetOperaton(b, img.Data[width, height, channel] * Math.Abs(Normalize(value) - 1), 
+                        tempImage.Data[width, height, channel] * Normalize(value));
                 result.Data[width, height, channel] = color;
             });
 
@@ -310,7 +307,7 @@ namespace Introduction
         /// <param name="brightness">Brightness value</param>
         /// <param name="contrast">Contrast value</param>
         /// <param name="intens">Sub Image intensity</param>
-        public Image<T, byte> WaterColor<T>(Image<T, byte> img, double brightness, double contrast, double intens) where T : struct, IColor
+        public Image<T, byte> WaterColor<T>(Image<T, byte> img, double brightness, double contrast, int intens) where T : struct, IColor
         {
             Image<T, byte> result = new Image<T, byte>(img.Size);
 
@@ -399,7 +396,7 @@ namespace Introduction
         /// </summary>
         /// <param name="img">Source image</param>
         /// <param name="thresholdValue">Threshold value</param>
-        public Image<Bgr, byte> CartoonFIlter(Image<Bgr, byte> img, int thresholdValue)
+        public Image<Bgr, byte> CartoonFilter(Image<Bgr, byte> img, int thresholdValue)
         {
             var bwImage= ConvertToBW(img);
             var blurImage = MedianBlur(bwImage);
@@ -444,7 +441,12 @@ namespace Introduction
 
         private int ThresholdNormalize(int value)
         {
-            return (value < 1) ? 3 : (value % 2 != 1) ? ++value : 0;
+            return (value <= 1) ? 3 : (value % 2 != 1) ? ++value : value;
+        }
+
+        private double Normalize(int value)
+        {
+            return (value <= 1) ? 0.1 : (value >= 9) ? 0.9 : value * 0.1;
         }
 
         #endregion

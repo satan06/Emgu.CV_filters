@@ -23,6 +23,16 @@
             Add,
             Substract
         }
+
+        /// <summary>
+        /// BGR channels 
+        /// </summary>
+        public enum BGR : byte
+        {
+            Blue,
+            Green,
+            Red
+        }
         #endregion
         #region Window filter matrixes
         /// <summary>
@@ -39,6 +49,11 @@
         /// Edges detecting effect
         /// </summary>
         static public int[,] Edges;
+
+        /// <summary>
+        /// Custom matrix. Empty by default
+        /// </summary>
+        static public int[,] Custom;
         #endregion
 
         static Data()
@@ -58,6 +73,7 @@
             Sharp = sTemp;
             Embos = emTemp;
             Edges = edTemp;
+            Custom = new int[3, 3];
         }
     }
 }

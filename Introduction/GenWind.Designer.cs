@@ -78,6 +78,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.cartoonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CartFilterThreshold = new System.Windows.Forms.NumericUpDown();
+            this.blurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -250,7 +251,8 @@
             this.hSVToolStripMenuItem,
             this.brightnessContrastToolStripMenuItem,
             this.windowFilterToolStripMenuItem,
-            this.cartoonToolStripMenuItem});
+            this.cartoonToolStripMenuItem,
+            this.blurToolStripMenuItem});
             this.FToolStripMenuItem.Name = "FToolStripMenuItem";
             this.FToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.FToolStripMenuItem.Text = "Filter";
@@ -590,6 +592,13 @@
             0});
             this.CartFilterThreshold.ValueChanged += new System.EventHandler(this.CartFilterThresholdChanged);
             // 
+            // blurToolStripMenuItem
+            // 
+            this.blurToolStripMenuItem.Name = "blurToolStripMenuItem";
+            this.blurToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.blurToolStripMenuItem.Text = "Blur";
+            this.blurToolStripMenuItem.Click += new System.EventHandler(this.BlurFIlter);
+            // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -689,6 +698,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ToolStripMenuItem cartoonToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown CartFilterThreshold;
+        private System.Windows.Forms.ToolStripMenuItem blurToolStripMenuItem;
     }
 }
 

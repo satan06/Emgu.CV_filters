@@ -167,5 +167,10 @@ namespace Introduction
         {
             imageBoxRs.Image = filter.CartoonFilter(filter.sourceImage, (int)CartFilterThreshold.Value);
         }
+
+        private void BlurFIlter(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = filter.MedianBlur(filter.sourceImage);
+        }
     }
 }

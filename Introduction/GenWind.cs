@@ -9,11 +9,11 @@ namespace Introduction
         private ImageFilter filter = new ImageFilter();
         private string filterParam = "File Image (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
 
-        public int width = 640;
-        public int height = 480;
+        public int ImageWidth { get; set; } = 640;
+        public int ImageHeight { get; set; } = 480;
 
-        public int windowPanelModeWidth = 840;
-        public int windowRelaxModeWidth = 685;
+        public int WindowPanelModeWidth { get; set; } = 840;
+        public int WindowRelaxModeWidth { get; set; } = 690;
 
         public Filter()
         {
@@ -21,18 +21,18 @@ namespace Introduction
 
             imageBox.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
             imageBoxRs.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
-            Width = windowRelaxModeWidth;
+            Width = WindowRelaxModeWidth;
         }
 
         private void LoaderCheck(string fileName, bool isSource)
         {
             if (isSource)
             {
-                filter.OpenFile(fileName, ref filter.sourceImage, width, height);
+                filter.OpenFile(fileName, ref filter.sourceImage, ImageWidth, ImageHeight);
             }
             else
             {
-                filter.OpenFile(fileName, ref filter.tempImage, width, height);
+                filter.OpenFile(fileName, ref filter.tempImage, ImageWidth, ImageHeight);
             }
         }
 
@@ -59,13 +59,13 @@ namespace Introduction
 
         private void HSVFIlter(object sender, EventArgs e)
         {
-            Width = windowPanelModeWidth;
+            Width = WindowPanelModeWidth;
             HSVPanel.Visible = true;
         }
 
         private void HSVClose(object sender, EventArgs e)
         {
-            Width = windowRelaxModeWidth;
+            Width = WindowRelaxModeWidth;
             HSVPanel.Visible = false;
         }
 
@@ -96,13 +96,13 @@ namespace Introduction
 
         private void BrContrFilter(object sender, EventArgs e)
         {
-            Width = windowPanelModeWidth;
+            Width = WindowPanelModeWidth;
             BrContrPanel.Visible = true;
         }
 
         private void BrContrClose(object sender, EventArgs e)
         {
-            Width = windowRelaxModeWidth;
+            Width = WindowRelaxModeWidth;
             BrContrPanel.Visible = false;
         }
     }

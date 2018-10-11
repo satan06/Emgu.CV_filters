@@ -1,8 +1,12 @@
-﻿namespace Introduction
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
+
+namespace Introduction
 {
     public static class Data
-    {
-        public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
+    { 
+        public static Image<Bgr, byte> sourceImage;
+        public static Image<Bgr, byte> tempImage;
 
         #region Enums
 

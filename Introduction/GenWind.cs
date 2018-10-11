@@ -7,6 +7,7 @@ namespace Introduction
     public partial class Filter : Form
     {
         private ImageFilter filter = new ImageFilter();
+        private ImageTransform transform = new ImageTransform();
         private string filterParam = "File Image (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
 
         public int ImageWidth { get; set; } = 640;
@@ -32,11 +33,11 @@ namespace Introduction
         {
             if (isSource)
             {
-                filter.OpenFile(fileName, ref filter.sourceImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref Data.sourceImage, ImageWidth, ImageHeight);
             }
             else
             {
-                filter.OpenFile(fileName, ref filter.tempImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref Data.tempImage, ImageWidth, ImageHeight);
             }
         }
 
@@ -52,7 +53,7 @@ namespace Introduction
             {
                 string fileName = openFileDialog.FileName;
                 LoaderCheck(fileName, isSource);
-                imageBox.Image = imageBoxRs.Image = filter.sourceImage;
+                imageBox.Image = imageBoxRs.Image = Data.sourceImage;
             }
         }
 
@@ -90,12 +91,12 @@ namespace Introduction
 
         private void BrightScroll(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.Brightness(filter.sourceImage, BrTrackbar.Value);
+            imageBoxRs.Image = filter.Brightness(Data.sourceImage, BrTrackbar.Value);
         }
 
         private void ContrScroll(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.Contrast(filter.sourceImage, ContrTrackbar.Value);
+            imageBoxRs.Image = filter.Contrast(Data.sourceImage, ContrTrackbar.Value);
         }
 
         private void BrContrFilter(object sender, EventArgs e)
@@ -162,17 +163,17 @@ namespace Introduction
         {
             Width = WindowPanelModeWidth;
             CartnFilterPanel.Visible = true;
-            imageBoxRs.Image = filter.CartoonFilter(filter.sourceImage, (int)CartFilterThreshold.Value);
+            imageBoxRs.Image = filter.CartoonFilter(Data.sourceImage, (int)CartFilterThreshold.Value);
         }
 
         private void CartFilterThresholdChanged(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.CartoonFilter(filter.sourceImage, (int)CartFilterThreshold.Value);
+            imageBoxRs.Image = filter.CartoonFilter(Data.sourceImage, (int)CartFilterThreshold.Value);
         }
 
         private void BlurFIlter(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.MedianBlur(filter.sourceImage, BlurIntensity);
+            imageBoxRs.Image = filter.MedianBlur(Data.sourceImage, BlurIntensity);
         }
 
         private void WaterColorFilter(object sender, EventArgs e)
@@ -188,19 +189,19 @@ namespace Introduction
 
         private void WaterColorMaskScroll(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value, 
+            imageBoxRs.Image = filter.WaterColor(Data.sourceImage, (double)WaterColorBr.Value, 
                                                  (double)WaterColorCtr.Value, WaterColorMask.Value);
         }
 
         private void WaterColorCtrChanged(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+            imageBoxRs.Image = filter.WaterColor(Data.sourceImage, (double)WaterColorBr.Value,
                                      (double)WaterColorCtr.Value, WaterColorMask.Value);
         }
 
         private void WaterColorBrChanged(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+            imageBoxRs.Image = filter.WaterColor(Data.sourceImage, (double)WaterColorBr.Value,
                                      (double)WaterColorCtr.Value, WaterColorMask.Value);
         }
 
@@ -211,7 +212,7 @@ namespace Introduction
             WaterColorBr.Enabled = true;
             WaterColorCtr.Enabled = true;
             WaterColorMask.Enabled = true;
-            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+            imageBoxRs.Image = filter.WaterColor(Data.sourceImage, (double)WaterColorBr.Value,
                                      (double)WaterColorCtr.Value, WaterColorMask.Value);
         }
 
@@ -254,18 +255,18 @@ namespace Introduction
 
         private void BooleansAddDown(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.BooleanOperation(filter.sourceImage, Data.Boolean.Add, BooleansIntens);
+            imageBoxRs.Image = filter.BooleanOperation(Data.sourceImage, Data.Boolean.Add, BooleansIntens);
         }
 
         private void BooleansSubstrDown(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.BooleanOperation(filter.sourceImage, Data.Boolean.Substract, BooleansIntens);
+            imageBoxRs.Image = filter.BooleanOperation(Data.sourceImage, Data.Boolean.Substract, BooleansIntens);
         }
 
         private void IntersectionFilter(object sender, EventArgs e)
         {
             LoadI(false);
-            imageBoxRs.Image = filter.Intersection(filter.sourceImage);
+            imageBoxRs.Image = filter.Intersection(Data.sourceImage);
         }
 
         private void SepiaFilter(object sender, EventArgs e)
@@ -275,7 +276,7 @@ namespace Introduction
 
         private void BlackWhiteFilter(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.ConvertToBW(filter.sourceImage);
+            imageBoxRs.Image = filter.ConvertToBW(Data.sourceImage);
         }
 
         private void ChannelSplitRed(object sender, EventArgs e)
@@ -291,6 +292,16 @@ namespace Introduction
         private void ChannelSplitGreen(object sender, EventArgs e)
         {
             imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Green);
+        }
+
+        /// <summary>
+        /// Temporary event to test new Transform functional
+        /// </summary>
+
+
+        private void TestEvent(object sender, EventArgs e)
+        {
+            // Test functional here
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Emgu.CV.UI;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Introduction
@@ -17,6 +16,7 @@ namespace Introduction
         public int WindowRelaxModeWidth { get; set; } = 690;
 
         private int BooleansIntens { get; set; } = 5;
+        private int BlurIntensity { get; set; } = 5;
 
         public Filter()
         {
@@ -172,7 +172,7 @@ namespace Introduction
 
         private void BlurFIlter(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.MedianBlur(filter.sourceImage);
+            imageBoxRs.Image = filter.MedianBlur(filter.sourceImage, BlurIntensity);
         }
 
         private void WaterColorFilter(object sender, EventArgs e)
@@ -285,12 +285,12 @@ namespace Introduction
 
         private void ChannelSplitBlue(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Green);
+            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Blue);
         }
 
         private void ChannelSplitGreen(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Blue);
+            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Green);
         }
     }
 }

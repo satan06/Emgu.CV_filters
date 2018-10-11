@@ -5,6 +5,7 @@
         public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
 
         #region Enums
+
         /// <summary>
         /// HSV channels 
         /// </summary>
@@ -33,8 +34,11 @@
             Green,
             Red
         }
+
         #endregion
+
         #region Window filter matrixes
+
         /// <summary>
         /// Sharpen effect
         /// </summary>
@@ -54,6 +58,7 @@
         /// Custom matrix. Empty by default
         /// </summary>
         static public int[,] Custom;
+
         #endregion
 
         static Data()

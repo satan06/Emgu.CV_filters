@@ -324,20 +324,22 @@ namespace Introduction
         /// </summary>
         /// <typeparam name="T">Image type</typeparam>
         /// <param name="img">Image to work with</param>
-        public Image<T, byte> MedianBlur<T>(Image<T, byte> img) where T : struct, IColor
+        /// /// <param name="intens">Blur intensity</param>
+        public Image<T, byte> MedianBlur<T>(Image<T, byte> img, int intens = 3) where T : struct, IColor
         {
             List<byte> pixels = new List<byte>();
-            const int coreInd = 4; 
+            int index = ThresholdNormalize(intens) / 2;
+            int coreInd = ThresholdNormalize(intens) * index;
 
             for (byte channel = 0; channel < img.NumberOfChannels; channel++)
             {
-                for (int x = 1; x < img.Width - 1; x++)
+                for (int x = index; x < img.Width - index; x++)
                 {
-                    for (int y = 1; y < img.Height - 1; y++)
+                    for (int y = index; y < img.Height - index; y++)
                     {
-                        for (sbyte i = -1; i < 2; i++)
+                        for (int i = -(index); i <= index; i++)
                         {
-                            for (sbyte j = -1; j < 2; j++)
+                            for (int j = -(index); j <= index; j++)
                             {
                                 pixels.Add(sourceImage.Data[y + j, x + i, channel]);
                             }
@@ -396,13 +398,16 @@ namespace Introduction
         /// </summary>
         /// <param name="img">Source image</param>
         /// <param name="thresholdValue">Threshold value</param>
-        public Image<Bgr, byte> CartoonFilter(Image<Bgr, byte> img, int thresholdValue)
+        public Image<Bgr, byte> CartoonFilter(Image<Bgr, byte> img, int thresholdValue = 10)
         {
+            int blurIntensity = 11;
+
             var bwImage= ConvertToBW(img);
-            var blurImage = MedianBlur(bwImage);
-            var binImage = blurImage.ThresholdAdaptive(new Gray(100), AdaptiveThresholdType.MeanC, 
+            var blurImage = MedianBlur(bwImage, blurIntensity);
+            var binImage = blurImage.ThresholdAdaptive(new Gray(255), AdaptiveThresholdType.MeanC, 
                                                        ThresholdType.Binary, ThresholdNormalize(thresholdValue), 
-                                                       new Gray(0.03));
+                                                       new Gray(0.03))
+                                                       .Dilate(1);
             tempImage = binImage.Convert<Bgr, byte>();
             var result = Intersection(sourceImage);
 

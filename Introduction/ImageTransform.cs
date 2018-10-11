@@ -47,5 +47,20 @@ namespace Introduction
 
             return newImage;
         }
+
+        public Image<Bgr, byte> Reflect(int paramX, int paramY)
+        {
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>(Data.sourceImage.Size);
+
+            EachPixel((height, width, pixel) =>
+            {
+                int newX = width * paramX + Data.sourceImage.Width;
+                int newY = height * paramY + Data.sourceImage.Height;
+
+                newImage[newY, newX] = pixel;
+            });
+
+            return newImage;
+        }
     }
 }

@@ -22,11 +22,9 @@ namespace Introduction
         public Filter()
         {
             InitializeComponent();
+
             Width = WindowRelaxModeWidth;
             FormBorderStyle = FormBorderStyle.FixedSingle;
-
-            imageBox.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
-            imageBoxRs.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
         }
 
         private void LoaderCheck(string fileName, bool isSource)
@@ -300,7 +298,6 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
-            imageBoxRs.Image = transform.Reflect(Data.ReflType.Vertical);
         }
     }
 }

@@ -48,19 +48,43 @@ namespace Introduction
             return newImage;
         }
 
-        public Image<Bgr, byte> Reflect(int paramX, int paramY)
+        /// <summary>
+        /// Reflect image
+        /// </summary>
+        /// <param name="rtype"> Reflection type</param>
+        public Image<Bgr, byte> Reflect(Data.ReflType rtype)
         {
             Image<Bgr, byte> newImage = new Image<Bgr, byte>(Data.sourceImage.Size);
 
+            int[] param = ReflTypeToData(rtype);
+
             EachPixel((height, width, pixel) =>
             {
-                int newX = width * paramX + Data.sourceImage.Width;
-                int newY = height * paramY + Data.sourceImage.Height;
+                int newX = width;
+                int newY = height;
 
+                if (param[0] == -1)
+                {
+                    newX = width * param[0] + Data.sourceImage.Width - 1;
+                }
+                if (param[1] == -1)
+                {
+                    newY = height * param[1] + Data.sourceImage.Height - 1;
+                }
                 newImage[newY, newX] = pixel;
             });
 
             return newImage;
+        }
+
+        private int[] ReflTypeToData(Data.ReflType rtype)
+        {
+            bool isHoriz = rtype == Data.ReflType.Horizontal;
+            bool isVert = rtype == Data.ReflType.Vertical;
+            bool isDiag = rtype == Data.ReflType.Diagonal;
+
+            return isHoriz ? new int[] { -1, 1 } : isVert ? 
+                             new int[] { 1, -1 } : new int[] { -1, -1 };
         }
     }
 }

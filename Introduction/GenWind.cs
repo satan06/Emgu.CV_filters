@@ -297,12 +297,10 @@ namespace Introduction
         /// <summary>
         /// Temporary event to test new Transform functional
         /// </summary>
-
-
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
-            imageBoxRs.Image = transform.Reflect(-1, -1);
+            imageBoxRs.Image = transform.Reflect(Data.ReflType.Vertical);
         }
     }
 }

@@ -39,6 +39,16 @@ namespace Introduction
             Red
         }
 
+        /// <summary>
+        /// Image reflection types
+        /// </summary>
+        public enum ReflType
+        {
+            Horizontal,
+            Vertical,
+            Diagonal
+        }
+
         #endregion
 
         #region Window filter matrixes
@@ -64,6 +74,7 @@ namespace Introduction
         static public int[,] Custom;
 
         #endregion
+
 
         static Data()
         {

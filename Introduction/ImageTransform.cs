@@ -26,6 +26,7 @@ namespace Introduction
                 }
             }
         }
+
         private void EachPixelChannel(Func<int, int, int, byte> action)
         {
             for (int channel = 0; channel < Data.sourceImage.NumberOfChannels; channel++)
@@ -91,20 +92,34 @@ namespace Introduction
             return newImage;
         }
 
-        public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img)
+        public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, params float [] par)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(img.Size);
 
             EachPixelChannel((channel, width, height, color) =>
             {
-                int floorX = (int)Math.Floor((double)width); // I don't get it! 
-                int floorY = (int)Math.Floor((double)height);
-                int ratioX = width - floorX;
-                int ratioY = height - floorY;
-                int inversRatioX = 1 - ratioX;
-                int inversRatioY = 1 - ratioY;
+                int floorX = (int)Math.Floor(width / par[0]);
+                int floorY = (int)Math.Floor(height * par[1]);
+                double ratioX = width / par[0] - floorX;
+                double ratioY = height / par[1] - floorY;
+                double inversRatioX = 1 - ratioX;
+                double inversRatioY = 1 - ratioY;
 
-                // Pixel writing logic here 
+                byte invDataX = (byte)(Data.sourceImage.Data[width, height, channel] * inversRatioX);
+                byte dataX = (byte)(Data.sourceImage.Data[width, height, channel] * ratioX);
+                byte invDataY = (byte)(Data.sourceImage.Data[width, height, channel] * inversRatioY);
+                byte dataY = (byte)(Data.sourceImage.Data[width, height, channel] * ratioY);
+
+                if(img.Data[width, height, channel] == 0)
+                {
+                    img.Data[width, height, channel] = (byte)((invDataX + dataX) * inversRatioX + 
+                                                                 (invDataY + dataY) * ratioY);
+                }
+                else
+                {
+                    result.Data[width, height, channel] = color;
+                }
+                                                             
             });
 
             return result;

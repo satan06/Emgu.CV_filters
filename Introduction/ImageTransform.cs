@@ -93,24 +93,59 @@ namespace Introduction
             return newImage;
         }
 
+        public interface ISpecification<T>
+        {
+            bool IsSatisfied(T t);
+        }
+
+        public interface IFilter<T>
+        {
+            IEnumerable<T> Filter(IEnumerable<T> items, ISpecification<T> spec);
+        }
+
+        public class ShiftTypeSpec : ISpecification<ShearingType>
+        {
+            private ShiftType shift;
+
+            public ShiftTypeSpec(ShiftType shift)
+            {
+                this.shift = shift;
+            }
+
+            public bool IsSatisfied(ShearingType sh) => sh.ShiftType == shift;
+        }
+
+        public class ShearingFilter : IFilter<ShearingType>
+        {
+            public IEnumerable<ShearingType> Filter(IEnumerable<ShearingType> stypes, 
+                                                    ISpecification<ShearingType> spec)
+            {
+                foreach (var s in stypes)
+                {
+                    if(spec.IsSatisfied(s))
+                    {
+                        yield return s;
+                    }
+                }
+            }
+        }
 
         // Horizontal shift relative to image bottom 
         // Need to make this function multipurpose
         public Image<Bgr, byte> Shear(float shift)
         {
-            int maxOffsetX = (int)Math.Abs(sourceImage.Width * shift);
-
-            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Width + maxOffsetX,
-                                                             sourceImage.Height);
-
+            int maxOffset = (int)Math.Abs(sourceImage.Height * shift);
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Width,
+                                                             sourceImage.Height + maxOffset);
             EachPixel((height, width, pixel) =>
             {
-                int newX = (int)(width + shift * (newImage.Height - height));
-                int newY = height;
+                // If shifting along X use:
+                // (int)(width + shift * (newImage.Height - height));
+                int newX = width;
+                int newY = (int)Math.Abs(height + shift * (sourceImage.Height - width));
 
                 newImage[newY, newX] = pixel;
             });
-
             return newImage;
         }
 

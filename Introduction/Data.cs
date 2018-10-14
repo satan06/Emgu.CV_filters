@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using System;
 
 namespace Introduction
 {
@@ -49,8 +50,16 @@ namespace Introduction
             Diagonal
         }
 
-        #endregion
+        /// <summary>
+        /// Image shearing types
+        /// </summary>
+        public enum ShiftType
+        {
+            Horizontal,
+            Vertical
+        }
 
+        #endregion
         #region Window filter matrixes
 
         /// <summary>
@@ -75,6 +84,19 @@ namespace Introduction
 
         #endregion
 
+        public class ShearingType
+        {
+            public ShiftType ShiftType { get; set; }
+            public float Value { get; set; }
+
+            public ShearingType(float value, ShiftType shift)
+            {
+                ShiftType = shift;
+                Value = value;
+            }
+
+            public bool IsNegative(float val) => val < 0;
+        }
 
         static Data()
         {

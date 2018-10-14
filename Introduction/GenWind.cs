@@ -1,12 +1,14 @@
 ﻿using Emgu.CV.UI;
 using System;
 using System.Windows.Forms;
+using static Introduction.Data;
 
 namespace Introduction
 {
     public partial class Filter : Form
     {
         private ImageFilter filter = new ImageFilter();
+        private ImageTransform transform = new ImageTransform();
         private string filterParam = "File Image (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
 
         public int ImageWidth { get; set; } = 640;
@@ -21,22 +23,20 @@ namespace Introduction
         public Filter()
         {
             InitializeComponent();
+
             Width = WindowRelaxModeWidth;
             FormBorderStyle = FormBorderStyle.FixedSingle;
-
-            imageBox.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
-            imageBoxRs.FunctionalMode = ImageBox.FunctionalModeOption.Minimum;
         }
 
         private void LoaderCheck(string fileName, bool isSource)
         {
             if (isSource)
             {
-                filter.OpenFile(fileName, ref filter.sourceImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref sourceImage, ImageWidth, ImageHeight);
             }
             else
             {
-                filter.OpenFile(fileName, ref filter.tempImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref tempImage, ImageWidth, ImageHeight);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Introduction
             {
                 string fileName = openFileDialog.FileName;
                 LoaderCheck(fileName, isSource);
-                imageBox.Image = imageBoxRs.Image = filter.sourceImage;
+                imageBox.Image = imageBoxRs.Image = sourceImage;
             }
         }
 
@@ -75,27 +75,27 @@ namespace Introduction
 
         private void HueScroll(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.HSVFilter(HueTrackbar.Value, Data.HSV.Hue);
+            imageBoxRs.Image = filter.HSVFilter(HueTrackbar.Value, HSV.Hue);
         }
 
         private void SaturScroll(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.HSVFilter(SaturTrackbar.Value, Data.HSV.Saturation);
+            imageBoxRs.Image = filter.HSVFilter(SaturTrackbar.Value, HSV.Saturation);
         }
 
         private void ValueScroll(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.HSVFilter(ValueTrackbar.Value, Data.HSV.Value);
+            imageBoxRs.Image = filter.HSVFilter(ValueTrackbar.Value, HSV.Value);
         }
 
         private void BrightScroll(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.Brightness(filter.sourceImage, BrTrackbar.Value);
+            imageBoxRs.Image = filter.Brightness(sourceImage, BrTrackbar.Value);
         }
 
         private void ContrScroll(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.Contrast(filter.sourceImage, ContrTrackbar.Value);
+            imageBoxRs.Image = filter.Contrast(sourceImage, ContrTrackbar.Value);
         }
 
         private void BrContrFilter(object sender, EventArgs e)
@@ -124,17 +124,17 @@ namespace Introduction
 
         private void WinFilterSharpen(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.WindowFilter(Data.Sharp);
+            imageBoxRs.Image = filter.WindowFilter(Sharp);
         }
 
         private void WinFilterEmbos(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.WindowFilter(Data.Embos);
+            imageBoxRs.Image = filter.WindowFilter(Embos);
         }
 
         private void WinFilterEdges(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.WindowFilter(Data.Edges);
+            imageBoxRs.Image = filter.WindowFilter(Edges);
         }
 
         private void WinFilerCustomMatSend(object sender, EventArgs e)
@@ -143,13 +143,13 @@ namespace Introduction
                               { (int)MatArg3.Value, (int)MatArg4.Value, (int)MatArg5.Value },
                               { (int)MatArg6.Value, (int)MatArg7.Value, (int)MatArg8.Value } };
 
-            Data.Custom = edTemp;
+            Custom = edTemp;
 
-            if(Data.Custom == null)
+            if(Custom == null)
             {
                 return;
             }
-            imageBoxRs.Image = filter.WindowFilter(Data.Custom);
+            imageBoxRs.Image = filter.WindowFilter(Custom);
         }
 
         private void CartnFilterClose(object sender, EventArgs e)
@@ -162,17 +162,17 @@ namespace Introduction
         {
             Width = WindowPanelModeWidth;
             CartnFilterPanel.Visible = true;
-            imageBoxRs.Image = filter.CartoonFilter(filter.sourceImage, (int)CartFilterThreshold.Value);
+            imageBoxRs.Image = filter.CartoonFilter(sourceImage, (int)CartFilterThreshold.Value);
         }
 
         private void CartFilterThresholdChanged(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.CartoonFilter(filter.sourceImage, (int)CartFilterThreshold.Value);
+            imageBoxRs.Image = filter.CartoonFilter(sourceImage, (int)CartFilterThreshold.Value);
         }
 
         private void BlurFIlter(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.MedianBlur(filter.sourceImage, BlurIntensity);
+            imageBoxRs.Image = filter.MedianBlur(sourceImage, BlurIntensity);
         }
 
         private void WaterColorFilter(object sender, EventArgs e)
@@ -188,19 +188,19 @@ namespace Introduction
 
         private void WaterColorMaskScroll(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value, 
+            imageBoxRs.Image = filter.WaterColor(sourceImage, (double)WaterColorBr.Value, 
                                                  (double)WaterColorCtr.Value, WaterColorMask.Value);
         }
 
         private void WaterColorCtrChanged(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+            imageBoxRs.Image = filter.WaterColor(sourceImage, (double)WaterColorBr.Value,
                                      (double)WaterColorCtr.Value, WaterColorMask.Value);
         }
 
         private void WaterColorBrChanged(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+            imageBoxRs.Image = filter.WaterColor(sourceImage, (double)WaterColorBr.Value,
                                      (double)WaterColorCtr.Value, WaterColorMask.Value);
         }
 
@@ -211,7 +211,7 @@ namespace Introduction
             WaterColorBr.Enabled = true;
             WaterColorCtr.Enabled = true;
             WaterColorMask.Enabled = true;
-            imageBoxRs.Image = filter.WaterColor(filter.sourceImage, (double)WaterColorBr.Value,
+            imageBoxRs.Image = filter.WaterColor(sourceImage, (double)WaterColorBr.Value,
                                      (double)WaterColorCtr.Value, WaterColorMask.Value);
         }
 
@@ -254,18 +254,18 @@ namespace Introduction
 
         private void BooleansAddDown(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.BooleanOperation(filter.sourceImage, Data.Boolean.Add, BooleansIntens);
+            imageBoxRs.Image = filter.BooleanOperation(sourceImage, Data.Boolean.Add, BooleansIntens);
         }
 
         private void BooleansSubstrDown(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.BooleanOperation(filter.sourceImage, Data.Boolean.Substract, BooleansIntens);
+            imageBoxRs.Image = filter.BooleanOperation(sourceImage, Data.Boolean.Substract, BooleansIntens);
         }
 
         private void IntersectionFilter(object sender, EventArgs e)
         {
             LoadI(false);
-            imageBoxRs.Image = filter.Intersection(filter.sourceImage);
+            imageBoxRs.Image = filter.Intersection(sourceImage);
         }
 
         private void SepiaFilter(object sender, EventArgs e)
@@ -275,22 +275,31 @@ namespace Introduction
 
         private void BlackWhiteFilter(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.ConvertToBW(filter.sourceImage);
+            imageBoxRs.Image = filter.ConvertToBW(sourceImage);
         }
 
         private void ChannelSplitRed(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Red);
+            imageBoxRs.Image = filter.ChannelSplit(BGR.Red);
         }
 
         private void ChannelSplitBlue(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Blue);
+            imageBoxRs.Image = filter.ChannelSplit(BGR.Blue);
         }
 
         private void ChannelSplitGreen(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.ChannelSplit(Data.BGR.Green);
+            imageBoxRs.Image = filter.ChannelSplit(BGR.Green);
+        }
+
+        /// <summary>
+        /// Temporary event to test new Transform functional
+        /// </summary>
+        private void TestEvent(object sender, EventArgs e)
+        {
+            // Test functional here
+            imageBoxRs.Image = transform.Shear(0.25f); 
         }
     }
 }

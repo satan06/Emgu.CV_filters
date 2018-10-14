@@ -66,6 +66,7 @@
       <DependentUpon>GenWind.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageFilter.cs" />
+    <Compile Include="ImageTransform.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GenWind.resx">

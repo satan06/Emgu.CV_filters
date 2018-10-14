@@ -1,8 +1,13 @@
-﻿namespace Introduction
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
+using System;
+
+namespace Introduction
 {
     public static class Data
-    {
-        public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
+    { 
+        public static Image<Bgr, byte> sourceImage;
+        public static Image<Bgr, byte> tempImage;
 
         #region Enums
 
@@ -35,8 +40,26 @@
             Red
         }
 
-        #endregion
+        /// <summary>
+        /// Image reflection types
+        /// </summary>
+        public enum ReflType
+        {
+            Horizontal,
+            Vertical,
+            Diagonal
+        }
 
+        /// <summary>
+        /// Image shearing types
+        /// </summary>
+        public enum ShiftType
+        {
+            Horizontal,
+            Vertical
+        }
+
+        #endregion
         #region Window filter matrixes
 
         /// <summary>
@@ -60,6 +83,20 @@
         static public int[,] Custom;
 
         #endregion
+
+        public class ShearingType
+        {
+            public ShiftType ShiftType { get; set; }
+            public float Value { get; set; }
+
+            public ShearingType(float value, ShiftType shift)
+            {
+                ShiftType = shift;
+                Value = value;
+            }
+
+            public bool IsNegative(float val) => val < 0;
+        }
 
         static Data()
         {

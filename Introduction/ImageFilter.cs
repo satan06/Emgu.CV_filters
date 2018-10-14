@@ -4,6 +4,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
+using static Introduction.Data;
 
 namespace Introduction
 {
@@ -12,11 +13,10 @@ namespace Introduction
     /// </summary>
     public class ImageFilter
     {
-        public Image<Bgr, byte> sourceImage;
-        public Image<Bgr, byte> tempImage;
-        
+        public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
+
         // Pixel image traversal
-        private void EachPixel(Data.Func<int, int, int, byte> action)
+        private void EachPixel(Func<int, int, int, byte> action)
         {
             for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
             {
@@ -267,7 +267,7 @@ namespace Introduction
 
             EachPixel((channel, width, height, color) =>
             {
-                color = SetOperaton(b, img.Data[width, height, channel] * Math.Abs(Normalize(value) - 1), 
+                color = SetOperaton(b, img.Data[width, height, channel] * Math.Abs(Normalize(value) - 1),
                         tempImage.Data[width, height, channel] * Normalize(value));
                 result.Data[width, height, channel] = color;
             });

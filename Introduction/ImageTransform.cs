@@ -4,6 +4,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
+using static Introduction.Data;
 
 namespace Introduction
 {
@@ -18,24 +19,24 @@ namespace Introduction
         // Pixel image traversal
         private void EachPixel(FuncSimpl<int, int, Bgr> action)
         {
-            for (int x = 0; x < Data.sourceImage.Width; x++)
+            for (int x = 0; x < sourceImage.Width; x++)
             {
-                for (int y = 0; y < Data.sourceImage.Height; y++)
+                for (int y = 0; y < sourceImage.Height; y++)
                 {
-                    action(y, x, Data.sourceImage[y, x]);
+                    action(y, x, sourceImage[y, x]);
                 }
             }
         }
 
         private void EachPixelChannel(Func<int, int, int, byte> action)
         {
-            for (int channel = 0; channel < Data.sourceImage.NumberOfChannels; channel++)
+            for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
             {
-                for (int x = 0; x < Data.sourceImage.Width; x++)
+                for (int x = 0; x < sourceImage.Width; x++)
                 {
-                    for (int y = 0; y < Data.sourceImage.Height; y++)
+                    for (int y = 0; y < sourceImage.Height; y++)
                     {
-                        action(channel, y, x, Data.sourceImage.Data[y, x, channel]);
+                        action(channel, y, x, sourceImage.Data[y, x, channel]);
                     }
                 }
             }
@@ -49,8 +50,8 @@ namespace Introduction
         // Testing: OK
         public Image<Bgr, byte> Scale(float scaleX, float scaleY)
         {
-            Image<Bgr, byte> newImage = new Image<Bgr, byte>((int)(Data.sourceImage.Width * scaleX),
-                                                             (int)(Data.sourceImage.Height * scaleY));
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>((int)(sourceImage.Width * scaleX),
+                                                             (int)(sourceImage.Height * scaleY));
 
             EachPixel((height, width, pixel) =>
             {
@@ -68,9 +69,9 @@ namespace Introduction
         /// </summary>
         /// <param name="rtype"> Reflection type</param>
         // Testing: OK
-        public Image<Bgr, byte> Reflect(Data.ReflType rtype)
+        public Image<Bgr, byte> Reflect(ReflType rtype)
         {
-            Image<Bgr, byte> newImage = new Image<Bgr, byte>(Data.sourceImage.Size);
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Size);
             int[] param = ReflTypeToData(rtype);
 
             EachPixel((height, width, pixel) =>
@@ -80,12 +81,33 @@ namespace Introduction
 
                 if (param[0] == -1)
                 {
-                    newX = width * param[0] + Data.sourceImage.Width - 1;
+                    newX = width * param[0] + sourceImage.Width - 1;
                 }
                 if (param[1] == -1)
                 {
-                    newY = height * param[1] + Data.sourceImage.Height - 1;
+                    newY = height * param[1] + sourceImage.Height - 1;
                 }
+                newImage[newY, newX] = pixel;
+            });
+
+            return newImage;
+        }
+
+
+        // Horizontal shift relative to image bottom 
+        // Need to make this function multipurpose
+        public Image<Bgr, byte> Shear(float shift)
+        {
+            int maxOffsetX = (int)Math.Abs(sourceImage.Width * shift);
+
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Width + maxOffsetX,
+                                                             sourceImage.Height);
+
+            EachPixel((height, width, pixel) =>
+            {
+                int newX = (int)(width + shift * (newImage.Height - height));
+                int newY = height;
+
                 newImage[newY, newX] = pixel;
             });
 
@@ -105,10 +127,10 @@ namespace Introduction
                 double inversRatioX = 1 - ratioX;
                 double inversRatioY = 1 - ratioY;
 
-                byte invDataX = (byte)(Data.sourceImage.Data[width, height, channel] * inversRatioX);
-                byte dataX = (byte)(Data.sourceImage.Data[width, height, channel] * ratioX);
-                byte invDataY = (byte)(Data.sourceImage.Data[width, height, channel] * inversRatioY);
-                byte dataY = (byte)(Data.sourceImage.Data[width, height, channel] * ratioY);
+                byte invDataX = (byte)(sourceImage.Data[width, height, channel] * inversRatioX);
+                byte dataX = (byte)(sourceImage.Data[width, height, channel] * ratioX);
+                byte invDataY = (byte)(sourceImage.Data[width, height, channel] * inversRatioY);
+                byte dataY = (byte)(sourceImage.Data[width, height, channel] * ratioY);
 
                 if(img.Data[width, height, channel] == 0)
                 {
@@ -127,11 +149,11 @@ namespace Introduction
 
         #region Additional methods
 
-        private int[] ReflTypeToData(Data.ReflType rtype)
+        private int[] ReflTypeToData(ReflType rtype)
         {
-            bool isHoriz = rtype == Data.ReflType.Horizontal;
-            bool isVert = rtype == Data.ReflType.Vertical;
-            bool isDiag = rtype == Data.ReflType.Diagonal;
+            bool isHoriz = rtype == ReflType.Horizontal;
+            bool isVert = rtype == ReflType.Vertical;
+            bool isDiag = rtype == ReflType.Diagonal;
 
             return isHoriz ? new int[] { -1, 1 } : isVert ? 
                              new int[] { 1, -1 } : new int[] { -1, -1 };

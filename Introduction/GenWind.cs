@@ -298,7 +298,7 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
-            imageBoxRs.Image = transform.BilinearInterp(transform.Scale(1.5f, 1.5f), 1.5f, 1.5f); 
+            imageBoxRs.Image = transform.Shear(0.25f); 
         }
     }
 }

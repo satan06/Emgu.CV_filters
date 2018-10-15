@@ -61,7 +61,7 @@ namespace Introduction
                 newImage[newY, newX] = pixel;
             });
 
-            return newImage;
+            return newImage ?? throw new ArgumentNullException(paramName: nameof(newImage));
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Introduction
                 newImage[newY, newX] = pixel;
             });
 
-            return newImage;
+            return newImage ?? throw new ArgumentNullException(paramName: nameof(newImage));
         }
 
         /// <summary>
@@ -111,9 +111,16 @@ namespace Introduction
 
                 newImage[newY, newX] = pixel;
             });
-            return newImage;
+
+            return newImage ?? throw new ArgumentNullException(paramName: nameof(newImage));
         }
 
+        /// <summary>
+        /// Rotates image
+        /// </summary>
+        /// <param name="p">Anchor of the rotation</param>
+        /// <param name="angle">Rotation angle</param>
+        // Testing: FALSE
         public Image<Bgr, byte> Rotate(Point p, double angle)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);

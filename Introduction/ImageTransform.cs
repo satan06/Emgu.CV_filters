@@ -13,7 +13,7 @@ namespace Introduction
     /// </summary>
     public class ImageTransform
     {
-        public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
+        public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 height, Targ2 width, Targ3 color);
         public delegate void FuncSimpl<Targ0, Targ1, Targ2>(Targ0 height, Targ1 width, Targ2 pixel);
 
         // Pixel image traversal
@@ -30,16 +30,16 @@ namespace Introduction
 
         private void EachPixelChannel(Func<int, int, int, byte> action)
         {
-            for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
-            {
-                for (int x = 0; x < sourceImage.Width; x++)
+                for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
                 {
-                    for (int y = 0; y < sourceImage.Height; y++)
+                    for (int x = 0; x < sourceImage.Width - 1; x++)
                     {
-                        action(channel, y, x, sourceImage.Data[y, x, channel]);
+                        for (int y = 0; y < sourceImage.Height - 1; y++)
+                        {
+                            action(channel, y, x, sourceImage.Data[y, x, channel]);
+                        }
                     }
                 }
-            }
         }
 
         /// <summary>
@@ -93,56 +93,38 @@ namespace Introduction
             return newImage;
         }
 
-        public interface ISpecification<T>
-        {
-            bool IsSatisfied(T t);
-        }
 
-        public interface IFilter<T>
+        public Image<Bgr, byte> Shear(ShiftType type, float value)
         {
-            IEnumerable<T> Filter(IEnumerable<T> items, ISpecification<T> spec);
-        }
+            int maxOffsetX, maxOffsetY;
 
-        public class ShiftTypeSpec : ISpecification<ShearingType>
-        {
-            private ShiftType shift;
-
-            public ShiftTypeSpec(ShiftType shift)
+            if (new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal))
             {
-                this.shift = shift;
+                maxOffsetX = (int)Math.Abs(sourceImage.Width * value);
+                maxOffsetY = 0;  
+            }
+            else
+            {
+                maxOffsetX = 0;
+                maxOffsetY = (int)Math.Abs(sourceImage.Height * value);
             }
 
-            public bool IsSatisfied(ShearingType sh) => sh.ShiftType == shift;
-        }
-
-        public class ShearingFilter : IFilter<ShearingType>
-        {
-            public IEnumerable<ShearingType> Filter(IEnumerable<ShearingType> stypes, 
-                                                    ISpecification<ShearingType> spec)
-            {
-                foreach (var s in stypes)
-                {
-                    if(spec.IsSatisfied(s))
-                    {
-                        yield return s;
-                    }
-                }
-            }
-        }
-
-        // Horizontal shift relative to image bottom 
-        // Need to make this function multipurpose
-        public Image<Bgr, byte> Shear(float shift)
-        {
-            int maxOffset = (int)Math.Abs(sourceImage.Height * shift);
-            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Width,
-                                                             sourceImage.Height + maxOffset);
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Width + maxOffsetX,
+                                                             sourceImage.Height + maxOffsetY);
             EachPixel((height, width, pixel) =>
             {
-                // If shifting along X use:
-                // (int)(width + shift * (newImage.Height - height));
-                int newX = width;
-                int newY = (int)Math.Abs(height + shift * (sourceImage.Height - width));
+                int newX, newY;
+
+                if (new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal))
+                {
+                    newX = (int)Math.Abs(width + value * (sourceImage.Height - height));;
+                    newY = height;
+                }
+                else
+                {
+                    newX = width;
+                    newY = (int)Math.Abs(height + value * (sourceImage.Height - width));
+                }
 
                 newImage[newY, newX] = pixel;
             });
@@ -153,32 +135,36 @@ namespace Introduction
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(img.Size);
 
-            EachPixelChannel((channel, width, height, color) =>
+            for (int channel = 0; channel < img.NumberOfChannels; channel++)
             {
-                int floorX = (int)Math.Floor(width / par[0]);
-                int floorY = (int)Math.Floor(height * par[1]);
-                double ratioX = width / par[0] - floorX;
-                double ratioY = height / par[1] - floorY;
-                double inversRatioX = 1 - ratioX;
-                double inversRatioY = 1 - ratioY;
-
-                byte invDataX = (byte)(sourceImage.Data[width, height, channel] * inversRatioX);
-                byte dataX = (byte)(sourceImage.Data[width, height, channel] * ratioX);
-                byte invDataY = (byte)(sourceImage.Data[width, height, channel] * inversRatioY);
-                byte dataY = (byte)(sourceImage.Data[width, height, channel] * ratioY);
-
-                if(img.Data[width, height, channel] == 0)
+                for (int x = 0; x < img.Width - 1; x++)
                 {
-                    img.Data[width, height, channel] = (byte)((invDataX + dataX) * inversRatioX + 
-                                                                 (invDataY + dataY) * ratioY);
-                }
-                else
-                {
-                    result.Data[width, height, channel] = color;
-                }
-                                                             
-            });
+                    for (int y = 0; y < img.Height - 1; y++)
+                    {
+                        int floorX = (int)Math.Floor(x / par[0]);
+                        int floorY = (int)Math.Floor(y / par[1]);
+                        double ratioX = x / par[0] - floorX;
+                        double ratioY = y / par[1] - floorY;
+                        double inversRatioX = 1 - ratioX;
+                        double inversRatioY = 1 - ratioY;
 
+                        byte invDataX = (byte)(sourceImage.Data[floorY, floorX, channel] * inversRatioX);
+                        byte dataX = (byte)(sourceImage.Data[floorY + 1, floorX, channel] * ratioX);
+                        byte invDataY = (byte)(sourceImage.Data[floorY, floorX + 1, channel] * inversRatioY);
+                        byte dataY = (byte)(sourceImage.Data[floorY + 1, floorX + 1, channel] * ratioY);
+
+                        if (img.Data[y, x, channel] == 0)
+                        {
+                            img.Data[y, x, channel] = (byte)((invDataX + dataX) * inversRatioX +
+                                                             (invDataY + dataY) * ratioY);
+                        }
+                        else
+                        {
+                            result.Data[y, x, channel] = img.Data[y, x, channel];
+                        }
+                    }
+                }
+            }
             return result;
         }
 

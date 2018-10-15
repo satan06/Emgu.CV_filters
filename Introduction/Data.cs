@@ -84,18 +84,23 @@ namespace Introduction
 
         #endregion
 
-        public class ShearingType
+        public interface ISpecification<T>
         {
-            public ShiftType ShiftType { get; set; }
-            public float Value { get; set; }
+            bool IsSatisfied(T t);
+        }
 
-            public ShearingType(float value, ShiftType shift)
+        public class HorizontalSpecification : ISpecification<ShiftType>
+        {
+            public HorizontalSpecification(ShiftType shift, float value)
             {
-                ShiftType = shift;
+                Shift = shift;
                 Value = value;
             }
 
-            public bool IsNegative(float val) => val < 0;
+            public ShiftType Shift { get; set; }
+            public float Value { get; set; }
+
+            public bool IsSatisfied(ShiftType t) => t == Shift;
         }
 
         static Data()

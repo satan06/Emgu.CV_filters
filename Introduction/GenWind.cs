@@ -26,6 +26,8 @@ namespace Introduction
 
             Width = WindowRelaxModeWidth;
             FormBorderStyle = FormBorderStyle.FixedSingle;
+
+
         }
 
         private void LoaderCheck(string fileName, bool isSource)
@@ -299,7 +301,7 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
-            imageBoxRs.Image = transform.Shear(0.25f); 
+            imageBoxRs.Image = transform.Shear(ShiftType.Vertical, 0.25f);
         }
     }
 }

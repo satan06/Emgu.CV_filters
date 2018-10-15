@@ -1,6 +1,5 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
-using System;
 
 namespace Introduction
 {
@@ -102,6 +101,68 @@ namespace Introduction
 
             public bool IsSatisfied(ShiftType t) => t == Shift;
         }
+
+        // Implementing multiple classes for diff points (SOLID's Open/Close)
+        #region Point Templates
+
+        public class Point
+        {
+            public virtual int Width { get; set; } = 0;
+            public virtual int Height { get; set; } = 0;
+        }
+
+        public class TopLeft : Point
+        {
+            public override int Width { get => base.Width; set => base.Width = value; }
+            public override int Height { get => base.Height; set => base.Height = value; }
+        }
+
+        public class TopRight : Point
+        {
+            public TopRight(int width)
+            {
+                Width = width;
+            }
+
+            public override int Width { get => base.Width; set => base.Width = value; }
+        }
+
+        public class BottomLeft : Point
+        {
+            public BottomLeft(int height)
+            {
+                Height = height;
+            }
+
+            public override int Height { get => base.Height; set => base.Height = value; }
+        }
+    
+        public class Center : Point
+        {
+            public Center(int width, int height)
+            {
+                Width = width / 2;
+                Height = height / 2;
+            }
+
+            public override int Width { get => base.Width; set => base.Width = value; }
+            public override int Height { get => base.Height; set => base.Height = value; }
+        }
+
+
+        public class CustomPoint : Point
+        {
+            public CustomPoint(int width, int height)
+            {
+                Width = width;
+                Height = height;
+            }
+
+            public override int Width { get => base.Width; set => base.Width = value; }
+            public override int Height { get => base.Height; set => base.Height = value; }
+        }
+
+        #endregion
 
         static Data()
         {

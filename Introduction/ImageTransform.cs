@@ -99,6 +99,7 @@ namespace Introduction
         /// </summary>
         /// <param name="type">Shift type</param>
         /// <param name="value">Shifting intensity</param>
+        // Testing: OK
         public Image<Bgr, byte> Shear(ShiftType type, float value)
         {
             Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Width + FilterShiftOffset(type, value)[0],
@@ -111,6 +112,22 @@ namespace Introduction
                 newImage[newY, newX] = pixel;
             });
             return newImage;
+        }
+
+        public Image<Bgr, byte> Rotate(Point p, double angle)
+        {
+            Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
+            double rad = ConvertToRad(angle);
+
+            EachPixel((height, width, pixel) =>
+            {
+                int newX = (int)Math.Cos(rad) * (width - p.Width) - (int)Math.Sin(rad) * (height - p.Height) + p.Width;
+                int newY = (int)Math.Sin(rad) * (width - p.Width) + (int)Math.Cos(rad) * (height - p.Height) + p.Height;
+
+                result[newY, newX] = pixel;
+            });
+
+            return result ?? throw new ArgumentNullException(paramName: nameof(result));
         }
 
         public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, params float [] par)
@@ -166,17 +183,29 @@ namespace Introduction
         {
             return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
 
-                new int[] { (int)Math.Abs(sourceImage.Width * value), 0 } :
-                new int[] { 0, (int)Math.Abs(sourceImage.Height * value) };
+                new int[] {
+                    (int)Math.Abs(sourceImage.Width * value), 0
+                } :
+                new int[] {
+                    0, (int)Math.Abs(sourceImage.Height * value)
+                };
         }
 
         private int[] FilterCoordinates(ShiftType type, float value, params int[] vs)
         {
             return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
 
-                new int[] { (int)Math.Abs(vs[0] + value * (sourceImage.Height - vs[1])), vs[1] } :
-                new int[] { vs[0], (int)Math.Abs(vs[1] + value * (sourceImage.Height - vs[0])) };
+                new int[] {
+                    (int)Math.Abs(vs[0] + value * (sourceImage.Height - vs[1])),
+                    vs[1]
+                } :
+                new int[] {
+                    vs[0],
+                    (int)Math.Abs(vs[1] + value * (sourceImage.Height - vs[0]))
+                };
         }
+
+        private double ConvertToRad(double angle) => Math.PI / 180 * angle;
 
         #endregion
     }

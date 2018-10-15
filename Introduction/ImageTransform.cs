@@ -30,16 +30,16 @@ namespace Introduction
 
         private void EachPixelChannel(Func<int, int, int, byte> action)
         {
-                for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
+            for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
+            {
+                for (int x = 0; x < sourceImage.Width - 1; x++)
                 {
-                    for (int x = 0; x < sourceImage.Width - 1; x++)
+                    for (int y = 0; y < sourceImage.Height - 1; y++)
                     {
-                        for (int y = 0; y < sourceImage.Height - 1; y++)
-                        {
-                            action(channel, y, x, sourceImage.Data[y, x, channel]);
-                        }
+                        action(channel, y, x, sourceImage.Data[y, x, channel]);
                     }
                 }
+            }
         }
 
         /// <summary>
@@ -93,38 +93,20 @@ namespace Introduction
             return newImage;
         }
 
-
+        /// <summary>
+        /// Shearing image relative to 
+        /// <see cref="ShiftType"></see>
+        /// </summary>
+        /// <param name="type">Shift type</param>
+        /// <param name="value">Shifting intensity</param>
         public Image<Bgr, byte> Shear(ShiftType type, float value)
         {
-            int maxOffsetX, maxOffsetY;
-
-            if (new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal))
-            {
-                maxOffsetX = (int)Math.Abs(sourceImage.Width * value);
-                maxOffsetY = 0;  
-            }
-            else
-            {
-                maxOffsetX = 0;
-                maxOffsetY = (int)Math.Abs(sourceImage.Height * value);
-            }
-
-            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Width + maxOffsetX,
-                                                             sourceImage.Height + maxOffsetY);
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Width + FilterShiftOffset(type, value)[0],
+                                                             sourceImage.Height + FilterShiftOffset(type, value)[1]);
             EachPixel((height, width, pixel) =>
             {
-                int newX, newY;
-
-                if (new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal))
-                {
-                    newX = (int)Math.Abs(width + value * (sourceImage.Height - height));;
-                    newY = height;
-                }
-                else
-                {
-                    newX = width;
-                    newY = (int)Math.Abs(height + value * (sourceImage.Height - width));
-                }
+                int newX = FilterCoordinates(type, value, width, height)[0];
+                int newY = FilterCoordinates(type, value, width, height)[1];
 
                 newImage[newY, newX] = pixel;
             });
@@ -178,6 +160,22 @@ namespace Introduction
 
             return isHoriz ? new int[] { -1, 1 } : isVert ? 
                              new int[] { 1, -1 } : new int[] { -1, -1 };
+        }
+
+        private int[] FilterShiftOffset(ShiftType type, float value)
+        {
+            return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
+
+                new int[] { (int)Math.Abs(sourceImage.Width * value), 0 } :
+                new int[] { 0, (int)Math.Abs(sourceImage.Height * value) };
+        }
+
+        private int[] FilterCoordinates(ShiftType type, float value, params int[] vs)
+        {
+            return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
+
+                new int[] { (int)Math.Abs(vs[0] + value * (sourceImage.Height - vs[1])), vs[1] } :
+                new int[] { vs[0], (int)Math.Abs(vs[1] + value * (sourceImage.Height - vs[0])) };
         }
 
         #endregion

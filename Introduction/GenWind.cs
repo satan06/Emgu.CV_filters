@@ -301,7 +301,6 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
-            imageBoxRs.Image = transform.Shear(ShiftType.Vertical, 0.25f);
         }
     }
 }

@@ -120,7 +120,7 @@ namespace Introduction
         /// </summary>
         /// <param name="p">Anchor of the rotation</param>
         /// <param name="angle">Rotation angle</param>
-        // Testing: FALSE
+        // Testing: OK
         public Image<Bgr, byte> Rotate(Point p, double angle)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
@@ -128,10 +128,16 @@ namespace Introduction
 
             EachPixel((height, width, pixel) =>
             {
-                int newX = (int)Math.Cos(rad) * (width - p.Width) - (int)Math.Sin(rad) * (height - p.Height) + p.Width;
-                int newY = (int)Math.Sin(rad) * (width - p.Width) + (int)Math.Cos(rad) * (height - p.Height) + p.Height;
+                int newX = (int)(Math.Cos(rad) * (width - p.Width) - 
+                                 Math.Sin(rad) * (height - p.Height) + p.Width);
 
-                result[newY, newX] = pixel;
+                int newY = (int)(Math.Sin(rad) * (width - p.Width) + 
+                                Math.Cos(rad) * (height - p.Height) + p.Height);
+
+                if(newX < sourceImage.Width && newX >= 0 && newY < sourceImage.Height && newY >= 0)
+                {
+                    result[newY, newX] = pixel;
+                }
             });
 
             return result ?? throw new ArgumentNullException(paramName: nameof(result));

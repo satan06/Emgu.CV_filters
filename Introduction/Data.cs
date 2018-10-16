@@ -105,7 +105,7 @@ namespace Introduction
         // Implementing multiple classes for diff points (SOLID's Open/Close)
         #region Point Templates
 
-        public class Point
+        public abstract class Point
         {
             public virtual int Width { get; set; } = 0;
             public virtual int Height { get; set; } = 0;

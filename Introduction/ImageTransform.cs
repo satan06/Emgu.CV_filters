@@ -153,6 +153,7 @@ namespace Introduction
         public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, params float [] par)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(img.Size);
+            var sn = new ScaleInterpBuilder();
 
             for (int channel = 0; channel < img.NumberOfChannels; channel++)
             {
@@ -160,32 +161,28 @@ namespace Introduction
                 {
                     for (int y = 0; y < img.Height - 1; y++)
                     {
-                        int floorX = (int)(x / par[0]);
-                        int floorY = (int)(y / par[1]);
-                        double ratioX = x / par[0] - floorX;
-                        double ratioY = y / par[1] - floorY;
-                        double inversRatioX = 1 - ratioX;
-                        double inversRatioY = 1 - ratioY;
+                        ScaleInterp interp = sn
+                            .Prep
+                                .Floor(x, y, par[0], par[1])
+                                .Ratio(x, y, par[0], par[1])
+                                .InvRatio();
+                        sn.Dat
+                            .SetInvDataX(sourceImage.Data[interp.FloorY, interp.FloorX, channel])
+                            .SetDataX(sourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
+                            .SetInvDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
+                            .SetDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
 
-                        byte invDataX = (byte)(sourceImage.Data[floorY, floorX, channel] * inversRatioX);
-                        byte dataX = (byte)(sourceImage.Data[floorY, floorX + 1, channel] * ratioX);
-                        byte invDataY = (byte)(sourceImage.Data[floorY + 1, floorX, channel] * inversRatioX);
-                        byte dataY = (byte)(sourceImage.Data[floorY + 1, floorX + 1, channel] * ratioX);
-
-                        if (img.Data[y, x, channel] == 0)
-                        {
-                            result.Data[y, x, channel] = (byte)((invDataX + dataX) * inversRatioY +
-                                                                (invDataY + dataY) * ratioY);
-                        }
-                        else
-                        {
-                            result.Data[y, x, channel] = img.Data[y, x, channel];
-                        }
+                        result.Data[y, x, channel] = IsPixelBlack(img.Data[y, x, channel],
+                                                                 (byte)((interp.InvDataX + interp.DataX) * interp.InvRatioY +
+                                                                        (interp.InvDataY + interp.DataY) * interp.RatioY));
                     }
                 }
             }
             return result;
         }
+
+        private byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
+
 
         #region Additional methods
 

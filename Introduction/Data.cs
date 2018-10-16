@@ -102,6 +102,90 @@ namespace Introduction
             public bool IsSatisfied(ShiftType t) => t == Shift;
         }
 
+        public class ScaleInterp
+        {
+            // Interp preporation
+            public int FloorX, FloorY;
+            public double RatioX, RatioY, InvRatioX, InvRatioY;
+
+            // Building data
+            public double DataX, DataY, InvDataX, InvDataY;
+        }
+
+        public class ScaleInterpBuilder
+        {
+            protected ScaleInterp interp = new ScaleInterp();
+
+            public ScaleInterpPrepBuilder Prep => new ScaleInterpPrepBuilder(interp);
+            public ScaleInterpDataBuilder Dat => new ScaleInterpDataBuilder(interp);
+
+            public static implicit operator ScaleInterp(ScaleInterpBuilder sb)
+            {
+                return sb.interp;
+            }
+        }
+
+        public class ScaleInterpPrepBuilder : ScaleInterpBuilder
+        {
+            public ScaleInterpPrepBuilder(ScaleInterp interp)
+            {
+                this.interp = interp;
+            }
+
+            public ScaleInterpPrepBuilder Floor(int x, int y, float coefX, double coefY)
+            {
+                interp.FloorX = (int)(x / coefX);
+                interp.FloorY = (int)(y / coefY);
+                return this;
+            }
+
+            public ScaleInterpPrepBuilder Ratio(int x, int y, float coefX, double coefY)
+            {
+                interp.RatioX = x / coefX - interp.FloorX;
+                interp.RatioY = y / coefY - interp.FloorY;
+                return this;
+            }
+
+            public ScaleInterpPrepBuilder InvRatio()
+            {
+                interp.InvRatioX = 1 - interp.RatioX;
+                interp.InvRatioY = 1 - interp.RatioY;
+                return this;
+            }
+        }
+
+        public class ScaleInterpDataBuilder : ScaleInterpBuilder
+        {
+            public ScaleInterpDataBuilder(ScaleInterp interp)
+            {
+                this.interp = interp;
+            }
+
+            public ScaleInterpDataBuilder SetDataX(byte src)
+            {
+                interp.DataX = (byte)(src * interp.RatioX);
+                return this;
+            }
+
+            public ScaleInterpDataBuilder SetDataY(byte src)
+            {
+                interp.DataY = (byte)(src * interp.RatioX);
+                return this;
+            }
+
+            public ScaleInterpDataBuilder SetInvDataX(byte src)
+            {
+                interp.InvDataX = (byte)(src * interp.InvRatioX);
+                return this;
+            }
+
+            public ScaleInterpDataBuilder SetInvDataY(byte src)
+            {
+                interp.InvDataY = (byte)(src * interp.InvRatioX);
+                return this;
+            }
+        }
+
         // Implementing multiple classes for diff points (SOLID's Open/Close)
         #region Point Templates
 

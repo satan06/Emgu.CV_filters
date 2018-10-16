@@ -132,7 +132,7 @@ namespace Introduction
                                  Math.Sin(rad) * (height - p.Height) + p.Width);
 
                 int newY = (int)(Math.Sin(rad) * (width - p.Width) + 
-                                Math.Cos(rad) * (height - p.Height) + p.Height);
+                                 Math.Cos(rad) * (height - p.Height) + p.Height);
 
                 if(newX < sourceImage.Width && newX >= 0 && newY < sourceImage.Height && newY >= 0)
                 {
@@ -143,6 +143,13 @@ namespace Introduction
             return result ?? throw new ArgumentNullException(paramName: nameof(result));
         }
 
+        /// <summary>
+        /// Remove resulting artefacts from image after
+        /// filtering operations
+        /// </summary>
+        /// <param name="img">Image to interpolate</param>
+        /// <param name="par">Required width and height coeffs</param>
+        // Testing: OK (tip: needs refactor ( too much variables )) 
         public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, params float [] par)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(img.Size);
@@ -153,22 +160,22 @@ namespace Introduction
                 {
                     for (int y = 0; y < img.Height - 1; y++)
                     {
-                        int floorX = (int)Math.Floor(x / par[0]);
-                        int floorY = (int)Math.Floor(y / par[1]);
+                        int floorX = (int)(x / par[0]);
+                        int floorY = (int)(y / par[1]);
                         double ratioX = x / par[0] - floorX;
                         double ratioY = y / par[1] - floorY;
                         double inversRatioX = 1 - ratioX;
                         double inversRatioY = 1 - ratioY;
 
                         byte invDataX = (byte)(sourceImage.Data[floorY, floorX, channel] * inversRatioX);
-                        byte dataX = (byte)(sourceImage.Data[floorY + 1, floorX, channel] * ratioX);
-                        byte invDataY = (byte)(sourceImage.Data[floorY, floorX + 1, channel] * inversRatioY);
-                        byte dataY = (byte)(sourceImage.Data[floorY + 1, floorX + 1, channel] * ratioY);
+                        byte dataX = (byte)(sourceImage.Data[floorY, floorX + 1, channel] * ratioX);
+                        byte invDataY = (byte)(sourceImage.Data[floorY + 1, floorX, channel] * inversRatioX);
+                        byte dataY = (byte)(sourceImage.Data[floorY + 1, floorX + 1, channel] * ratioX);
 
                         if (img.Data[y, x, channel] == 0)
                         {
-                            img.Data[y, x, channel] = (byte)((invDataX + dataX) * inversRatioX +
-                                                             (invDataY + dataY) * ratioY);
+                            result.Data[y, x, channel] = (byte)((invDataX + dataX) * inversRatioY +
+                                                                (invDataY + dataY) * ratioY);
                         }
                         else
                         {

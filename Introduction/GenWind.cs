@@ -34,11 +34,11 @@ namespace Introduction
         {
             if (isSource)
             {
-                filter.OpenFile(fileName, ref sourceImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref sourceImage, imageBox.Width, imageBox.Height);
             }
             else
             {
-                filter.OpenFile(fileName, ref tempImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref tempImage, imageBox.Width, imageBox.Height);
             }
         }
 
@@ -301,7 +301,10 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
-            imageBoxRs.Image = transform.Rotate(new Center(sourceImage.Width, sourceImage.Height), 45);
+            imageBoxRs.Image = transform.BilinearInterp(
+                transform.Scale(1.5f, 1.5f),
+                1.5f,
+                1.5f);
         }
     }
 }

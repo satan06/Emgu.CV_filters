@@ -149,7 +149,6 @@ namespace Introduction
             public override int Height { get => base.Height; set => base.Height = value; }
         }
 
-
         public class CustomPoint : Point
         {
             public CustomPoint(int width, int height)

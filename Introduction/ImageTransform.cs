@@ -13,7 +13,6 @@ namespace Introduction
     /// </summary>
     public class ImageTransform
     {
-        public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 height, Targ2 width, Targ3 color);
         public delegate void FuncSimpl<Targ0, Targ1, Targ2>(Targ0 height, Targ1 width, Targ2 pixel);
 
         // Pixel image traversal
@@ -24,20 +23,6 @@ namespace Introduction
                 for (int y = 0; y < sourceImage.Height; y++)
                 {
                     action(y, x, sourceImage[y, x]);
-                }
-            }
-        }
-
-        private void EachPixelChannel(Func<int, int, int, byte> action)
-        {
-            for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
-            {
-                for (int x = 0; x < sourceImage.Width - 1; x++)
-                {
-                    for (int y = 0; y < sourceImage.Height - 1; y++)
-                    {
-                        action(channel, y, x, sourceImage.Data[y, x, channel]);
-                    }
                 }
             }
         }
@@ -61,7 +46,7 @@ namespace Introduction
                 newImage[newY, newX] = pixel;
             });
 
-            return newImage ?? throw new ArgumentNullException(paramName: nameof(newImage));
+            return BilinearInterp(newImage, scaleX, scaleY) ?? throw new ArgumentNullException(paramName: nameof(newImage));
         }
 
         /// <summary>
@@ -149,7 +134,7 @@ namespace Introduction
         /// </summary>
         /// <param name="img">Image to interpolate</param>
         /// <param name="par">Required width and height coeffs</param>
-        // Testing: OK (tip: needs refactor ( too much variables )) 
+        // Testing: OK
         public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, params float [] par)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(img.Size);
@@ -180,9 +165,6 @@ namespace Introduction
             }
             return result;
         }
-
-        private byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
-
 
         #region Additional methods
 
@@ -223,6 +205,7 @@ namespace Introduction
         }
 
         private double ConvertToRad(double angle) => Math.PI / 180 * angle;
+        private byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
 
         #endregion
     }

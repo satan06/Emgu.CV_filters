@@ -102,6 +102,8 @@ namespace Introduction
             public bool IsSatisfied(ShiftType t) => t == Shift;
         }
 
+        #region BilinearInterpolation (Scale)
+
         public class ScaleInterp
         {
             // Interp preporation
@@ -185,6 +187,8 @@ namespace Introduction
                 return this;
             }
         }
+
+        #endregion
 
         // Implementing multiple classes for diff points (SOLID's Open/Close)
         #region Point Templates

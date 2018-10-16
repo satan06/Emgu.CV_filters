@@ -26,17 +26,19 @@ namespace Introduction
 
             Width = WindowRelaxModeWidth;
             FormBorderStyle = FormBorderStyle.FixedSingle;
+
+
         }
 
         private void LoaderCheck(string fileName, bool isSource)
         {
             if (isSource)
             {
-                filter.OpenFile(fileName, ref sourceImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref sourceImage, imageBox.Width, imageBox.Height);
             }
             else
             {
-                filter.OpenFile(fileName, ref tempImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref tempImage, imageBox.Width, imageBox.Height);
             }
         }
 
@@ -299,7 +301,6 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
-            imageBoxRs.Image = transform.Shear(0.25f); 
         }
     }
 }

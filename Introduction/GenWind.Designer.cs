@@ -148,7 +148,6 @@
             this.imageBox.Location = new System.Drawing.Point(12, 27);
             this.imageBox.Name = "imageBox";
             this.imageBox.Size = new System.Drawing.Size(319, 274);
-            this.imageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageBox.TabIndex = 2;
             this.imageBox.TabStop = false;
             // 
@@ -158,7 +157,6 @@
             this.imageBoxRs.Location = new System.Drawing.Point(349, 27);
             this.imageBoxRs.Name = "imageBoxRs";
             this.imageBoxRs.Size = new System.Drawing.Size(315, 274);
-            this.imageBoxRs.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageBoxRs.TabIndex = 3;
             this.imageBoxRs.TabStop = false;
             // 

@@ -180,9 +180,9 @@ namespace Introduction
                 green = sourceImage.Data[width, height, 1];
                 red = sourceImage.Data[width, height, 2];
 
-                destImage.Data[width, height, 0] = ColorCheck(blue * 0.272 + green * 0.534 + blue * 0.131, 0, 255);
-                destImage.Data[width, height, 1] = ColorCheck(blue * 0.349 + green * 0.686 + blue * 0.168, 0, 255);
-                destImage.Data[width, height, 2] = ColorCheck(blue * 0.393 + green * 0.769 + blue * 0.189, 0, 255);
+                destImage.Data[width, height, 0] = ColorCheck(red * 0.272 + green * 0.534 + blue * 0.131, 0, 255);
+                destImage.Data[width, height, 1] = ColorCheck(red * 0.349 + green * 0.686 + blue * 0.168, 0, 255);
+                destImage.Data[width, height, 2] = ColorCheck(red * 0.393 + green * 0.769 + blue * 0.189, 0, 255);
             });
 
             return destImage;

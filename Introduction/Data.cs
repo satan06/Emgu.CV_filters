@@ -1,6 +1,5 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
-using System;
 
 namespace Introduction
 {
@@ -84,19 +83,173 @@ namespace Introduction
 
         #endregion
 
-        public class ShearingType
+        public interface ISpecification<T>
         {
-            public ShiftType ShiftType { get; set; }
-            public float Value { get; set; }
+            bool IsSatisfied(T t);
+        }
 
-            public ShearingType(float value, ShiftType shift)
+        public class HorizontalSpecification : ISpecification<ShiftType>
+        {
+            public HorizontalSpecification(ShiftType shift, float value)
             {
-                ShiftType = shift;
+                Shift = shift;
                 Value = value;
             }
 
-            public bool IsNegative(float val) => val < 0;
+            public ShiftType Shift { get; set; }
+            public float Value { get; set; }
+
+            public bool IsSatisfied(ShiftType t) => t == Shift;
         }
+
+        #region BilinearInterpolation (Scale)
+
+        public class ScaleInterp
+        {
+            // Interp preporation
+            public int FloorX, FloorY;
+            public double RatioX, RatioY, InvRatioX, InvRatioY;
+
+            // Building data
+            public double DataX, DataY, InvDataX, InvDataY;
+        }
+
+        public class ScaleInterpBuilder
+        {
+            protected ScaleInterp interp = new ScaleInterp();
+
+            public ScaleInterpPrepBuilder Prep => new ScaleInterpPrepBuilder(interp);
+            public ScaleInterpDataBuilder Dat => new ScaleInterpDataBuilder(interp);
+
+            public static implicit operator ScaleInterp(ScaleInterpBuilder sb)
+            {
+                return sb.interp;
+            }
+        }
+
+        public class ScaleInterpPrepBuilder : ScaleInterpBuilder
+        {
+            public ScaleInterpPrepBuilder(ScaleInterp interp)
+            {
+                this.interp = interp;
+            }
+
+            public ScaleInterpPrepBuilder Floor(int x, int y, float coefX, double coefY)
+            {
+                interp.FloorX = (int)(x / coefX);
+                interp.FloorY = (int)(y / coefY);
+                return this;
+            }
+
+            public ScaleInterpPrepBuilder Ratio(int x, int y, float coefX, double coefY)
+            {
+                interp.RatioX = x / coefX - interp.FloorX;
+                interp.RatioY = y / coefY - interp.FloorY;
+                return this;
+            }
+
+            public ScaleInterpPrepBuilder InvRatio()
+            {
+                interp.InvRatioX = 1 - interp.RatioX;
+                interp.InvRatioY = 1 - interp.RatioY;
+                return this;
+            }
+        }
+
+        public class ScaleInterpDataBuilder : ScaleInterpBuilder
+        {
+            public ScaleInterpDataBuilder(ScaleInterp interp)
+            {
+                this.interp = interp;
+            }
+
+            public ScaleInterpDataBuilder SetDataX(byte src)
+            {
+                interp.DataX = (byte)(src * interp.RatioX);
+                return this;
+            }
+
+            public ScaleInterpDataBuilder SetDataY(byte src)
+            {
+                interp.DataY = (byte)(src * interp.RatioX);
+                return this;
+            }
+
+            public ScaleInterpDataBuilder SetInvDataX(byte src)
+            {
+                interp.InvDataX = (byte)(src * interp.InvRatioX);
+                return this;
+            }
+
+            public ScaleInterpDataBuilder SetInvDataY(byte src)
+            {
+                interp.InvDataY = (byte)(src * interp.InvRatioX);
+                return this;
+            }
+        }
+
+        #endregion
+
+        // Implementing multiple classes for diff points (SOLID's Open/Close)
+        #region Point Templates
+
+        public abstract class Point
+        {
+            public virtual int Width { get; set; } = 0;
+            public virtual int Height { get; set; } = 0;
+        }
+
+        public class TopLeft : Point
+        {
+            public override int Width { get => base.Width; set => base.Width = value; }
+            public override int Height { get => base.Height; set => base.Height = value; }
+        }
+
+        public class TopRight : Point
+        {
+            public TopRight(int width)
+            {
+                Width = width;
+            }
+
+            public override int Width { get => base.Width; set => base.Width = value; }
+        }
+
+        public class BottomLeft : Point
+        {
+            public BottomLeft(int height)
+            {
+                Height = height;
+            }
+
+            public override int Height { get => base.Height; set => base.Height = value; }
+        }
+    
+        public class Center : Point
+        {
+            public Center(int width, int height)
+            {
+                Width = width / 2;
+                Height = height / 2;
+            }
+
+            public override int Width { get => base.Width; set => base.Width = value; }
+            public override int Height { get => base.Height; set => base.Height = value; }
+        }
+
+        public class CustomPoint : Point
+        {
+            public CustomPoint(int width, int height)
+            {
+                Width = width;
+                Height = height;
+            }
+
+            public override int Width { get => base.Width; set => base.Width = value; }
+            public override int Height { get => base.Height; set => base.Height = value; }
+        }
+
+        #endregion
 
         static Data()
         {

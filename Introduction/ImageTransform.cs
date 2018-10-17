@@ -4,6 +4,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using static Introduction.Data;
 
 namespace Introduction
@@ -120,7 +121,7 @@ namespace Introduction
         /// <param name="p">Anchor of the rotation</param>
         /// <param name="angle">Rotation angle</param>
         // Testing: OK
-        public Image<Bgr, byte> Rotate(Point p, double angle)
+        public Image<Bgr, byte> Rotate(Data.Point p, double angle)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
             double rad = ConvertToRad(angle);
@@ -175,7 +176,7 @@ namespace Introduction
         }
 
         // Rotation overload => Testing: OK
-        public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, Point p, double angle)
+        public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, Data.Point p, double angle)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
             var rn = new RotateInterpBuilder();
@@ -204,6 +205,21 @@ namespace Introduction
             }, img);
 
             return result ?? throw new ArgumentNullException(paramName: nameof(result));
+        }
+
+        public Image<Bgr, byte> Homograph(PointF [] src)
+        {
+            var destPoints = new PointF[]
+            {
+                 new PointF(0, 0),
+                 new PointF(0, sourceImage.Height - 1),
+                 new PointF(sourceImage.Width - 1, sourceImage.Height - 1),
+                 new PointF(sourceImage.Width - 1, 0)
+            };            var homographyMatrix = CvInvoke.GetPerspectiveTransform(src, destPoints);            var destImage = new Image<Bgr, byte>(sourceImage.Size);
+
+            CvInvoke.WarpPerspective(sourceImage, destImage, homographyMatrix, destImage.Size);
+
+            return destImage;
         }
 
         #region Additional methods

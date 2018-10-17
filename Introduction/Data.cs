@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using static System.Math;
 
 namespace Introduction
 {
@@ -189,8 +190,105 @@ namespace Introduction
         }
 
         #endregion
+        #region BilinearInterpolation (Rotate)
 
-        // Implementing multiple classes for diff points (SOLID's Open/Close)
+        public class RotateInterp
+        {
+            // Interp preporation
+            public int FloorX, FloorY, InWidth, InHeight;
+            public double RatioX, RatioY, InvRatioX, InvRatioY;
+
+            // Building data
+            public double DataX, DataY, InvDataX, InvDataY;
+        }
+
+        public class RotateInterpBuilder
+        {
+            protected RotateInterp interp = new RotateInterp();
+
+            public RotateInterpPrepBuilder Prep => new RotateInterpPrepBuilder(interp);
+            public RotateInterpDataBuilder Dat => new RotateInterpDataBuilder(interp);
+
+            public static implicit operator RotateInterp(RotateInterpBuilder rb)
+            {
+                return rb.interp;
+            }
+        }
+
+        public class RotateInterpPrepBuilder : RotateInterpBuilder
+        {
+            public RotateInterpPrepBuilder(RotateInterp interp)
+            {
+                this.interp = interp;
+            }
+
+            public RotateInterpPrepBuilder Dimens(int width, int height)
+            {
+                interp.InWidth = width;
+                interp.InHeight = height;
+                return this;
+            }
+
+            public RotateInterpPrepBuilder Floor(Point p, double angle)
+            {
+                interp.FloorX = (int)(Cos(-angle) * (interp.InWidth - p.Width) -
+                                      Sin(-angle) * (interp.InHeight - p.Height) + p.Width);
+                interp.FloorY = (int)(Sin(-angle) * (interp.InWidth - p.Width) +
+                                      Cos(-angle) * (interp.InHeight - p.Height) + p.Height);
+                return this;
+            }
+
+            public RotateInterpPrepBuilder Ratio(Point p, double angle)
+            {
+                interp.RatioX = Cos(-angle) * (interp.InWidth - p.Width) -
+                                (Sin(-angle) * (interp.InHeight - p.Height)) + p.Width - interp.FloorX;
+                interp.RatioY = Sin(-angle) * (interp.InWidth - p.Width) +
+                                Cos(-angle) * (interp.InHeight - p.Height) + p.Height - interp.FloorY;
+                return this;
+            }
+
+            public RotateInterpPrepBuilder InvRatio()
+            {
+                interp.InvRatioX = 1 - interp.RatioX;
+                interp.InvRatioY = 1 - interp.RatioY;
+                return this;
+            }
+        }
+
+        public class RotateInterpDataBuilder : RotateInterpBuilder
+        {
+            public RotateInterpDataBuilder(RotateInterp interp)
+            {
+                this.interp = interp;
+            }
+
+            public RotateInterpDataBuilder SetDataX(byte src)
+            {
+                interp.DataX = (byte)(src * interp.RatioX);
+                return this;
+            }
+
+            public RotateInterpDataBuilder SetDataY(byte src)
+            {
+                interp.DataY = (byte)(src * interp.RatioX);
+                return this;
+            }
+
+            public RotateInterpDataBuilder SetInvDataX(byte src)
+            {
+                interp.InvDataX = (byte)(src * interp.InvRatioX);
+                return this;
+            }
+
+            public RotateInterpDataBuilder SetInvDataY(byte src)
+            {
+                interp.InvDataY = (byte)(src * interp.InvRatioX);
+                return this;
+            }
+        }
+
+        #endregion
+
         #region Point Templates
 
         public abstract class Point

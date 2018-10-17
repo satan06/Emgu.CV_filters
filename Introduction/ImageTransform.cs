@@ -14,6 +14,7 @@ namespace Introduction
     public class ImageTransform
     {
         public delegate void FuncSimpl<Targ0, Targ1, Targ2>(Targ0 height, Targ1 width, Targ2 pixel);
+        public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 height, Targ2 width, Targ3 color);
 
         // Pixel image traversal
         private void EachPixel(FuncSimpl<int, int, Bgr> action)
@@ -23,6 +24,19 @@ namespace Introduction
                 for (int y = 0; y < sourceImage.Height; y++)
                 {
                     action(y, x, sourceImage[y, x]);
+                }
+            }
+        }
+        private void EachPixelChannel(Func<int, int, int, byte> action, Image<Bgr, byte> image)
+        {
+            for (int channel = 0; channel < image.NumberOfChannels; channel++)
+            {
+                for (int x = 0; x < image.Width - 1; x++)
+                {
+                    for (int y = 0; y < image.Height - 1; y++)
+                    {
+                        action(channel, y, x, image.Data[y, x, channel]);
+                    }
                 }
             }
         }
@@ -125,7 +139,7 @@ namespace Introduction
                 }
             });
 
-            return result ?? throw new ArgumentNullException(paramName: nameof(result));
+            return BilinearInterp(result, p, angle) ?? throw new ArgumentNullException(paramName: nameof(result));
         }
 
         /// <summary>
@@ -140,30 +154,56 @@ namespace Introduction
             Image<Bgr, byte> result = new Image<Bgr, byte>(img.Size);
             var sn = new ScaleInterpBuilder();
 
-            for (int channel = 0; channel < img.NumberOfChannels; channel++)
+            EachPixelChannel((channel, height, width, color) =>
             {
-                for (int x = 0; x < img.Width - 1; x++)
-                {
-                    for (int y = 0; y < img.Height - 1; y++)
-                    {
-                        ScaleInterp interp = sn
-                            .Prep
-                                .Floor(x, y, par[0], par[1])
-                                .Ratio(x, y, par[0], par[1])
-                                .InvRatio();
-                        sn.Dat
-                            .SetInvDataX(sourceImage.Data[interp.FloorY, interp.FloorX, channel])
-                            .SetDataX(sourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
-                            .SetInvDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
-                            .SetDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
+                ScaleInterp interp = sn
+                    .Prep
+                        .Floor(width, height, par[0], par[1])
+                        .Ratio(width, height, par[0], par[1])
+                        .InvRatio();
+                sn.Dat
+                    .SetInvDataX(sourceImage.Data[interp.FloorY, interp.FloorX, channel])
+                    .SetDataX(sourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
+                    .SetInvDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
+                    .SetDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
 
-                        result.Data[y, x, channel] = IsPixelBlack(img.Data[y, x, channel],
-                                                                 (byte)((interp.InvDataX + interp.DataX) * interp.InvRatioY +
-                                                                        (interp.InvDataY + interp.DataY) * interp.RatioY));
-                    }
-                }
-            }
+                result.Data[height, width, channel] = IsPixelBlack(color, (byte)((interp.InvDataX + interp.DataX) * interp.InvRatioY +
+                                                                                 (interp.InvDataY + interp.DataY) * interp.RatioY));
+            }, img);
+
             return result;
+        }
+
+        // Rotation overload => Testing: OK
+        public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, Point p, double angle)
+        {
+            Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
+            var rn = new RotateInterpBuilder();
+
+            EachPixelChannel((channel, height, width, color) =>
+            {
+                RotateInterp interp = rn
+                    .Prep
+                        .Dimens(width, height)
+                        .Floor(p, angle)
+                        .Ratio(p, angle)
+                        .InvRatio();
+
+                if (interp.FloorX < sourceImage.Width - 1 && interp.FloorX >= 0 && interp.FloorY < sourceImage.Height - 1 && interp.FloorY >= 0)
+                {
+                    rn.Dat
+                        .SetInvDataX(sourceImage.Data[interp.FloorY, interp.FloorX, channel])
+                        .SetDataX(sourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
+                        .SetInvDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
+                        .SetDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
+
+                    result.Data[height, width, channel] = (byte)((interp.InvDataX + interp.DataX) * interp.InvRatioY +
+                                                                 (interp.InvDataY + interp.DataY) * interp.RatioY);
+                }
+
+            }, img);
+
+            return result ?? throw new ArgumentNullException(paramName: nameof(result));
         }
 
         #region Additional methods

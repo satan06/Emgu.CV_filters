@@ -301,6 +301,10 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
+            imageBoxRs.Image = transform.Rotate(new Center(sourceImage.Width, sourceImage.Height), 45);
+            //imageBoxRs.Image = transform.Scale(1.5f, 1.5f);
+            //imageBoxRs.Image = transform.Reflect(ReflType.Horizontal);
+            //imageBoxRs.Image = transform.Shear(ShiftType.Horizontal, 0.2f);
         }
     }
 }

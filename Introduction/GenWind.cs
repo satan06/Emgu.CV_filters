@@ -1,5 +1,5 @@
-﻿using Emgu.CV.UI;
-using System;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using static Introduction.Data;
 
@@ -9,6 +9,7 @@ namespace Introduction
     {
         private ImageFilter filter = new ImageFilter();
         private ImageTransform transform = new ImageTransform();
+        private PointManager manager = new PointManager();
         private string filterParam = "File Image (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
 
         public int ImageWidth { get; set; } = 640;
@@ -34,11 +35,12 @@ namespace Introduction
         {
             if (isSource)
             {
-                filter.OpenFile(fileName, ref sourceImage, imageBox.Width, imageBox.Height);
+                filter.OpenFile(fileName, ref sourceImage, ImageWidth, ImageHeight);
+                manager.Points.Clear();
             }
             else
             {
-                filter.OpenFile(fileName, ref tempImage, imageBox.Width, imageBox.Height);
+                filter.OpenFile(fileName, ref tempImage, ImageWidth, ImageHeight);
             }
         }
 
@@ -301,6 +303,28 @@ namespace Introduction
         private void TestEvent(object sender, EventArgs e)
         {
             // Test functional here
+            imageBoxRs.Image = transform.Rotate(CstPoint.Factory.NewCenterPoint(sourceImage.Width, 
+                                                                                sourceImage.Height), 45);
+            //imageBoxRs.Image = transform.Scale(1.5f, 1.5f);
+            //imageBoxRs.Image = transform.Reflect(ReflType.Horizontal);
+            //imageBoxRs.Image = transform.Shear(ShiftType.Horizontal, 0.2f);
+        }
+
+        private void SetDotEvent(object sender, MouseEventArgs e)
+        {
+            int x = (int)(e.Location.X / imageBox.ZoomScale);
+            int y = (int)(e.Location.Y / imageBox.ZoomScale);
+
+            if (!manager.IsFull)
+            {
+                manager.AddPoint(new PointF(x, y));
+                transform.DrawPoint(new Point(x, y), 1, 1);
+            }
+            else
+            {
+                imageBoxRs.Image = transform.Homograph(manager.Points.ToArray());
+
+            }
         }
     }
 }

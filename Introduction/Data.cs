@@ -1,5 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using System.Collections.Generic;
+using System.Drawing;
 using static System.Math;
 
 namespace Introduction
@@ -229,21 +231,21 @@ namespace Introduction
                 return this;
             }
 
-            public RotateInterpPrepBuilder Floor(Point p, double angle)
+            public RotateInterpPrepBuilder Floor(CstPoint p, double angle)
             {
-                interp.FloorX = (int)(Cos(-angle) * (interp.InWidth - p.Width) -
-                                      Sin(-angle) * (interp.InHeight - p.Height) + p.Width);
-                interp.FloorY = (int)(Sin(-angle) * (interp.InWidth - p.Width) +
-                                      Cos(-angle) * (interp.InHeight - p.Height) + p.Height);
+                interp.FloorX = (int)(Cos(-angle) * (interp.InWidth - p.X) -
+                                      Sin(-angle) * (interp.InHeight - p.Y) + p.X);
+                interp.FloorY = (int)(Sin(-angle) * (interp.InWidth - p.X) +
+                                      Cos(-angle) * (interp.InHeight - p.Y) + p.Y);
                 return this;
             }
 
-            public RotateInterpPrepBuilder Ratio(Point p, double angle)
+            public RotateInterpPrepBuilder Ratio(CstPoint p, double angle)
             {
-                interp.RatioX = Cos(-angle) * (interp.InWidth - p.Width) -
-                                (Sin(-angle) * (interp.InHeight - p.Height)) + p.Width - interp.FloorX;
-                interp.RatioY = Sin(-angle) * (interp.InWidth - p.Width) +
-                                Cos(-angle) * (interp.InHeight - p.Height) + p.Height - interp.FloorY;
+                interp.RatioX = Cos(-angle) * (interp.InWidth - p.X) -
+                                (Sin(-angle) * (interp.InHeight - p.Y)) + p.X - interp.FloorX;
+                interp.RatioY = Sin(-angle) * (interp.InWidth - p.X) +
+                                Cos(-angle) * (interp.InHeight - p.Y) + p.Y - interp.FloorY;
                 return this;
             }
 
@@ -291,63 +293,46 @@ namespace Introduction
 
         #region Point Templates
 
-        public abstract class Point
+        public class CstPoint
         {
-            public virtual int Width { get; set; } = 0;
-            public virtual int Height { get; set; } = 0;
-        }
+            private int x, y;
 
-        public class TopLeft : Point
-        {
-            public override int Width { get => base.Width; set => base.Width = value; }
-            public override int Height { get => base.Height; set => base.Height = value; }
-        }
-
-        public class TopRight : Point
-        {
-            public TopRight(int width)
+            protected CstPoint(int x, int y)
             {
-                Width = width;
+                this.x = x;
+                this.y = y;
             }
 
-            public override int Width { get => base.Width; set => base.Width = value; }
-        }
+            public static CstPoint Origin => new CstPoint(0, 0);
 
-        public class BottomLeft : Point
-        {
-            public BottomLeft(int height)
+            public int X { get => x; set => x = value; }
+            public int Y { get => y; set => y = value; }
+
+            public static class Factory
             {
-                Height = height;
+                public static CstPoint NewCenterPoint(int x, int y)
+                {
+                    return new CstPoint(x / 2, y / 2);
+                }
             }
-
-            public override int Height { get => base.Height; set => base.Height = value; }
-        }
-    
-        public class Center : Point
-        {
-            public Center(int width, int height)
-            {
-                Width = width / 2;
-                Height = height / 2;
-            }
-
-            public override int Width { get => base.Width; set => base.Width = value; }
-            public override int Height { get => base.Height; set => base.Height = value; }
-        }
-
-        public class CustomPoint : Point
-        {
-            public CustomPoint(int width, int height)
-            {
-                Width = width;
-                Height = height;
-            }
-
-            public override int Width { get => base.Width; set => base.Width = value; }
-            public override int Height { get => base.Height; set => base.Height = value; }
         }
 
         #endregion
+
+        public class PointManager
+        {
+            public List<PointF> Points = new List<PointF>();
+            public int MaxPoints { get; set; } = 4;
+            public bool IsFull => Points.Count == MaxPoints;
+
+            public void AddPoint(PointF point)
+            {
+                Points.Add(point);
+                System.Console.WriteLine($"{nameof(point.X)}: {point.X} " +
+                    $"{nameof(point.Y)}: {point.Y}");
+                System.Console.WriteLine(Points.Count);
+            }
+        }
 
         static Data()
         {

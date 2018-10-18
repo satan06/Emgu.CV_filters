@@ -1,9 +1,6 @@
 ﻿using Emgu.CV;
-using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using Emgu.CV.Util;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using static Introduction.Data;
 
@@ -61,7 +58,7 @@ namespace Introduction
                 newImage[newY, newX] = pixel;
             });
 
-            return BilinearInterp(newImage, scaleX, scaleY) ?? throw new ArgumentNullException(paramName: nameof(newImage));
+            return BilinearInterp(newImage, scaleX, scaleY);
         }
 
         /// <summary>
@@ -121,18 +118,18 @@ namespace Introduction
         /// <param name="p">Anchor of the rotation</param>
         /// <param name="angle">Rotation angle</param>
         // Testing: OK
-        public Image<Bgr, byte> Rotate(Data.Point p, double angle)
+        public Image<Bgr, byte> Rotate(CstPoint p, double angle)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
             double rad = ConvertToRad(angle);
 
             EachPixel((height, width, pixel) =>
             {
-                int newX = (int)(Math.Cos(rad) * (width - p.Width) - 
-                                 Math.Sin(rad) * (height - p.Height) + p.Width);
+                int newX = (int)(Math.Cos(rad) * (width - p.X) - 
+                                 Math.Sin(rad) * (height - p.Y) + p.X);
 
-                int newY = (int)(Math.Sin(rad) * (width - p.Width) + 
-                                 Math.Cos(rad) * (height - p.Height) + p.Height);
+                int newY = (int)(Math.Sin(rad) * (width - p.X) + 
+                                 Math.Cos(rad) * (height - p.Y) + p.Y);
 
                 if(newX < sourceImage.Width && newX >= 0 && newY < sourceImage.Height && newY >= 0)
                 {
@@ -172,11 +169,11 @@ namespace Introduction
                                                                                  (interp.InvDataY + interp.DataY) * interp.RatioY));
             }, img);
 
-            return result;
+            return result ?? throw new ArgumentNullException(paramName: nameof(result));
         }
 
         // Rotation overload => Testing: OK
-        public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, Data.Point p, double angle)
+        public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, CstPoint p, double angle)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
             var rn = new RotateInterpBuilder();
@@ -190,7 +187,8 @@ namespace Introduction
                         .Ratio(p, angle)
                         .InvRatio();
 
-                if (interp.FloorX < sourceImage.Width - 1 && interp.FloorX >= 0 && interp.FloorY < sourceImage.Height - 1 && interp.FloorY >= 0)
+                if (interp.FloorX < sourceImage.Width - 1 && interp.FloorX >= 0 && 
+                    interp.FloorY < sourceImage.Height - 1 && interp.FloorY >= 0)
                 {
                     rn.Dat
                         .SetInvDataX(sourceImage.Data[interp.FloorY, interp.FloorX, channel])
@@ -215,11 +213,20 @@ namespace Introduction
                  new PointF(0, sourceImage.Height - 1),
                  new PointF(sourceImage.Width - 1, sourceImage.Height - 1),
                  new PointF(sourceImage.Width - 1, 0)
-            };            var homographyMatrix = CvInvoke.GetPerspectiveTransform(src, destPoints);            var destImage = new Image<Bgr, byte>(sourceImage.Size);
+            };
+            var homographyMatrix = CvInvoke.GetPerspectiveTransform(src, destPoints);
+            var destImage = new Image<Bgr, byte>(sourceImage.Size);
 
             CvInvoke.WarpPerspective(sourceImage, destImage, homographyMatrix, destImage.Size);
 
             return destImage;
+        }
+
+        public void DrawPoint(Point center, int radius, int thickness)
+        {
+            var color = new Bgr(Color.Blue).MCvScalar;
+
+            CvInvoke.Circle(sourceImage, center, radius, color, thickness);
         }
 
         #region Additional methods

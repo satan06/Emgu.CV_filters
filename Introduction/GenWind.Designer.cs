@@ -150,6 +150,7 @@
             this.imageBox.Size = new System.Drawing.Size(319, 274);
             this.imageBox.TabIndex = 2;
             this.imageBox.TabStop = false;
+            this.imageBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SetDotEvent);
             // 
             // imageBoxRs
             // 

@@ -21,26 +21,27 @@ namespace Introduction
         private int BooleansIntens { get; set; } = 5;
         private int BlurIntensity { get; set; } = 5;
 
+        public bool ImageHomogrActivator { get; set; } = false;
+
         public Filter()
         {
             InitializeComponent();
 
             Width = WindowRelaxModeWidth;
             FormBorderStyle = FormBorderStyle.FixedSingle;
-
-
+            TestEventButton.Visible = false;
         }
 
         private void LoaderCheck(string fileName, bool isSource)
         {
             if (isSource)
             {
-                filter.OpenFile(fileName, ref sourceImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref sourceImage, imageBox.Width, imageBox.Height);
                 manager.Points.Clear();
             }
             else
             {
-                filter.OpenFile(fileName, ref tempImage, ImageWidth, ImageHeight);
+                filter.OpenFile(fileName, ref tempImage, imageBoxRs.Width, imageBoxRs.Height);
             }
         }
 
@@ -302,28 +303,25 @@ namespace Introduction
         /// </summary>
         private void TestEvent(object sender, EventArgs e)
         {
-            // Test functional here
-            imageBoxRs.Image = transform.Rotate(CstPoint.Factory.NewCenterPoint(sourceImage.Width, 
-                                                                                sourceImage.Height), 45);
-            //imageBoxRs.Image = transform.Scale(1.5f, 1.5f);
-            //imageBoxRs.Image = transform.Reflect(ReflType.Horizontal);
-            //imageBoxRs.Image = transform.Shear(ShiftType.Horizontal, 0.2f);
+
         }
 
         private void SetDotEvent(object sender, MouseEventArgs e)
         {
-            int x = (int)(e.Location.X / imageBox.ZoomScale);
-            int y = (int)(e.Location.Y / imageBox.ZoomScale);
-
-            if (!manager.IsFull)
+            while(ImageHomogrActivator)
             {
-                manager.AddPoint(new PointF(x, y));
-                transform.DrawPoint(new Point(x, y), 1, 1);
-            }
-            else
-            {
-                imageBoxRs.Image = transform.Homograph(manager.Points.ToArray());
+                int x = (int)(e.Location.X / imageBox.ZoomScale);
+                int y = (int)(e.Location.Y / imageBox.ZoomScale);
 
+                if (!manager.IsFull)
+                {
+                    manager.AddPoint(new PointF(x, y));
+                    transform.DrawPoint(new Point(x, y), 1, 1);
+                }
+                else
+                {
+                    imageBoxRs.Image = transform.Homograph(manager.Points.ToArray());
+                }
             }
         }
     }

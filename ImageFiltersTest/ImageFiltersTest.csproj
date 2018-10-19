@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="ImageColorCheckTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ImageTransformTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,16 +1,14 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using Introduction;
 
 namespace ImageFiltersTest
 {
-    [TestClass]
+    [TestFixture]
     public class ImageColorCheckTest
     {
-        [TestMethod]
+        [Test]
         public void ColorCheck_WithValidValue_Test()
         {
-
             // arrange
             ImageFilter f = new ImageFilter();
             const double min = 0;
@@ -25,7 +23,7 @@ namespace ImageFiltersTest
             Assert.AreEqual(expected, result);
         }
 
-        [TestMethod]
+        [Test]
         public void ColorCheck_WithLessValue_Test()
         {
             // arrange
@@ -42,7 +40,7 @@ namespace ImageFiltersTest
             Assert.AreEqual(expected, result);
         }
 
-        [TestMethod]
+        [Test]
         public void ColorCheck_WithBiggerValue_Test()
         {
             // arrange
@@ -59,7 +57,7 @@ namespace ImageFiltersTest
             Assert.AreEqual(expected, result);
         }
 
-        [TestMethod]
+        [Test]
         public void ColorCheck_WithMinEdgeValue_Test()
         {
             // arrange
@@ -76,7 +74,7 @@ namespace ImageFiltersTest
             Assert.AreEqual(expected, result);
         }
 
-        [TestMethod]
+        [Test]
         public void ColorCheck_WithMaxEdgeValue_Test()
         {
             // arrange
@@ -94,10 +92,10 @@ namespace ImageFiltersTest
         }
     }
 
-    [TestClass]
+    [TestFixture]
     public class ImageSetOperationTest
     {
-        [TestMethod]
+        [Test]
         public void SetOperation_Add_Test()
         {
             // arrange
@@ -114,7 +112,7 @@ namespace ImageFiltersTest
             Assert.AreEqual(expected, result);
         }
 
-        [TestMethod]
+        [Test]
         public void SetOperation_Substract_Test()
         {
             // arrange
@@ -132,10 +130,10 @@ namespace ImageFiltersTest
         }
     }
 
-    [TestClass]
+    [TestFixture]
     public class ImageCellShadingCheckTest
     {
-        [TestMethod]
+        [Test]
         public void CellShad_Less50_Test()
         {
             // arrange

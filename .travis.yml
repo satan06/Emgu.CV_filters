@@ -1,11 +1,11 @@
 language: csharp
-solution: Introduction.sln
+solution: DataCalculator/DataCalculator.sln
 install:
   - nuget restore Introduction.sln
-  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory TestResults
+  - nuget install NUnit.Runners -Version 3.7.0 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release Introduction.sln
-  - mono ./TestResults/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./ImageFiltersTest/bin/Debug/ImageFiltersTest.dll
+  - mono ./testrunner/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./ImageFiltersTest/bin/Release/ImageFiltersTest.dll
 notifications:
   email:
     recipients:

@@ -1,11 +1,15 @@
 language: csharp
 solution: Introduction.sln
-install:
-  - nuget restore Introduction.sln
-  - nuget install NUnit.Runners -Version 3.7.0 -OutputDirectory testrunner
 script:
-  - xbuild /p:VbcToolExe=vbnc.exe Introduction.sln
-  - mono ./testrunner/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./ImageFiltersTest/bin/Debug/ImageFiltersTest.dll
+  - grep "Test Results" build.log
+dotnet: 2.0.0
+dist: trusty
+install:
+  - dotnet restore
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+script:
+  - dotnet build
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./ImageFiltersTest/bin/Debug/ImageFiltersTest.dll
 notifications:
   email:
     recipients:

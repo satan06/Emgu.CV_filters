@@ -1,14 +1,14 @@
 language: csharp
 solution: Introduction.sln
 install:
-	- nuget restore Introduction.sln 
-	- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory TestResults
+  - nuget restore Introduction.sln 
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory TestResults
 script:
   - xbuild /p:Configuration=Release Introduction.sln
   - mono ./TestResults/NUnit.Runners.2.6.4/tools/nunit-console.exe ./ImageFiltersTest/bin/Debug/ImageFiltersTest.dll
 notifications:
-	email:
-		recipients:
-			- panmihaurkin@icloud.com
-		on_success: never
-		on_failure: always
+  email:
+    recipients:
+      - panmihaurkin@icloud.com
+    on_success: never
+    on_failure: always

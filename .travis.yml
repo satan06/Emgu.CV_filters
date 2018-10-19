@@ -4,7 +4,7 @@ install:
   - nuget restore Introduction.sln
   - nuget install NUnit.Runners -Version 3.7.0 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release|x64 Introduction.sln
+  - xbuild /p:VbcToolExe=vbnc.exe Introduction.sln
   - mono ./testrunner/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./ImageFiltersTest/bin/Debug/ImageFiltersTest.dll
 notifications:
   email:

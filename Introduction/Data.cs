@@ -328,6 +328,7 @@ namespace Introduction
             public void AddPoint(PointF point)
             {
                 Points.Add(point);
+
                 System.Console.WriteLine($"{nameof(point.X)}: {point.X} " +
                     $"{nameof(point.Y)}: {point.Y}");
                 System.Console.WriteLine(Points.Count);

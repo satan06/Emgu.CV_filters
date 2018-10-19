@@ -94,6 +94,7 @@ namespace Introduction
 
             return cannyEdges;
         }
+
         /// <summary>
         /// Imposes a cell shading effect on the image
         /// </summary>
@@ -415,7 +416,8 @@ namespace Introduction
         }
 
         #region Additional methods
-        private byte SetOperaton(Data.Boolean b, double val, double subval)
+
+        public byte SetOperaton(Data.Boolean b, double val, double subval)
         {
             if (b == Data.Boolean.Add)
             {
@@ -428,7 +430,7 @@ namespace Introduction
             throw new Exception("Wrong operation");
         }
 
-        private byte CellShadingCheck(byte color)
+        public byte CellShadingCheck(byte color)
         {
             var condArg0 = (color <= 50) ? 0 :
                             (color <= 100) ? 25 :
@@ -438,18 +440,18 @@ namespace Introduction
             return (byte)condArg0;
         }
 
-        private byte ColorCheck(double color, double min, double max)
+        public byte ColorCheck(double color, double min, double max)
         {
             var condition = (color < min) ? min : (color > max) ? max : color;
             return (byte)condition;
         }
 
-        private int ThresholdNormalize(int value)
+        public int ThresholdNormalize(int value)
         {
             return (value <= 1) ? 3 : (value % 2 != 1) ? ++value : value;
         }
 
-        private double Normalize(int value)
+        public double Normalize(int value)
         {
             return (value <= 1) ? 0.1 : (value >= 9) ? 0.9 : value * 0.1;
         }

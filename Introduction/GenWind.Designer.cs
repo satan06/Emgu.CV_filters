@@ -111,7 +111,7 @@
             this.label19 = new System.Windows.Forms.Label();
             this.button9 = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
-            this.button8 = new System.Windows.Forms.Button();
+            this.TestEventButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -958,24 +958,24 @@
             this.label22.TabIndex = 0;
             this.label22.Text = "Booleans";
             // 
-            // button8
+            // TestEventButton
             // 
-            this.button8.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button8.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.button8.Location = new System.Drawing.Point(91, 1);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
-            this.button8.TabIndex = 31;
-            this.button8.Text = "Test Event";
-            this.button8.UseVisualStyleBackColor = false;
-            this.button8.Click += new System.EventHandler(this.TestEvent);
+            this.TestEventButton.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.TestEventButton.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.TestEventButton.Location = new System.Drawing.Point(91, 1);
+            this.TestEventButton.Name = "TestEventButton";
+            this.TestEventButton.Size = new System.Drawing.Size(75, 23);
+            this.TestEventButton.TabIndex = 31;
+            this.TestEventButton.Text = "Test Event";
+            this.TestEventButton.UseVisualStyleBackColor = false;
+            this.TestEventButton.Click += new System.EventHandler(this.TestEvent);
             // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 319);
-            this.Controls.Add(this.button8);
+            this.Controls.Add(this.TestEventButton);
             this.Controls.Add(this.CartnFilterPanel);
             this.Controls.Add(this.BooleansPanel);
             this.Controls.Add(this.WaterColorPanel);
@@ -1113,7 +1113,7 @@
         private System.Windows.Forms.ToolStripMenuItem redToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem blueToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem greenToolStripMenuItem;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button TestEventButton;
     }
 }
 

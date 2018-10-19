@@ -231,7 +231,7 @@ namespace Introduction
 
         #region Additional methods
 
-        private int[] ReflTypeToData(ReflType rtype)
+        public int[] ReflTypeToData(ReflType rtype)
         {
             bool isHoriz = rtype == ReflType.Horizontal;
             bool isVert = rtype == ReflType.Vertical;

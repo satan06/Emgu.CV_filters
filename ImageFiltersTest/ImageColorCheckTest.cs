@@ -282,10 +282,10 @@ namespace ImageFiltersTest
             // arrange
             ImageFilter f = new ImageFilter();
             const int value = -6;
-            const double expected = 0.1;
+            const float expected = 0.1f;
 
             // act
-            double result = f.Normalize(value);
+            float result = f.Normalize(value);
 
             // assert
             Assert.AreEqual(expected, result);
@@ -297,10 +297,10 @@ namespace ImageFiltersTest
             // arrange
             ImageFilter f = new ImageFilter();
             const int value = 1;
-            const double expected = 0.1;
+            const float expected = 0.1f;
 
             // act
-            double result = f.Normalize(value);
+            float result = f.Normalize(value);
 
             // assert
             Assert.AreEqual(expected, result);
@@ -312,10 +312,10 @@ namespace ImageFiltersTest
             // arrange
             ImageFilter f = new ImageFilter();
             const int value = 9;
-            const double expected = 0.9;
+            const float expected = 0.9f;
 
             // act
-            double result = f.Normalize(value);
+            float result = f.Normalize(value);
 
             // assert
             Assert.AreEqual(expected, result);
@@ -327,10 +327,10 @@ namespace ImageFiltersTest
             // arrange
             ImageFilter f = new ImageFilter();
             const int value = 12;
-            const double expected = 0.9;
+            const float expected = 0.9f;
 
             // act
-            double result = f.Normalize(value);
+            float result = f.Normalize(value);
 
             // assert
             Assert.AreEqual(expected, result);
@@ -342,10 +342,10 @@ namespace ImageFiltersTest
             // arrange
             ImageFilter f = new ImageFilter();
             const int value = 3;
-            const double expected = 0.3;
+            const float expected = 0.3f;
 
             // act
-            double result = f.Normalize(value);
+            float result = f.Normalize(value);
 
             // assert
             Assert.AreEqual(expected, result);

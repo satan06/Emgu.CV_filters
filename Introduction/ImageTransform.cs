@@ -267,8 +267,8 @@ namespace Introduction
                 };
         }
 
-        private double ConvertToRad(double angle) => Math.PI / 180 * angle;
-        private byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
+        public double ConvertToRad(double angle) => Math.PI / 180 * angle;
+        public byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
 
         #endregion
     }

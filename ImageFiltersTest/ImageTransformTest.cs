@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Introduction;
+using System;
 
 namespace ImageFiltersTest
 {
@@ -46,6 +47,27 @@ namespace ImageFiltersTest
 
             // act
             int[] result = t.ReflTypeToData(rt);
+
+            // assert
+            Assert.AreEqual(expected, result);
+        }
+    }
+
+    [TestFixture]
+    public class ImageFilterShiftOffsetTest
+    {
+        [Test]
+        public void FilterShiftOffset_IsHorizontalSpec_Test()
+        {
+            // arrange
+            ImageTransform t = new ImageTransform();
+            Data.ShiftType type = Data.ShiftType.Horizontal;
+            float value = 0.25f;
+            const int width = 640;
+            int[] expected = { (int)Math.Abs(width * value), 0 }; 
+
+            // act
+            int [] result = t.FilterShiftOffset(type, value);
 
             // assert
             Assert.AreEqual(expected, result);

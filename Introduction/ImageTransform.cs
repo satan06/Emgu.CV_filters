@@ -241,7 +241,7 @@ namespace Introduction
                              new int[] { 1, -1 } : new int[] { -1, -1 };
         }
 
-        private int[] FilterShiftOffset(ShiftType type, float value)
+        public int[] FilterShiftOffset(ShiftType type, float value)
         {
             return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
 
@@ -253,7 +253,7 @@ namespace Introduction
                 };
         }
 
-        private int[] FilterCoordinates(ShiftType type, float value, params int[] vs)
+        public int[] FilterCoordinates(ShiftType type, float value, params int[] vs)
         {
             return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
 
@@ -267,8 +267,8 @@ namespace Introduction
                 };
         }
 
-        private double ConvertToRad(double angle) => Math.PI / 180 * angle;
-        private byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
+        public double ConvertToRad(double angle) => Math.PI / 180 * angle;
+        public byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
 
         #endregion
     }

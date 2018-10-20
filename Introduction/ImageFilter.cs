@@ -451,9 +451,9 @@ namespace Introduction
             return (value <= 1) ? 3 : (value % 2 != 1) ? ++value : value;
         }
 
-        public double Normalize(int value)
+        public float Normalize(int value)
         {
-            return (value <= 1) ? 0.1 : (value >= 9) ? 0.9 : value * 0.1;
+            return (value <= 1) ? 0.1f : (value >= 9) ? 0.9f : (value * 0.1f);
         }
 
         #endregion

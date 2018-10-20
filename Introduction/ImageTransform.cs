@@ -241,7 +241,7 @@ namespace Introduction
                              new int[] { 1, -1 } : new int[] { -1, -1 };
         }
 
-        public int[] FilterShiftOffset(ShiftType type, float value)
+        private int[] FilterShiftOffset(ShiftType type, float value)
         {
             return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
 
@@ -253,7 +253,7 @@ namespace Introduction
                 };
         }
 
-        public int[] FilterCoordinates(ShiftType type, float value, params int[] vs)
+        private int[] FilterCoordinates(ShiftType type, float value, params int[] vs)
         {
             return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
 

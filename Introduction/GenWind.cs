@@ -21,7 +21,7 @@ namespace Introduction
         private int BooleansIntens { get; set; } = 5;
         private int BlurIntensity { get; set; } = 5;
 
-        public bool ImageHomogrActivator { get; set; } = false;
+        public bool IsHomographyActive { get; set; } = true;
 
         public Filter()
         {
@@ -29,7 +29,7 @@ namespace Introduction
 
             Width = WindowRelaxModeWidth;
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            TestEventButton.Visible = false;
+            TestEventButton.Visible = true;
         }
 
         private void LoaderCheck(string fileName, bool isSource)
@@ -303,12 +303,12 @@ namespace Introduction
         /// </summary>
         private void TestEvent(object sender, EventArgs e)
         {
-
+            
         }
 
         private void SetDotEvent(object sender, MouseEventArgs e)
         {
-            while(ImageHomogrActivator)
+            if(IsHomographyActive)
             {
                 int x = (int)(e.Location.X / imageBox.ZoomScale);
                 int y = (int)(e.Location.Y / imageBox.ZoomScale);
@@ -317,10 +317,15 @@ namespace Introduction
                 {
                     manager.AddPoint(new PointF(x, y));
                     transform.DrawPoint(new Point(x, y), 1, 1);
+                    imageBox.Image = sourceImage;
                 }
                 else
                 {
-                    imageBoxRs.Image = transform.Homograph(manager.Points.ToArray());
+                    imageBoxRs.Image = transform.Homograph(
+                        transform.CoordSort(
+                            manager.Points.ToArray()
+                            )
+                        );
                 }
             }
         }

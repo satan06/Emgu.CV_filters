@@ -145,6 +145,7 @@
             // imageBox
             // 
             this.imageBox.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.imageBox.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
             this.imageBox.Location = new System.Drawing.Point(12, 27);
             this.imageBox.Name = "imageBox";
             this.imageBox.Size = new System.Drawing.Size(319, 274);

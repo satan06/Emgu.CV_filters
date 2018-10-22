@@ -1,6 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using static Introduction.Data;
 
@@ -125,13 +126,13 @@ namespace Introduction
 
             EachPixel((height, width, pixel) =>
             {
-                int newX = (int)(Math.Cos(rad) * (width - p.X) - 
+                int newX = (int)(Math.Cos(rad) * (width - p.X) -
                                  Math.Sin(rad) * (height - p.Y) + p.X);
 
-                int newY = (int)(Math.Sin(rad) * (width - p.X) + 
+                int newY = (int)(Math.Sin(rad) * (width - p.X) +
                                  Math.Cos(rad) * (height - p.Y) + p.Y);
 
-                if(newX < sourceImage.Width && newX >= 0 && newY < sourceImage.Height && newY >= 0)
+                if (newX < sourceImage.Width && newX >= 0 && newY < sourceImage.Height && newY >= 0)
                 {
                     result[newY, newX] = pixel;
                 }
@@ -147,7 +148,7 @@ namespace Introduction
         /// <param name="img">Image to interpolate</param>
         /// <param name="par">Required width and height coeffs</param>
         // Testing: OK
-        public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, params float [] par)
+        public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, params float[] par)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(img.Size);
             var sn = new ScaleInterpBuilder();
@@ -187,7 +188,7 @@ namespace Introduction
                         .Ratio(p, angle)
                         .InvRatio();
 
-                if (interp.FloorX < sourceImage.Width - 1 && interp.FloorX >= 0 && 
+                if (interp.FloorX < sourceImage.Width - 1 && interp.FloorX >= 0 &&
                     interp.FloorY < sourceImage.Height - 1 && interp.FloorY >= 0)
                 {
                     rn.Dat
@@ -205,7 +206,7 @@ namespace Introduction
             return result ?? throw new ArgumentNullException(paramName: nameof(result));
         }
 
-        public Image<Bgr, byte> Homograph(PointF [] src)
+        public Image<Bgr, byte> Homograph(PointF[] src)
         {
             var destPoints = new PointF[]
             {
@@ -237,7 +238,7 @@ namespace Introduction
             bool isVert = rtype == ReflType.Vertical;
             bool isDiag = rtype == ReflType.Diagonal;
 
-            return isHoriz ? new int[] { -1, 1 } : isVert ? 
+            return isHoriz ? new int[] { -1, 1 } : isVert ?
                              new int[] { 1, -1 } : new int[] { -1, -1 };
         }
 
@@ -269,6 +270,47 @@ namespace Introduction
 
         public double ConvertToRad(double angle) => Math.PI / 180 * angle;
         public byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
+
+        public void Swap(ref PointF a, ref PointF b)
+        {
+            PointF temp;
+
+            temp = a;
+            a = b;
+            b = temp;
+        }
+
+        public PointF[] InsertionSort(PointF[] input)
+        { 
+            for (int i = 1; i < input.Length; i++)
+            {
+                for (int j = i; j > 0; j--)
+                {
+                    if (input[j].X < input[j - 1].X)
+                    {
+                        Swap(ref input[j], ref input[j - 1]);
+                    }
+                }
+            }
+            return input;
+        }
+
+        public PointF [] CoordSort (PointF [] points)
+        {
+            points = InsertionSort(points);
+
+            if(points[0].Y > points[1].Y)
+            {
+                Swap(ref points[1], ref points[0]);
+            }
+
+            if (points[2].Y < points[3].Y)
+            {
+                Swap(ref points[3], ref points[2]);
+            }
+
+            return points;
+        }
 
         #endregion
     }

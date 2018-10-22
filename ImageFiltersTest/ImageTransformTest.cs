@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Introduction;
 using System;
+using System.Drawing;
 
 namespace ImageFiltersTest
 {
@@ -115,6 +116,54 @@ namespace ImageFiltersTest
 
             // act
             byte result = t.IsPixelBlack(def, process);
+
+            // assert
+            Assert.AreEqual(expected, result);
+        }
+    }
+
+    [TestFixture]
+    public class SortingTest
+    {
+        [Test]
+        public void SwapTest()
+        {
+            // arrange
+            ImageTransform t = new ImageTransform();
+            PointF a = new PointF(10, 45);
+            PointF b = new PointF(11, 21);
+            string expected = $"{a.ToString()}, {b.ToString()}";
+
+            // act
+            t.Swap(ref a, ref b);
+            string result = $"{a.ToString()}, {b.ToString()}"; ;
+
+            // assert
+            Assert.AreNotEqual(expected, result);
+        }
+
+        [Test]
+        public void InsertionSortTest()
+        {
+            // arrange
+            ImageTransform t = new ImageTransform();
+            var points = new PointF[]
+            {
+                 new PointF(140, 195),
+                 new PointF(213, 183),
+                 new PointF(141, 246),
+                 new PointF(211, 230),
+            };
+            var expected = new PointF[]
+            {
+                 new PointF(140, 195),
+                 new PointF(141, 246),
+                 new PointF(211, 230),
+                 new PointF(213, 183),
+            };
+
+            // act
+            var result = t.InsertionSort(points);
 
             // assert
             Assert.AreEqual(expected, result);

@@ -141,5 +141,32 @@ namespace ImageFiltersTest
             // assert
             Assert.AreNotEqual(expected, result);
         }
+
+        [Test]
+        public void InsertionSortTest()
+        {
+            // arrange
+            ImageTransform t = new ImageTransform();
+            var points = new PointF[]
+            {
+                 new PointF(140, 195),
+                 new PointF(213, 183),
+                 new PointF(141, 246),
+                 new PointF(211, 230),
+            };
+            var expected = new PointF[]
+            {
+                 new PointF(140, 195),
+                 new PointF(141, 246),
+                 new PointF(211, 230),
+                 new PointF(213, 183),
+            };
+
+            // act
+            var result = t.InsertionSort(points);
+
+            // assert
+            Assert.AreEqual(expected, result);
+        }
     }
 }

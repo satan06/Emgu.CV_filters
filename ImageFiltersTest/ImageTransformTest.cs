@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Introduction;
 using System;
+using System.Drawing;
 
 namespace ImageFiltersTest
 {
@@ -118,6 +119,27 @@ namespace ImageFiltersTest
 
             // assert
             Assert.AreEqual(expected, result);
+        }
+    }
+
+    [TestFixture]
+    public class SortingTest
+    {
+        [Test]
+        public void SwapTest()
+        {
+            // arrange
+            ImageTransform t = new ImageTransform();
+            PointF a = new PointF(10, 45);
+            PointF b = new PointF(11, 21);
+            string expected = $"{a.ToString()}, {b.ToString()}";
+
+            // act
+            t.Swap(ref a, ref b);
+            string result = $"{a.ToString()}, {b.ToString()}"; ;
+
+            // assert
+            Assert.AreNotEqual(expected, result);
         }
     }
 }

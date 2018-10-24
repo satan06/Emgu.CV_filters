@@ -165,7 +165,7 @@ namespace ImageFiltersTest
             // act
             var result = t.InsertionSort(points);
 
-            // assert
+            // assert   
             Assert.AreEqual(expected, result);
         }
     }

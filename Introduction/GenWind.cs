@@ -29,7 +29,6 @@ namespace Introduction
 
             Width = WindowRelaxModeWidth;
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            TestEventButton.Visible = true;
         }
 
         private void LoaderCheck(string fileName, bool isSource)
@@ -327,6 +326,26 @@ namespace Introduction
                             )
                         );
                 }
+            }
+        }
+
+        private void ScaleTransform(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            ScalePanel.Visible = true;
+        }
+
+        private void ScalePanelClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            ScalePanel.Visible = false;
+        }
+
+        private void ScaleTransformApply(object sender, EventArgs e)
+        {
+            if(ScaleAmountX.Value != 0 && ScaleAmountX.Value != 0)
+            {
+                imageBoxRs.Image = transform.Scale((float)ScaleAmountX.Value, (float)ScaleAmountY.Value);
             }
         }
     }

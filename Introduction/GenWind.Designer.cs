@@ -60,6 +60,12 @@
             this.redToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.blueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.greenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.transformToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.shearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reflectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.homographToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BrContrPanel = new System.Windows.Forms.Panel();
             this.BrContrCloseButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
@@ -111,7 +117,17 @@
             this.label19 = new System.Windows.Forms.Label();
             this.button9 = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
-            this.TestEventButton = new System.Windows.Forms.Button();
+            this.horizontalyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.vertcalyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.diagonalyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ScalePanel = new System.Windows.Forms.Panel();
+            this.label21 = new System.Windows.Forms.Label();
+            this.ScaleCloseButton = new System.Windows.Forms.Button();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
+            this.ScaleAmountX = new System.Windows.Forms.NumericUpDown();
+            this.ScaleAmountY = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -140,6 +156,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.WaterColorBr)).BeginInit();
             this.BooleansPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BooleansMask)).BeginInit();
+            this.ScalePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountY)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox
@@ -262,7 +281,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.FToolStripMenuItem});
+            this.FToolStripMenuItem,
+            this.transformToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(824, 24);
@@ -417,6 +437,53 @@
             this.greenToolStripMenuItem.Name = "greenToolStripMenuItem";
             this.greenToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.greenToolStripMenuItem.Text = "Green";
+            // 
+            // transformToolStripMenuItem
+            // 
+            this.transformToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scaleToolStripMenuItem,
+            this.shearToolStripMenuItem,
+            this.reflectToolStripMenuItem,
+            this.rotateToolStripMenuItem,
+            this.homographToolStripMenuItem});
+            this.transformToolStripMenuItem.Name = "transformToolStripMenuItem";
+            this.transformToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.transformToolStripMenuItem.Text = "Transform";
+            // 
+            // scaleToolStripMenuItem
+            // 
+            this.scaleToolStripMenuItem.Name = "scaleToolStripMenuItem";
+            this.scaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.scaleToolStripMenuItem.Text = "Scale";
+            this.scaleToolStripMenuItem.Click += new System.EventHandler(this.ScaleTransform);
+            // 
+            // shearToolStripMenuItem
+            // 
+            this.shearToolStripMenuItem.Name = "shearToolStripMenuItem";
+            this.shearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.shearToolStripMenuItem.Text = "Shear";
+            // 
+            // reflectToolStripMenuItem
+            // 
+            this.reflectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.horizontalyToolStripMenuItem,
+            this.vertcalyToolStripMenuItem,
+            this.diagonalyToolStripMenuItem});
+            this.reflectToolStripMenuItem.Name = "reflectToolStripMenuItem";
+            this.reflectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reflectToolStripMenuItem.Text = "Reflect";
+            // 
+            // rotateToolStripMenuItem
+            // 
+            this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
+            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rotateToolStripMenuItem.Text = "Rotate ";
+            // 
+            // homographToolStripMenuItem
+            // 
+            this.homographToolStripMenuItem.Name = "homographToolStripMenuItem";
+            this.homographToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.homographToolStripMenuItem.Text = "Homograph";
             // 
             // BrContrPanel
             // 
@@ -959,24 +1026,111 @@
             this.label22.TabIndex = 0;
             this.label22.Text = "Booleans";
             // 
-            // TestEventButton
+            // horizontalyToolStripMenuItem
             // 
-            this.TestEventButton.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.TestEventButton.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.TestEventButton.Location = new System.Drawing.Point(91, 1);
-            this.TestEventButton.Name = "TestEventButton";
-            this.TestEventButton.Size = new System.Drawing.Size(75, 23);
-            this.TestEventButton.TabIndex = 31;
-            this.TestEventButton.Text = "Test Event";
-            this.TestEventButton.UseVisualStyleBackColor = false;
-            this.TestEventButton.Click += new System.EventHandler(this.TestEvent);
+            this.horizontalyToolStripMenuItem.Name = "horizontalyToolStripMenuItem";
+            this.horizontalyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.horizontalyToolStripMenuItem.Text = "Horizontaly";
+            // 
+            // vertcalyToolStripMenuItem
+            // 
+            this.vertcalyToolStripMenuItem.Name = "vertcalyToolStripMenuItem";
+            this.vertcalyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.vertcalyToolStripMenuItem.Text = "Verticaly";
+            // 
+            // diagonalyToolStripMenuItem
+            // 
+            this.diagonalyToolStripMenuItem.Name = "diagonalyToolStripMenuItem";
+            this.diagonalyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.diagonalyToolStripMenuItem.Text = "Diagonaly";
+            // 
+            // ScalePanel
+            // 
+            this.ScalePanel.BackColor = System.Drawing.SystemColors.Menu;
+            this.ScalePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ScalePanel.Controls.Add(this.ScaleAmountY);
+            this.ScalePanel.Controls.Add(this.ScaleAmountX);
+            this.ScalePanel.Controls.Add(this.button8);
+            this.ScalePanel.Controls.Add(this.label24);
+            this.ScalePanel.Controls.Add(this.label21);
+            this.ScalePanel.Controls.Add(this.ScaleCloseButton);
+            this.ScalePanel.Controls.Add(this.label23);
+            this.ScalePanel.Location = new System.Drawing.Point(671, 23);
+            this.ScalePanel.Name = "ScalePanel";
+            this.ScalePanel.Size = new System.Drawing.Size(149, 274);
+            this.ScalePanel.TabIndex = 24;
+            this.ScalePanel.Visible = false;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(23, 48);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(53, 13);
+            this.label21.TabIndex = 9;
+            this.label21.Text = "X Amount";
+            // 
+            // ScaleCloseButton
+            // 
+            this.ScaleCloseButton.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ScaleCloseButton.FlatAppearance.BorderSize = 0;
+            this.ScaleCloseButton.Location = new System.Drawing.Point(126, -1);
+            this.ScaleCloseButton.Name = "ScaleCloseButton";
+            this.ScaleCloseButton.Size = new System.Drawing.Size(22, 22);
+            this.ScaleCloseButton.TabIndex = 7;
+            this.ScaleCloseButton.Text = "X";
+            this.ScaleCloseButton.UseVisualStyleBackColor = false;
+            this.ScaleCloseButton.Click += new System.EventHandler(this.ScalePanelClose);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(3, 11);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(34, 13);
+            this.label23.TabIndex = 0;
+            this.label23.Text = "Scale";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(23, 79);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(53, 13);
+            this.label24.TabIndex = 10;
+            this.label24.Text = "Y Amount";
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.button8.Location = new System.Drawing.Point(47, 117);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(62, 23);
+            this.button8.TabIndex = 13;
+            this.button8.Text = "Apply";
+            this.button8.UseVisualStyleBackColor = false;
+            this.button8.Click += new System.EventHandler(this.ScaleTransformApply);
+            // 
+            // ScaleAmountX
+            // 
+            this.ScaleAmountX.Location = new System.Drawing.Point(82, 46);
+            this.ScaleAmountX.Name = "ScaleAmountX";
+            this.ScaleAmountX.Size = new System.Drawing.Size(53, 20);
+            this.ScaleAmountX.TabIndex = 14;
+            // 
+            // ScaleAmountY
+            // 
+            this.ScaleAmountY.Location = new System.Drawing.Point(82, 76);
+            this.ScaleAmountY.Name = "ScaleAmountY";
+            this.ScaleAmountY.Size = new System.Drawing.Size(53, 20);
+            this.ScaleAmountY.TabIndex = 15;
             // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 319);
-            this.Controls.Add(this.TestEventButton);
+            this.Controls.Add(this.ScalePanel);
             this.Controls.Add(this.CartnFilterPanel);
             this.Controls.Add(this.BooleansPanel);
             this.Controls.Add(this.WaterColorPanel);
@@ -1025,6 +1179,10 @@
             this.BooleansPanel.ResumeLayout(false);
             this.BooleansPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BooleansMask)).EndInit();
+            this.ScalePanel.ResumeLayout(false);
+            this.ScalePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountY)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1114,7 +1272,23 @@
         private System.Windows.Forms.ToolStripMenuItem redToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem blueToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem greenToolStripMenuItem;
-        private System.Windows.Forms.Button TestEventButton;
+        private System.Windows.Forms.ToolStripMenuItem transformToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scaleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem shearToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reflectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rotateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem homographToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem horizontalyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem vertcalyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem diagonalyToolStripMenuItem;
+        private System.Windows.Forms.Panel ScalePanel;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Button ScaleCloseButton;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.NumericUpDown ScaleAmountY;
+        private System.Windows.Forms.NumericUpDown ScaleAmountX;
     }
 }
 

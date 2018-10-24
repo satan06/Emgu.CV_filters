@@ -137,14 +137,14 @@ namespace Introduction
                 this.interp = interp;
             }
 
-            public ScaleInterpPrepBuilder Floor(int x, int y, float coefX, double coefY)
+            public ScaleInterpPrepBuilder Floor(int x, int y, float coefX, float coefY)
             {
                 interp.FloorX = (int)(x / coefX);
                 interp.FloorY = (int)(y / coefY);
                 return this;
             }
 
-            public ScaleInterpPrepBuilder Ratio(int x, int y, float coefX, double coefY)
+            public ScaleInterpPrepBuilder Ratio(int x, int y, float coefX, float coefY)
             {
                 interp.RatioX = x / coefX - interp.FloorX;
                 interp.RatioY = y / coefY - interp.FloorY;

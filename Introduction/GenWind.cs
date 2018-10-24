@@ -348,5 +348,50 @@ namespace Introduction
                 imageBoxRs.Image = transform.Scale((float)ScaleAmountX.Value, (float)ScaleAmountY.Value);
             }
         }
+
+        private void ReflHorizTransform(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = transform.Reflect(ReflType.Horizontal);
+        }
+
+        private void ReflVertTransform(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = transform.Reflect(ReflType.Vertical);
+        }
+
+        private void ReflDiagTransform(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = transform.Reflect(ReflType.Diagonal);
+        }
+
+        private void ShearTransform(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            ShearPanel.Visible = true;
+        }
+
+        private void ShearTransformClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            ShearPanel.Visible = false;
+        }
+
+        private void ShearHorizApply(object sender, EventArgs e)
+        {
+            if (ShearAmount.Value != 0)
+            {
+                imageBoxRs.Image = transform.Shear(ShiftType.Horizontal,
+                                                  (float)ShearAmount.Value);
+            }
+        }
+
+        private void ShearVertApply(object sender, EventArgs e)
+        {
+            if (ShearAmount.Value != 0)
+            {
+                imageBoxRs.Image = transform.Shear(ShiftType.Vertical,
+                                                  (float)ShearAmount.Value);
+            }
+        }
     }
 }

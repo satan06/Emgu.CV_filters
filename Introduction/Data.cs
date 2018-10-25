@@ -314,6 +314,11 @@ namespace Introduction
                 {
                     return new CstPoint(x / 2, y / 2);
                 }
+
+                public static CstPoint NewFreePoint(int x, int y)
+                {
+                    return new CstPoint(x, y);
+                }
             }
         }
 
@@ -328,10 +333,6 @@ namespace Introduction
             public void AddPoint(PointF point)
             {
                 Points.Add(point);
-
-                System.Console.WriteLine($"{nameof(point.X)}: {point.X} " +
-                    $"{nameof(point.Y)}: {point.Y}");
-                System.Console.WriteLine(Points.Count);
             }
         }
 

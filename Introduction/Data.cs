@@ -137,14 +137,14 @@ namespace Introduction
                 this.interp = interp;
             }
 
-            public ScaleInterpPrepBuilder Floor(int x, int y, float coefX, double coefY)
+            public ScaleInterpPrepBuilder Floor(int x, int y, float coefX, float coefY)
             {
                 interp.FloorX = (int)(x / coefX);
                 interp.FloorY = (int)(y / coefY);
                 return this;
             }
 
-            public ScaleInterpPrepBuilder Ratio(int x, int y, float coefX, double coefY)
+            public ScaleInterpPrepBuilder Ratio(int x, int y, float coefX, float coefY)
             {
                 interp.RatioX = x / coefX - interp.FloorX;
                 interp.RatioY = y / coefY - interp.FloorY;
@@ -314,6 +314,11 @@ namespace Introduction
                 {
                     return new CstPoint(x / 2, y / 2);
                 }
+
+                public static CstPoint NewFreePoint(int x, int y)
+                {
+                    return new CstPoint(x, y);
+                }
             }
         }
 
@@ -328,10 +333,6 @@ namespace Introduction
             public void AddPoint(PointF point)
             {
                 Points.Add(point);
-
-                System.Console.WriteLine($"{nameof(point.X)}: {point.X} " +
-                    $"{nameof(point.Y)}: {point.Y}");
-                System.Console.WriteLine(Points.Count);
             }
         }
 

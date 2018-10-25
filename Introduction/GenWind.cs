@@ -21,7 +21,10 @@ namespace Introduction
         private int BooleansIntens { get; set; } = 5;
         private int BlurIntensity { get; set; } = 5;
 
-        public bool IsHomographyActive { get; set; } = true;
+        public bool IsSetCenterModeActive { get; set; } = false;
+
+        public bool IsHomographyActive { get; set; } = false;
+        public CstPoint RotateAnchor;
 
         public Filter()
         {
@@ -29,7 +32,17 @@ namespace Introduction
 
             Width = WindowRelaxModeWidth;
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            TestEventButton.Visible = true;
+            RotateCenterPoint.Visible = false;
+            HomographyApplyButton.Visible = false;
+
+            RotateAnchor = CstPoint.Factory.NewCenterPoint(imageBox.Width, imageBox.Height);
+        }
+
+        private void PrepareHomogrButton()
+        {
+            HomographyApplyButton.Text = $"Set Points";
+            HomographyApplyButton.BackColor = Color.Red;
+            HomographyApplyButton.Enabled = false;
         }
 
         private void LoaderCheck(string fileName, bool isSource)
@@ -38,6 +51,7 @@ namespace Introduction
             {
                 filter.OpenFile(fileName, ref sourceImage, imageBox.Width, imageBox.Height);
                 manager.Points.Clear();
+                PrepareHomogrButton();
             }
             else
             {
@@ -58,6 +72,9 @@ namespace Introduction
                 string fileName = openFileDialog.FileName;
                 LoaderCheck(fileName, isSource);
                 imageBox.Image = imageBoxRs.Image = sourceImage;
+
+                FilterMenuStrip.Enabled = true;
+                TransformMenuStrip.Enabled = true;
             }
         }
 
@@ -194,7 +211,8 @@ namespace Introduction
         private void WaterColorMaskScroll(object sender, EventArgs e)
         {
             imageBoxRs.Image = filter.WaterColor(sourceImage, (double)WaterColorBr.Value, 
-                                                 (double)WaterColorCtr.Value, WaterColorMask.Value);
+                                                 (double)WaterColorCtr.Value, 
+                                                 WaterColorMask.Value);
         }
 
         private void WaterColorCtrChanged(object sender, EventArgs e)
@@ -259,12 +277,14 @@ namespace Introduction
 
         private void BooleansAddDown(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.BooleanOperation(sourceImage, Data.Boolean.Add, BooleansIntens);
+            imageBoxRs.Image = filter.BooleanOperation(sourceImage, Data.Boolean.Add, 
+                                                                    BooleansIntens);
         }
 
         private void BooleansSubstrDown(object sender, EventArgs e)
         {
-            imageBoxRs.Image = filter.BooleanOperation(sourceImage, Data.Boolean.Substract, BooleansIntens);
+            imageBoxRs.Image = filter.BooleanOperation(sourceImage, Data.Boolean.Substract, 
+                                                                    BooleansIntens);
         }
 
         private void IntersectionFilter(object sender, EventArgs e)
@@ -308,26 +328,151 @@ namespace Introduction
 
         private void SetDotEvent(object sender, MouseEventArgs e)
         {
-            if(IsHomographyActive)
-            {
-                int x = (int)(e.Location.X / imageBox.ZoomScale);
-                int y = (int)(e.Location.Y / imageBox.ZoomScale);
+            int x = (int)(e.Location.X / imageBox.ZoomScale);
+            int y = (int)(e.Location.Y / imageBox.ZoomScale);
 
-                if (!manager.IsFull)
+            if (IsHomographyActive && !manager.IsFull)
+            {
+                HomographyApplyButton.Enabled = false;
+
+                manager.AddPoint(new PointF(x, y));
+                transform.DrawPoint(new Point(x, y), 1, 1);
+                imageBox.Image = sourceImage;
+
+                if(manager.IsFull)
                 {
-                    manager.AddPoint(new PointF(x, y));
-                    transform.DrawPoint(new Point(x, y), 1, 1);
-                    imageBox.Image = sourceImage;
-                }
-                else
-                {
-                    imageBoxRs.Image = transform.Homograph(
-                        transform.CoordSort(
-                            manager.Points.ToArray()
-                            )
-                        );
+                    HomographyApplyButton.Text = $"Apply";
+                    HomographyApplyButton.BackColor = Color.Aquamarine;
+                    HomographyApplyButton.Enabled = true;
                 }
             }
+
+            if (IsSetCenterModeActive)
+            {
+                RotateCenterPoint.Location = new Point(x + 10, y + 25); // hardcode, need fix here
+                RotateAnchor = CstPoint.Factory.NewFreePoint(x, y);
+            }
+        }
+
+        private void ScaleTransform(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            ScalePanel.Visible = true;
+        }
+
+        private void ScalePanelClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            ScalePanel.Visible = false;
+        }
+
+        private void ScaleTransformApply(object sender, EventArgs e)
+        {
+            if(ScaleAmountX.Value != 0 && ScaleAmountX.Value != 0)
+            {
+                imageBoxRs.Image = transform.Scale((float)ScaleAmountX.Value, 
+                                                   (float)ScaleAmountY.Value);
+            }
+        }
+
+        private void ReflHorizTransform(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = transform.Reflect(ReflType.Horizontal);
+        }
+
+        private void ReflVertTransform(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = transform.Reflect(ReflType.Vertical);
+        }
+
+        private void ReflDiagTransform(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = transform.Reflect(ReflType.Diagonal);
+        }
+
+        private void ShearTransform(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            ShearPanel.Visible = true;
+        }
+
+        private void ShearTransformClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            ShearPanel.Visible = false;
+        }
+
+        private void ShearHorizApply(object sender, EventArgs e)
+        {
+            if (ShearAmount.Value != 0)
+            {
+                imageBoxRs.Image = transform.Shear(ShiftType.Horizontal,
+                                                  (float)ShearAmount.Value);
+            }
+        }
+
+        private void ShearVertApply(object sender, EventArgs e)
+        {
+            if (ShearAmount.Value != 0)
+            {
+                imageBoxRs.Image = transform.Shear(ShiftType.Vertical,
+                                                  (float)ShearAmount.Value);
+            }
+        }
+
+        private void RotateTransform(object sender, EventArgs e)
+        {
+            Width = WindowPanelModeWidth;
+            RotatePanel.Visible = true;
+        }
+
+        private void RotateTransformApply(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = transform.Rotate(RotateAnchor, double.Parse(RotateAngleInput.Text));
+        }
+
+        private void RotatePanelClose(object sender, EventArgs e)
+        {
+            Width = WindowRelaxModeWidth;
+            RotatePanel.Visible = false;
+        }
+
+        private void RotateTransformSetCenter(object sender, EventArgs e)
+        {
+            if(!IsSetCenterModeActive)
+            {
+                RotateSetCenterButton.BackColor = Color.Red;
+                IsSetCenterModeActive = !IsSetCenterModeActive;
+                RotateTransformApplyButton.Enabled = false;
+                RotateCenterPoint.Visible = true;
+            }
+            else
+            {
+                RotateSetCenterButton.BackColor = Color.PaleTurquoise;
+                IsSetCenterModeActive = !IsSetCenterModeActive;
+                RotateTransformApplyButton.Enabled = true;
+                RotateCenterPoint.Visible = false;
+            }
+        }
+
+        private void HomographTransform(object sender, EventArgs e)
+        {
+            PrepareHomogrButton();
+            manager.Points.Clear();
+
+            IsHomographyActive = true;
+
+            HomographyApplyButton.Visible = true;
+            HomographyApplyButton.Enabled = false;
+        }
+
+        private void HomogrApply(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = transform.Homograph(
+                transform.CoordSort(
+                    manager.Points.ToArray()
+                    )
+                );
         }
     }
 }

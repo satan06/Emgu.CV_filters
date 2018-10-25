@@ -1,7 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using static Introduction.Data;
 
@@ -59,6 +58,8 @@ namespace Introduction
                 newImage[newY, newX] = pixel;
             });
 
+            Console.WriteLine($"Image params: {nameof(newImage.Width)} = {newImage.Width}, " +
+                                            $"{nameof(newImage.Height)} = {newImage.Height}");
             return BilinearInterp(newImage, scaleX, scaleY);
         }
 
@@ -160,14 +161,20 @@ namespace Introduction
                         .Floor(width, height, par[0], par[1])
                         .Ratio(width, height, par[0], par[1])
                         .InvRatio();
-                sn.Dat
-                    .SetInvDataX(sourceImage.Data[interp.FloorY, interp.FloorX, channel])
-                    .SetDataX(sourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
-                    .SetInvDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
-                    .SetDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
 
-                result.Data[height, width, channel] = IsPixelBlack(color, (byte)((interp.InvDataX + interp.DataX) * interp.InvRatioY +
-                                                                                 (interp.InvDataY + interp.DataY) * interp.RatioY));
+                if (interp.FloorX < sourceImage.Width - 1 && interp.FloorX >= 0 &&
+                    interp.FloorY < sourceImage.Height - 1 && interp.FloorY >= 0)
+                {
+                    sn.Dat
+                        .SetInvDataX(sourceImage.Data[interp.FloorY, interp.FloorX, channel])
+                        .SetDataX(sourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
+                        .SetInvDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
+                        .SetDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
+
+                    result.Data[height, width, channel] = (byte)((interp.InvDataX + interp.DataX) * interp.InvRatioY +
+                                                                 (interp.InvDataY + interp.DataY) * interp.RatioY);
+                }
+
             }, img);
 
             return result ?? throw new ArgumentNullException(paramName: nameof(result));

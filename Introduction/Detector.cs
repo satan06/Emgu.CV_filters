@@ -7,10 +7,14 @@ namespace Introduction
 {
     public class Detector
     {
-        public Image<Gray, byte> GaussianBlur(Image<Bgr, byte> img, int radius)
+        private Image<Gray, byte> iter;
+
+        public Image<Gray, byte> IterImage { get => iter; set => iter = value; }
+
+        public Detector GaussianBlur(Image<Bgr, byte> img, int radius)
         {
             Image<Gray, byte> grayImage = img.Convert<Gray, byte>();
-            Image<Gray, byte> bluredImage = grayImage.SmoothGaussian(radius);            return bluredImage ?? throw new ArgumentNullException(paramName: nameof(bluredImage));        }
+            Image<Gray, byte> bluredImage = grayImage.SmoothGaussian(radius);            IterImage = bluredImage;            return this;            }
 
 
     }

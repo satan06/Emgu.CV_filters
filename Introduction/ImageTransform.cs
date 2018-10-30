@@ -52,10 +52,11 @@ namespace Introduction
 
             EachPixel((height, width, pixel) =>
             {
-                int newX = (int)(width * scaleX);
-                int newY = (int)(height * scaleY);
+                // int newX = (int)(width * scaleX);
+                // int newY = (int)(height * scaleY);
 
-                newImage[newY, newX] = pixel;
+                // newImage[newY, newX] = pixel;
+                newImage[(int)(height * scaleY), (int)(width * scaleX)] = pixel;
             });
 
             Console.WriteLine($"Image params: {nameof(newImage.Width)} = {newImage.Width}, " +
@@ -158,9 +159,9 @@ namespace Introduction
             {
                 ScaleInterp interp = sn
                     .Prep
-                        .Floor(width, height, par[0], par[1])
-                        .Ratio(width, height, par[0], par[1])
-                        .InvRatio();
+                    .Floor(width, height, par[0], par[1])
+                    .Ratio(width, height, par[0], par[1])
+                    .InvRatio();
 
                 if (interp.FloorX < sourceImage.Width - 1 && interp.FloorX >= 0 &&
                     interp.FloorY < sourceImage.Height - 1 && interp.FloorY >= 0)

@@ -295,18 +295,16 @@ namespace Introduction
 
         public class CstPoint
         {
-            private int x, y;
-
             protected CstPoint(int x, int y)
             {
-                this.x = x;
-                this.y = y;
+                this.X = x;
+                this.Y = y;
             }
 
             public static CstPoint Origin => new CstPoint(0, 0);
 
-            public int X { get => x; set => x = value; }
-            public int Y { get => y; set => y = value; }
+            public int X { get; set; }
+            public int Y { get; set; }
 
             public static class Factory
             {

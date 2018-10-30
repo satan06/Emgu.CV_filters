@@ -7,15 +7,24 @@ namespace Introduction
 {
     public class Detector
     {
-        private Image<Gray, byte> iter;
+        public Image<Gray, byte> IterImage { get; set; }
 
-        public Image<Gray, byte> IterImage { get => iter; set => iter = value; }
-
-        public Detector GaussianBlur(Image<Bgr, byte> img, int radius)
+        public Detector GaussianBlur(int radius)
         {
-            Image<Gray, byte> grayImage = img.Convert<Gray, byte>();
-            Image<Gray, byte> bluredImage = grayImage.SmoothGaussian(radius);            IterImage = bluredImage;            return this;            }
+            Image<Gray, byte> grayImage = sourceImage.Convert<Gray, byte>();
+            Image<Gray, byte> bluredImage = grayImage.SmoothGaussian(radius);
 
+            IterImage = bluredImage;
+            return this;
+        }
 
+        public Detector GetInterestArea(double thresval = 80, double cval = 255)
+        {
+            var threshold = new Gray(thresval);
+            var color = new Gray(cval);
+
+            IterImage = IterImage.ThresholdBinary(threshold, color);
+            return this;
+        }
     }
 }

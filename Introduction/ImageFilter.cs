@@ -4,7 +4,6 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
-using static Introduction.Data;
 
 namespace Introduction
 {
@@ -14,6 +13,14 @@ namespace Introduction
     public class ImageFilter
     {
         public Data Data;
+
+        public ImageFilter(Data data)
+        {
+            Data = data;
+        }
+
+        public ImageFilter() { }
+
         public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
 
         // Pixel image traversal

@@ -13,8 +13,14 @@ namespace Introduction
     {
         public delegate void FuncSimpl<Targ0, Targ1, Targ2>(Targ0 height, Targ1 width, Targ2 pixel);
         public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 height, Targ2 width, Targ3 color);
-
         public Data Data;
+
+        public ImageTransform(Data data)
+        {
+            Data = data;
+        }
+
+        public ImageTransform() { }
 
         // Pixel image traversal
         private void EachPixel(FuncSimpl<int, int, Bgr> action)

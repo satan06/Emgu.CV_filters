@@ -7,8 +7,8 @@ namespace Introduction
 {
     public partial class Filter : Form
     {
-        private ImageFilter filter = new ImageFilter();
-        private ImageTransform transform = new ImageTransform();
+        private ImageFilter filter;
+        private ImageTransform transform;
         private PointManager manager = new PointManager();
         public Data Data; 
         private string filterParam = "File Image (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
@@ -52,7 +52,8 @@ namespace Introduction
             manager.Points.Clear();
             PrepareHomogrButton();
 
-            transform.Data = filter.Data = Data;
+            transform = new ImageTransform(Data);
+            filter = new ImageFilter(Data);
         }
 
         private void LoadI(bool isSource)

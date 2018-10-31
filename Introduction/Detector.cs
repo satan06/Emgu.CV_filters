@@ -6,8 +6,15 @@ namespace Introduction
 {
     public class Detector
     {
-        public Image<Gray, byte> IterImage { get; set; }
+        private Image<Gray, byte> _iterImage; 
+        public Image<Gray, byte> IterImage { get => _iterImage; private set => _iterImage = value; }
+
         public Data Data;
+
+        public Detector(Data data)
+        {
+            Data = data;
+        }
 
         public Detector GaussianBlur(int radius)
         {

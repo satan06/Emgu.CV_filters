@@ -13,15 +13,23 @@ namespace Introduction
     {
         public delegate void FuncSimpl<Targ0, Targ1, Targ2>(Targ0 height, Targ1 width, Targ2 pixel);
         public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 height, Targ2 width, Targ3 color);
+        public Data Data;
+
+        public ImageTransform(Data data)
+        {
+            Data = data;
+        }
+
+        public ImageTransform() { }
 
         // Pixel image traversal
         private void EachPixel(FuncSimpl<int, int, Bgr> action)
         {
-            for (int x = 0; x < sourceImage.Width; x++)
+            for (int x = 0; x < Data.SourceImage.Width; x++)
             {
-                for (int y = 0; y < sourceImage.Height; y++)
+                for (int y = 0; y < Data.SourceImage.Height; y++)
                 {
-                    action(y, x, sourceImage[y, x]);
+                    action(y, x, Data.SourceImage[y, x]);
                 }
             }
         }
@@ -47,19 +55,14 @@ namespace Introduction
         // Testing: OK
         public Image<Bgr, byte> Scale(float scaleX, float scaleY)
         {
-            Image<Bgr, byte> newImage = new Image<Bgr, byte>((int)(sourceImage.Width * scaleX),
-                                                             (int)(sourceImage.Height * scaleY));
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>((int)(Data.SourceImage.Width * scaleX),
+                                                             (int)(Data.SourceImage.Height * scaleY));
 
             EachPixel((height, width, pixel) =>
             {
-                int newX = (int)(width * scaleX);
-                int newY = (int)(height * scaleY);
-
-                newImage[newY, newX] = pixel;
+                newImage[(int)(height * scaleY), (int)(width * scaleX)] = pixel;
             });
 
-            Console.WriteLine($"Image params: {nameof(newImage.Width)} = {newImage.Width}, " +
-                                            $"{nameof(newImage.Height)} = {newImage.Height}");
             return BilinearInterp(newImage, scaleX, scaleY);
         }
 
@@ -70,7 +73,7 @@ namespace Introduction
         // Testing: OK
         public Image<Bgr, byte> Reflect(ReflType rtype)
         {
-            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Size);
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>(Data.SourceImage.Size);
             int[] param = ReflTypeToData(rtype);
 
             EachPixel((height, width, pixel) =>
@@ -80,11 +83,11 @@ namespace Introduction
 
                 if (param[0] == -1)
                 {
-                    newX = width * param[0] + sourceImage.Width - 1;
+                    newX = width * param[0] + Data.SourceImage.Width - 1;
                 }
                 if (param[1] == -1)
                 {
-                    newY = height * param[1] + sourceImage.Height - 1;
+                    newY = height * param[1] + Data.SourceImage.Height - 1;
                 }
                 newImage[newY, newX] = pixel;
             });
@@ -101,8 +104,8 @@ namespace Introduction
         // Testing: OK
         public Image<Bgr, byte> Shear(ShiftType type, float value)
         {
-            Image<Bgr, byte> newImage = new Image<Bgr, byte>(sourceImage.Width + FilterShiftOffset(type, value)[0],
-                                                             sourceImage.Height + FilterShiftOffset(type, value)[1]);
+            Image<Bgr, byte> newImage = new Image<Bgr, byte>(Data.SourceImage.Width + FilterShiftOffset(type, value)[0],
+                                                             Data.SourceImage.Height + FilterShiftOffset(type, value)[1]);
             EachPixel((height, width, pixel) =>
             {
                 int newX = FilterCoordinates(type, value, width, height)[0];
@@ -122,18 +125,20 @@ namespace Introduction
         // Testing: OK
         public Image<Bgr, byte> Rotate(CstPoint p, double angle)
         {
-            Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
-            double rad = ConvertToRad(angle);
+            Image<Bgr, byte> result = new Image<Bgr, byte>(Data.SourceImage.Size);
+
+            angle = ConvertToRad(angle);
 
             EachPixel((height, width, pixel) =>
             {
-                int newX = (int)(Math.Cos(rad) * (width - p.X) -
-                                 Math.Sin(rad) * (height - p.Y) + p.X);
+                int newX = (int)(Math.Cos(angle) * (width - p.X) -
+                                 Math.Sin(angle) * (height - p.Y) + p.X);
 
-                int newY = (int)(Math.Sin(rad) * (width - p.X) +
-                                 Math.Cos(rad) * (height - p.Y) + p.Y);
+                int newY = (int)(Math.Sin(angle) * (width - p.X) +
+                                 Math.Cos(angle) * (height - p.Y) + p.Y);
 
-                if (newX < sourceImage.Width && newX >= 0 && newY < sourceImage.Height && newY >= 0)
+                if (newX < Data.SourceImage.Width && newX >= 0 && 
+                    newY < Data.SourceImage.Height && newY >= 0)
                 {
                     result[newY, newX] = pixel;
                 }
@@ -158,18 +163,18 @@ namespace Introduction
             {
                 ScaleInterp interp = sn
                     .Prep
-                        .Floor(width, height, par[0], par[1])
-                        .Ratio(width, height, par[0], par[1])
-                        .InvRatio();
+                    .Floor(width, height, par[0], par[1])
+                    .Ratio(width, height, par[0], par[1])
+                    .InvRatio();
 
-                if (interp.FloorX < sourceImage.Width - 1 && interp.FloorX >= 0 &&
-                    interp.FloorY < sourceImage.Height - 1 && interp.FloorY >= 0)
+                if (interp.FloorX < Data.SourceImage.Width - 1 && interp.FloorX >= 0 &&
+                    interp.FloorY < Data.SourceImage.Height - 1 && interp.FloorY >= 0)
                 {
                     sn.Dat
-                        .SetInvDataX(sourceImage.Data[interp.FloorY, interp.FloorX, channel])
-                        .SetDataX(sourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
-                        .SetInvDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
-                        .SetDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
+                        .SetInvDataX(Data.SourceImage.Data[interp.FloorY, interp.FloorX, channel])
+                        .SetDataX(Data.SourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
+                        .SetInvDataY(Data.SourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
+                        .SetDataY(Data.SourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
 
                     result.Data[height, width, channel] = (byte)((interp.InvDataX + interp.DataX) * interp.InvRatioY +
                                                                  (interp.InvDataY + interp.DataY) * interp.RatioY);
@@ -183,7 +188,7 @@ namespace Introduction
         // Rotation overload => Testing: OK
         public Image<Bgr, byte> BilinearInterp(Image<Bgr, byte> img, CstPoint p, double angle)
         {
-            Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
+            Image<Bgr, byte> result = new Image<Bgr, byte>(Data.SourceImage.Size);
             var rn = new RotateInterpBuilder();
 
             EachPixelChannel((channel, height, width, color) =>
@@ -195,14 +200,14 @@ namespace Introduction
                         .Ratio(p, angle)
                         .InvRatio();
 
-                if (interp.FloorX < sourceImage.Width - 1 && interp.FloorX >= 0 &&
-                    interp.FloorY < sourceImage.Height - 1 && interp.FloorY >= 0)
+                if (interp.FloorX < Data.SourceImage.Width - 1 && interp.FloorX >= 0 &&
+                    interp.FloorY < Data.SourceImage.Height - 1 && interp.FloorY >= 0)
                 {
                     rn.Dat
-                        .SetInvDataX(sourceImage.Data[interp.FloorY, interp.FloorX, channel])
-                        .SetDataX(sourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
-                        .SetInvDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
-                        .SetDataY(sourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
+                        .SetInvDataX(Data.SourceImage.Data[interp.FloorY, interp.FloorX, channel])
+                        .SetDataX(Data.SourceImage.Data[interp.FloorY, interp.FloorX + 1, channel])
+                        .SetInvDataY(Data.SourceImage.Data[interp.FloorY + 1, interp.FloorX, channel])
+                        .SetDataY(Data.SourceImage.Data[interp.FloorY + 1, interp.FloorX + 1, channel]);
 
                     result.Data[height, width, channel] = (byte)((interp.InvDataX + interp.DataX) * interp.InvRatioY +
                                                                  (interp.InvDataY + interp.DataY) * interp.RatioY);
@@ -218,14 +223,14 @@ namespace Introduction
             var destPoints = new PointF[]
             {
                  new PointF(0, 0),
-                 new PointF(0, sourceImage.Height - 1),
-                 new PointF(sourceImage.Width - 1, sourceImage.Height - 1),
-                 new PointF(sourceImage.Width - 1, 0)
+                 new PointF(0, Data.SourceImage.Height - 1),
+                 new PointF(Data.SourceImage.Width - 1, Data.SourceImage.Height - 1),
+                 new PointF(Data.SourceImage.Width - 1, 0)
             };
             var homographyMatrix = CvInvoke.GetPerspectiveTransform(src, destPoints);
-            var destImage = new Image<Bgr, byte>(sourceImage.Size);
+            var destImage = new Image<Bgr, byte>(Data.SourceImage.Size);
 
-            CvInvoke.WarpPerspective(sourceImage, destImage, homographyMatrix, destImage.Size);
+            CvInvoke.WarpPerspective(Data.SourceImage, destImage, homographyMatrix, destImage.Size);
 
             return destImage;
         }
@@ -234,7 +239,7 @@ namespace Introduction
         {
             var color = new Bgr(Color.Blue).MCvScalar;
 
-            CvInvoke.Circle(sourceImage, center, radius, color, thickness);
+            CvInvoke.Circle(Data.SourceImage, center, radius, color, thickness);
         }
 
         #region Additional methods
@@ -254,10 +259,10 @@ namespace Introduction
             return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
 
                 new int[] {
-                    (int)Math.Abs(sourceImage.Width * value), 0
+                    (int)Math.Abs(Data.SourceImage.Width * value), 0
                 } :
                 new int[] {
-                    0, (int)Math.Abs(sourceImage.Height * value)
+                    0, (int)Math.Abs(Data.SourceImage.Height * value)
                 };
         }
 
@@ -266,16 +271,16 @@ namespace Introduction
             return new HorizontalSpecification(type, value).IsSatisfied(ShiftType.Horizontal) ?
 
                 new int[] {
-                    (int)Math.Abs(vs[0] + value * (sourceImage.Height - vs[1])),
+                    (int)Math.Abs(vs[0] + value * (Data.SourceImage.Height - vs[1])),
                     vs[1]
                 } :
                 new int[] {
                     vs[0],
-                    (int)Math.Abs(vs[1] + value * (sourceImage.Height - vs[0]))
+                    (int)Math.Abs(vs[1] + value * (Data.SourceImage.Height - vs[0]))
                 };
         }
 
-        public double ConvertToRad(double angle) => Math.PI / 180 * angle;
+        public double ConvertToRad(double angle) => angle * Math.PI / 180 ;
         public byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
 
         public void Swap(ref PointF a, ref PointF b)

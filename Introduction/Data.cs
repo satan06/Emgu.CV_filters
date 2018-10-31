@@ -1,4 +1,5 @@
 ﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,10 +7,39 @@ using static System.Math;
 
 namespace Introduction
 {
-    public static class Data
-    { 
-        public static Image<Bgr, byte> sourceImage;
-        public static Image<Bgr, byte> tempImage;
+    public class Data
+    {
+        private Image<Bgr, byte> _sourceImage;
+        private Image<Bgr, byte> _tempImage;
+
+        public Image<Bgr, byte> SourceImage { get => _sourceImage; private set => _sourceImage = value; }
+        public Image<Bgr, byte> TempImage { get => _tempImage; private set => _tempImage = value; }
+
+        /// <summary>
+        /// Opens new image
+        /// </summary>
+        /// <param name="fileName">Path to image</param>
+        /// <param name="IsSource">Where to put image. Use
+        /// true
+        /// to work with main sourse image. Use
+        /// false
+        /// to load temp image and work with booleans (e.g.)</param>
+        /// <overload>Opens new image and resizes it</overload>
+        public void OpenFile(string fileName, bool IsSource)
+        {
+            if(IsSource)
+                SourceImage = new Image<Bgr, byte>(fileName);
+            else
+                TempImage = new Image<Bgr, byte>(fileName);
+        }
+
+        public void OpenFile(string fileName, bool IsSource, int width, int height)
+        {
+            if(IsSource)
+                SourceImage = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
+            else
+                TempImage = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
+        }
 
         #region Enums
 
@@ -295,18 +325,16 @@ namespace Introduction
 
         public class CstPoint
         {
-            private int x, y;
-
             protected CstPoint(int x, int y)
             {
-                this.x = x;
-                this.y = y;
+                X = x;
+                Y = y;
             }
 
             public static CstPoint Origin => new CstPoint(0, 0);
 
-            public int X { get => x; set => x = value; }
-            public int Y { get => y; set => y = value; }
+            public int X { get; set; }
+            public int Y { get; set; }
 
             public static class Factory
             {

@@ -14,5 +14,6 @@ notifications:
   email:
     recipients:
       - panmihaurkin@icloud.com
-    on_success: always
-    on_failure: never
+    on_success: never
+    on_failure: always
+    

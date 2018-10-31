@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="CaptureWebCam.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="Detector.cs" />
     <Compile Include="GenWind.cs">
       <SubType>Form</SubType>
     </Compile>

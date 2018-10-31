@@ -120,19 +120,20 @@ namespace Introduction
         /// </summary>
         /// <param name="p">Anchor of the rotation</param>
         /// <param name="angle">Rotation angle</param>
-        // Testing: OK
+        // Testing: SKIPPED
         public Image<Bgr, byte> Rotate(CstPoint p, double angle)
         {
             Image<Bgr, byte> result = new Image<Bgr, byte>(sourceImage.Size);
-            double rad = ConvertToRad(angle);
+
+            angle = ConvertToRad(angle);
 
             EachPixel((height, width, pixel) =>
             {
-                int newX = (int)(Math.Cos(rad) * (width - p.X) -
-                                 Math.Sin(rad) * (height - p.Y) + p.X);
+                int newX = (int)(Math.Cos(angle) * (width - p.X) -
+                                 Math.Sin(angle) * (height - p.Y) + p.X);
 
-                int newY = (int)(Math.Sin(rad) * (width - p.X) +
-                                 Math.Cos(rad) * (height - p.Y) + p.Y);
+                int newY = (int)(Math.Sin(angle) * (width - p.X) +
+                                 Math.Cos(angle) * (height - p.Y) + p.Y);
 
                 if (newX < sourceImage.Width && newX >= 0 && newY < sourceImage.Height && newY >= 0)
                 {
@@ -276,7 +277,7 @@ namespace Introduction
                 };
         }
 
-        public double ConvertToRad(double angle) => Math.PI / 180 * angle;
+        public double ConvertToRad(double angle) => angle * Math.PI / 180 ;
         public byte IsPixelBlack(byte def, byte processed) => def == 0 ? processed : def;
 
         public void Swap(ref PointF a, ref PointF b)

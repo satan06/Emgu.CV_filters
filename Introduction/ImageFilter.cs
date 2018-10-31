@@ -13,18 +13,19 @@ namespace Introduction
     /// </summary>
     public class ImageFilter
     {
+        public readonly Data data = new Data();
         public delegate void Func<Targ0, Targ1, Targ2, Targ3>(Targ0 channel, Targ1 width, Targ2 height, Targ3 color);
 
         // Pixel image traversal
         private void EachPixel(Func<int, int, int, byte> action)
         {
-            for (int channel = 0; channel < sourceImage.NumberOfChannels; channel++)
+            for (int channel = 0; channel < data.SourceImage.NumberOfChannels; channel++)
             {
-                for (int x = 0; x < sourceImage.Width; x++)
+                for (int x = 0; x < data.SourceImage.Width; x++)
                 {
-                    for (int y = 0; y < sourceImage.Height; y++)
+                    for (int y = 0; y < data.SourceImage.Height; y++)
                     {
-                        action(channel, y, x, sourceImage.Data[y, x, channel]);
+                        action(channel, y, x, data.SourceImage.Data[y, x, channel]);
                     }
                 }
             }
@@ -41,24 +42,24 @@ namespace Introduction
         /// to load temp image and work with booleans (e.g.)
         /// </param>
         /// <overload>Opens new image and resizes it</overload>
-        public void OpenFile(string fileName, ref Image<Bgr, byte> container)
-        {
-            container = new Image<Bgr, byte>(fileName);
-        }
+        //public void OpenFile(string fileName, ref Image<Bgr, byte> container)
+        //{
+        //    container = new Image<Bgr, byte>(fileName);
+        //}
 
-        public void OpenFile(string fileName, ref Image<Bgr, byte> container, int width, int height)
-        {
-            container = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
-        }
+        //public void OpenFile(string fileName, ref Image<Bgr, byte> container, int width, int height)
+        //{
+        //    container = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
+        //}
 
         private Image<Gray, byte> ToGray()
         {
-            if (sourceImage == null)
+            if (data.SourceImage == null)
             {
                 return null;
             }
 
-            Image<Gray, byte> grayImage = sourceImage.Convert<Gray, byte>();
+            Image<Gray, byte> grayImage = data.SourceImage.Convert<Gray, byte>();
             return grayImage;
         }
 
@@ -86,11 +87,11 @@ namespace Introduction
         /// <returns></returns>
         public Image<Gray, byte> CannyFilter(double threshold = 80.0, double thresholdLinking = 40.0)
         {
-            if (sourceImage == null)
+            if (data.SourceImage == null)
             {
                 return null;
             }
-            var cannyEdges = sourceImage.Canny(threshold, thresholdLinking);
+            var cannyEdges = data.SourceImage.Canny(threshold, thresholdLinking);
 
             return cannyEdges;
         }
@@ -100,13 +101,13 @@ namespace Introduction
         /// </summary>
         public Image<Bgr, byte> CellShading()
         {
-            if (sourceImage == null)
+            if (data.SourceImage == null)
             {
                 return null;
             }
 
             var cannyEdgesBgr = CannyFilter().Convert<Bgr, byte>();
-            var resultImage = sourceImage.Sub(cannyEdgesBgr);
+            var resultImage = data.SourceImage.Sub(cannyEdgesBgr);
 
             EachPixel((channel, width, height, color) =>
             {
@@ -119,12 +120,12 @@ namespace Introduction
 
         public Image<Gray, byte> ChannelSplit(Data.BGR channel)
         {
-            if(sourceImage == null)
+            if(data.SourceImage == null)
             {
                 return null;
             }
 
-            var ch = sourceImage.Split()[(int)channel];
+            var ch = data.SourceImage.Split()[(int)channel];
             return ch;
         }
 
@@ -135,7 +136,7 @@ namespace Introduction
         public Image<Bgr, byte> ChannelCombine(List<Image<Gray, byte>> channels)
         {
             VectorOfMat vm = new VectorOfMat();
-            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
+            Image<Bgr, byte> destImage = new Image<Bgr, byte>(data.SourceImage.Size);
                 
             for (byte ch = 0; ch < channels.Count; ch++)
             {
@@ -172,14 +173,14 @@ namespace Introduction
         /// </summary>
         public Image<Bgr, byte> Sepia() 
         {
-            Image<Bgr, byte> destImage = new Image<Bgr, byte>(sourceImage.Size);
+            Image<Bgr, byte> destImage = new Image<Bgr, byte>(data.SourceImage.Size);
             byte blue, green, red;
 
             EachPixel((channel, width, height, color) => 
             {
-                blue = sourceImage.Data[width, height, 0];
-                green = sourceImage.Data[width, height, 1];
-                red = sourceImage.Data[width, height, 2];
+                blue = data.SourceImage.Data[width, height, 0];
+                green = data.SourceImage.Data[width, height, 1];
+                red = data.SourceImage.Data[width, height, 2];
 
                 destImage.Data[width, height, 0] = ColorCheck(red * 0.272 + green * 0.534 + blue * 0.131, 0, 255);
                 destImage.Data[width, height, 1] = ColorCheck(red * 0.349 + green * 0.686 + blue * 0.168, 0, 255);
@@ -197,7 +198,7 @@ namespace Introduction
         /// /// <param name="value">Intensity value.</param>
         public Image<T, byte> Contrast<T>(Image<T, byte> img, double value = 5.0) where T : struct, IColor
         {
-            Image<T, byte> destImage = new Image<T, byte>(sourceImage.Size);
+            Image<T, byte> destImage = new Image<T, byte>(data.SourceImage.Size);
             double pixel;
 
             EachPixel((channel, width, height, color) =>
@@ -217,7 +218,7 @@ namespace Introduction
         /// /// <param name="value">Intensity value.</param>
         public Image<T, byte> Brightness<T>(Image<T, byte> img, double value = 25.0) where T : struct, IColor
         {
-            Image<T, byte> destImage = new Image<T, byte>(sourceImage.Size);
+            Image<T, byte> destImage = new Image<T, byte>(data.SourceImage.Size);
             double pixel;
 
             EachPixel((channel, width, height, color) =>
@@ -236,7 +237,7 @@ namespace Introduction
         /// <param name="hsv">The HSV channel</param>
         public Image<Hsv, byte> HSVFilter(double value, Data.HSV hsv)
         {
-            Image<Hsv, byte> destImage = sourceImage.Convert<Hsv, byte>();
+            Image<Hsv, byte> destImage = data.SourceImage.Convert<Hsv, byte>();
 
             EachPixel((channel, width, height, color) =>
             {
@@ -264,12 +265,12 @@ namespace Introduction
         /// <param name="value">Effect intensity</param>
         public Image<T, byte> BooleanOperation<T>(Image<T, byte> img, Data.Boolean b, int value) where T : struct, IColor
         {
-            Image<T, byte> result = new Image<T, byte>(sourceImage.Size);
+            Image<T, byte> result = new Image<T, byte>(data.SourceImage.Size);
 
             EachPixel((channel, width, height, color) =>
             {
                 color = SetOperaton(b, img.Data[width, height, channel] * Math.Abs(Normalize(value) - 1),
-                        tempImage.Data[width, height, channel] * Normalize(value));
+                        data.TempImage.Data[width, height, channel] * Normalize(value));
                 result.Data[width, height, channel] = color;
             });
 
@@ -287,13 +288,13 @@ namespace Introduction
 
             EachPixel((channel, width, height, color) =>
             {
-                if (tempImage.Data[width, height, channel] == 0)
+                if (data.TempImage.Data[width, height, channel] == 0)
                 {
                     result.Data[width, height, channel] = 0;
                 }
-                else if(tempImage.Data[width, height, channel] > 0)
+                else if(data.TempImage.Data[width, height, channel] > 0)
                 {
-                    result.Data[width, height, channel] = sourceImage.Data[width, height, channel];
+                    result.Data[width, height, channel] = data.SourceImage.Data[width, height, channel];
                 }
             });
 
@@ -342,7 +343,7 @@ namespace Introduction
                         {
                             for (int j = -(index); j <= index; j++)
                             {
-                                pixels.Add(sourceImage.Data[y + j, x + i, channel]);
+                                pixels.Add(data.SourceImage.Data[y + j, x + i, channel]);
                             }
                         }
 
@@ -363,8 +364,8 @@ namespace Introduction
         /// <param name="matrix">Specified matrix</param>
         public Image<Bgr, byte> WindowFilter(int[,] matrix)
         {
-            Image<Gray, byte> result = ConvertToBW(sourceImage);
-            Image<Gray, byte> temp = ConvertToBW(sourceImage);
+            Image<Gray, byte> result = ConvertToBW(data.SourceImage);
+            Image<Gray, byte> temp = ConvertToBW(data.SourceImage);
             double value = 0;
 
             if(matrix == null)
@@ -409,8 +410,8 @@ namespace Introduction
                                                        ThresholdType.Binary, ThresholdNormalize(thresholdValue), 
                                                        new Gray(0.03))
                                                        .Dilate(1);
-            tempImage = binImage.Convert<Bgr, byte>();
-            var result = Intersection(sourceImage);
+            //data.TempImage = binImage.Convert<Bgr, byte>();
+            var result = Intersection(data.SourceImage);
 
             return result;
         }

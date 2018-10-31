@@ -121,13 +121,6 @@
             this.button9 = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
             this.ScalePanel = new System.Windows.Forms.Panel();
-            this.ShearPanel = new System.Windows.Forms.Panel();
-            this.button12 = new System.Windows.Forms.Button();
-            this.ShearAmount = new System.Windows.Forms.NumericUpDown();
-            this.button10 = new System.Windows.Forms.Button();
-            this.label25 = new System.Windows.Forms.Label();
-            this.button11 = new System.Windows.Forms.Button();
-            this.label27 = new System.Windows.Forms.Label();
             this.ScaleAmountY = new System.Windows.Forms.NumericUpDown();
             this.ScaleAmountX = new System.Windows.Forms.NumericUpDown();
             this.button8 = new System.Windows.Forms.Button();
@@ -135,14 +128,21 @@
             this.label21 = new System.Windows.Forms.Label();
             this.ScaleCloseButton = new System.Windows.Forms.Button();
             this.label23 = new System.Windows.Forms.Label();
+            this.ShearPanel = new System.Windows.Forms.Panel();
+            this.button12 = new System.Windows.Forms.Button();
+            this.ShearAmount = new System.Windows.Forms.NumericUpDown();
+            this.button10 = new System.Windows.Forms.Button();
+            this.label25 = new System.Windows.Forms.Label();
+            this.button11 = new System.Windows.Forms.Button();
+            this.label27 = new System.Windows.Forms.Label();
             this.RotatePanel = new System.Windows.Forms.Panel();
+            this.RotateAngleInput = new System.Windows.Forms.TextBox();
             this.RotateSetCenterButton = new System.Windows.Forms.Button();
             this.RotateTransformApplyButton = new System.Windows.Forms.Button();
             this.label26 = new System.Windows.Forms.Label();
             this.button15 = new System.Windows.Forms.Button();
             this.label28 = new System.Windows.Forms.Label();
             this.RotateCenterPoint = new System.Windows.Forms.RadioButton();
-            this.RotateAngleInput = new System.Windows.Forms.TextBox();
             this.HomographyApplyButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
@@ -173,10 +173,10 @@
             this.BooleansPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BooleansMask)).BeginInit();
             this.ScalePanel.SuspendLayout();
-            this.ShearPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ShearAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountX)).BeginInit();
+            this.ShearPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ShearAmount)).BeginInit();
             this.RotatePanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -343,42 +343,42 @@
             // hSVToolStripMenuItem
             // 
             this.hSVToolStripMenuItem.Name = "hSVToolStripMenuItem";
-            this.hSVToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.hSVToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.hSVToolStripMenuItem.Text = "HSV";
             this.hSVToolStripMenuItem.Click += new System.EventHandler(this.HSVFIlter);
             // 
             // brightnessContrastToolStripMenuItem
             // 
             this.brightnessContrastToolStripMenuItem.Name = "brightnessContrastToolStripMenuItem";
-            this.brightnessContrastToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.brightnessContrastToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.brightnessContrastToolStripMenuItem.Text = "Brightness/Contrast";
             this.brightnessContrastToolStripMenuItem.Click += new System.EventHandler(this.BrContrFilter);
             // 
             // windowFilterToolStripMenuItem
             // 
             this.windowFilterToolStripMenuItem.Name = "windowFilterToolStripMenuItem";
-            this.windowFilterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.windowFilterToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.windowFilterToolStripMenuItem.Text = "Window Filter";
             this.windowFilterToolStripMenuItem.Click += new System.EventHandler(this.WinFilter);
             // 
             // cartoonToolStripMenuItem
             // 
             this.cartoonToolStripMenuItem.Name = "cartoonToolStripMenuItem";
-            this.cartoonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cartoonToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.cartoonToolStripMenuItem.Text = "Cartoon";
             this.cartoonToolStripMenuItem.Click += new System.EventHandler(this.CartnFilter);
             // 
             // blurToolStripMenuItem
             // 
             this.blurToolStripMenuItem.Name = "blurToolStripMenuItem";
-            this.blurToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.blurToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.blurToolStripMenuItem.Text = "Blur";
             this.blurToolStripMenuItem.Click += new System.EventHandler(this.BlurFIlter);
             // 
             // watercolorToolStripMenuItem
             // 
             this.watercolorToolStripMenuItem.Name = "watercolorToolStripMenuItem";
-            this.watercolorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.watercolorToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.watercolorToolStripMenuItem.Text = "Watercolor";
             this.watercolorToolStripMenuItem.Click += new System.EventHandler(this.WaterColorFilter);
             // 
@@ -388,7 +388,7 @@
             this.additionExeptionToolStripMenuItem,
             this.intersectionToolStripMenuItem});
             this.booleansToolStripMenuItem.Name = "booleansToolStripMenuItem";
-            this.booleansToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.booleansToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.booleansToolStripMenuItem.Text = "Booleans";
             // 
             // additionExeptionToolStripMenuItem
@@ -411,7 +411,7 @@
             this.sepiaToolStripMenuItem,
             this.blackWhiteToolStripMenuItem});
             this.othersToolStripMenuItem.Name = "othersToolStripMenuItem";
-            this.othersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.othersToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.othersToolStripMenuItem.Text = "Others";
             // 
             // sepiaToolStripMenuItem
@@ -435,7 +435,7 @@
             this.blueToolStripMenuItem,
             this.greenToolStripMenuItem});
             this.channelsToolStripMenuItem.Name = "channelsToolStripMenuItem";
-            this.channelsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.channelsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.channelsToolStripMenuItem.Text = "Channels";
             // 
             // redToolStripMenuItem
@@ -474,14 +474,14 @@
             // scaleToolStripMenuItem
             // 
             this.scaleToolStripMenuItem.Name = "scaleToolStripMenuItem";
-            this.scaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.scaleToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.scaleToolStripMenuItem.Text = "Scale";
             this.scaleToolStripMenuItem.Click += new System.EventHandler(this.ScaleTransform);
             // 
             // shearToolStripMenuItem
             // 
             this.shearToolStripMenuItem.Name = "shearToolStripMenuItem";
-            this.shearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.shearToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.shearToolStripMenuItem.Text = "Shear";
             this.shearToolStripMenuItem.Click += new System.EventHandler(this.ShearTransform);
             // 
@@ -492,7 +492,7 @@
             this.vertcalyToolStripMenuItem,
             this.diagonalyToolStripMenuItem});
             this.reflectToolStripMenuItem.Name = "reflectToolStripMenuItem";
-            this.reflectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reflectToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.reflectToolStripMenuItem.Text = "Reflect";
             // 
             // horizontalyToolStripMenuItem
@@ -519,14 +519,14 @@
             // rotateToolStripMenuItem
             // 
             this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
-            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.rotateToolStripMenuItem.Text = "Rotate ";
             this.rotateToolStripMenuItem.Click += new System.EventHandler(this.RotateTransform);
             // 
             // homographToolStripMenuItem
             // 
             this.homographToolStripMenuItem.Name = "homographToolStripMenuItem";
-            this.homographToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.homographToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.homographToolStripMenuItem.Text = "Homograph";
             this.homographToolStripMenuItem.Click += new System.EventHandler(this.HomographTransform);
             // 
@@ -1088,81 +1088,6 @@
             this.ScalePanel.TabIndex = 24;
             this.ScalePanel.Visible = false;
             // 
-            // ShearPanel
-            // 
-            this.ShearPanel.BackColor = System.Drawing.SystemColors.Menu;
-            this.ShearPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ShearPanel.Controls.Add(this.button12);
-            this.ShearPanel.Controls.Add(this.ShearAmount);
-            this.ShearPanel.Controls.Add(this.button10);
-            this.ShearPanel.Controls.Add(this.label25);
-            this.ShearPanel.Controls.Add(this.button11);
-            this.ShearPanel.Controls.Add(this.label27);
-            this.ShearPanel.Location = new System.Drawing.Point(670, 27);
-            this.ShearPanel.Name = "ShearPanel";
-            this.ShearPanel.Size = new System.Drawing.Size(149, 274);
-            this.ShearPanel.TabIndex = 25;
-            this.ShearPanel.Visible = false;
-            // 
-            // button12
-            // 
-            this.button12.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.button12.Location = new System.Drawing.Point(12, 75);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(62, 23);
-            this.button12.TabIndex = 16;
-            this.button12.Text = "Horiz";
-            this.button12.UseVisualStyleBackColor = false;
-            this.button12.Click += new System.EventHandler(this.ShearHorizApply);
-            // 
-            // ShearAmount
-            // 
-            this.ShearAmount.Location = new System.Drawing.Point(80, 43);
-            this.ShearAmount.Name = "ShearAmount";
-            this.ShearAmount.Size = new System.Drawing.Size(53, 20);
-            this.ShearAmount.TabIndex = 15;
-            // 
-            // button10
-            // 
-            this.button10.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.button10.Location = new System.Drawing.Point(77, 75);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(62, 23);
-            this.button10.TabIndex = 13;
-            this.button10.Text = "Vert";
-            this.button10.UseVisualStyleBackColor = false;
-            this.button10.Click += new System.EventHandler(this.ShearVertApply);
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(21, 46);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(43, 13);
-            this.label25.TabIndex = 10;
-            this.label25.Text = "Amount";
-            // 
-            // button11
-            // 
-            this.button11.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button11.FlatAppearance.BorderSize = 0;
-            this.button11.Location = new System.Drawing.Point(126, -1);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(22, 22);
-            this.button11.TabIndex = 7;
-            this.button11.Text = "X";
-            this.button11.UseVisualStyleBackColor = false;
-            this.button11.Click += new System.EventHandler(this.ShearTransformClose);
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(3, 11);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(35, 13);
-            this.label27.TabIndex = 0;
-            this.label27.Text = "Shear";
-            // 
             // ScaleAmountY
             // 
             this.ScaleAmountY.Location = new System.Drawing.Point(82, 76);
@@ -1227,6 +1152,87 @@
             this.label23.TabIndex = 0;
             this.label23.Text = "Scale";
             // 
+            // ShearPanel
+            // 
+            this.ShearPanel.BackColor = System.Drawing.SystemColors.Menu;
+            this.ShearPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ShearPanel.Controls.Add(this.button12);
+            this.ShearPanel.Controls.Add(this.ShearAmount);
+            this.ShearPanel.Controls.Add(this.button10);
+            this.ShearPanel.Controls.Add(this.label25);
+            this.ShearPanel.Controls.Add(this.button11);
+            this.ShearPanel.Controls.Add(this.label27);
+            this.ShearPanel.Location = new System.Drawing.Point(670, 27);
+            this.ShearPanel.Name = "ShearPanel";
+            this.ShearPanel.Size = new System.Drawing.Size(149, 274);
+            this.ShearPanel.TabIndex = 25;
+            this.ShearPanel.Visible = false;
+            // 
+            // button12
+            // 
+            this.button12.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.button12.Location = new System.Drawing.Point(12, 75);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(62, 23);
+            this.button12.TabIndex = 16;
+            this.button12.Text = "Horiz";
+            this.button12.UseVisualStyleBackColor = false;
+            this.button12.Click += new System.EventHandler(this.ShearHorizApply);
+            // 
+            // ShearAmount
+            // 
+            this.ShearAmount.DecimalPlaces = 1;
+            this.ShearAmount.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ShearAmount.Location = new System.Drawing.Point(80, 43);
+            this.ShearAmount.Name = "ShearAmount";
+            this.ShearAmount.Size = new System.Drawing.Size(53, 20);
+            this.ShearAmount.TabIndex = 15;
+            // 
+            // button10
+            // 
+            this.button10.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.button10.Location = new System.Drawing.Point(77, 75);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(62, 23);
+            this.button10.TabIndex = 13;
+            this.button10.Text = "Vert";
+            this.button10.UseVisualStyleBackColor = false;
+            this.button10.Click += new System.EventHandler(this.ShearVertApply);
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(21, 46);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(43, 13);
+            this.label25.TabIndex = 10;
+            this.label25.Text = "Amount";
+            // 
+            // button11
+            // 
+            this.button11.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.button11.FlatAppearance.BorderSize = 0;
+            this.button11.Location = new System.Drawing.Point(126, -1);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(22, 22);
+            this.button11.TabIndex = 7;
+            this.button11.Text = "X";
+            this.button11.UseVisualStyleBackColor = false;
+            this.button11.Click += new System.EventHandler(this.ShearTransformClose);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(3, 11);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(35, 13);
+            this.label27.TabIndex = 0;
+            this.label27.Text = "Shear";
+            // 
             // RotatePanel
             // 
             this.RotatePanel.BackColor = System.Drawing.SystemColors.Menu;
@@ -1242,6 +1248,13 @@
             this.RotatePanel.Size = new System.Drawing.Size(149, 274);
             this.RotatePanel.TabIndex = 26;
             this.RotatePanel.Visible = false;
+            // 
+            // RotateAngleInput
+            // 
+            this.RotateAngleInput.Location = new System.Drawing.Point(70, 88);
+            this.RotateAngleInput.Name = "RotateAngleInput";
+            this.RotateAngleInput.Size = new System.Drawing.Size(57, 20);
+            this.RotateAngleInput.TabIndex = 17;
             // 
             // RotateSetCenterButton
             // 
@@ -1311,13 +1324,6 @@
             this.RotateCenterPoint.TabIndex = 31;
             this.RotateCenterPoint.TabStop = true;
             this.RotateCenterPoint.UseVisualStyleBackColor = false;
-            // 
-            // RotateAngleInput
-            // 
-            this.RotateAngleInput.Location = new System.Drawing.Point(70, 88);
-            this.RotateAngleInput.Name = "RotateAngleInput";
-            this.RotateAngleInput.Size = new System.Drawing.Size(57, 20);
-            this.RotateAngleInput.TabIndex = 17;
             // 
             // HomographyApplyButton
             // 
@@ -1390,11 +1396,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.BooleansMask)).EndInit();
             this.ScalePanel.ResumeLayout(false);
             this.ScalePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountX)).EndInit();
             this.ShearPanel.ResumeLayout(false);
             this.ShearPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ShearAmount)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ScaleAmountX)).EndInit();
             this.RotatePanel.ResumeLayout(false);
             this.RotatePanel.PerformLayout();
             this.ResumeLayout(false);

@@ -1,4 +1,5 @@
 ﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,10 +7,23 @@ using static System.Math;
 
 namespace Introduction
 {
-    public static class Data
-    { 
-        public static Image<Bgr, byte> sourceImage;
-        public static Image<Bgr, byte> tempImage;
+    public class Data
+    {
+        private Image<Bgr, byte> _sourceImage;
+        private Image<Bgr, byte> _tempImage;
+
+        public Image<Bgr, byte> SourceImage { get => _sourceImage; private set => _sourceImage = value; }
+        public Image<Bgr, byte> TempImage { get => _tempImage; private set => _tempImage = value; }
+
+        public void OpenFile(string fileName)
+        {
+            SourceImage = new Image<Bgr, byte>(fileName);
+        }
+
+        public void OpenFile(string fileName, int width, int height)
+        {
+            SourceImage = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
+        }
 
         #region Enums
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using static Introduction.Data;
 
 namespace Introduction
 {

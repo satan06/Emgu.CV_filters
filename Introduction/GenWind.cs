@@ -477,7 +477,7 @@ namespace Introduction
                 .GaussianBlur()
                 .GetInterestArea()
                 .DetectContours()
-                .GetContours()
+                .Approx()
                 .GetContImage;
         }
     }

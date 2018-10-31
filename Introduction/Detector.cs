@@ -61,14 +61,33 @@ namespace Introduction
             return this;
         }
 
-        public Detector GetContours(int thickness = 2)
+        public Detector Approx(double eps = 0.05, int minArea = 256)
         {
-            var contoursImage = Data.SourceImage.CopyBlank();
+            var contoursImage = Data.SourceImage.Copy();
 
-            for (int i = 0; i < Contours.Size; i++)            {
-                var points = Contours[i].ToArray();
-                contoursImage.Draw(points, new Bgr(Color.GreenYellow), thickness); 
-            }            SetContImage(contoursImage);            return this;
+            for (int i = 0; i < Contours.Size; i++)
+            {
+                var approxContour = new VectorOfPoint();
+
+                CvInvoke.ApproxPolyDP(
+                    Contours[i],
+                    approxContour,
+                    CvInvoke.ArcLength(Contours[i], true) * eps,
+                    true);
+
+                if (approxContour.Size == 3 && 
+                    CvInvoke.ContourArea(approxContour, false) > minArea)
+                {
+                    var points = approxContour.ToArray();
+
+                    contoursImage.Draw(new Triangle2DF(points[0], points[1], points[2]),
+                    new Bgr(Color.GreenYellow), 2);
+                }
+            }
+
+            SetContImage(contoursImage);
+
+            return this;
         }
 
     }

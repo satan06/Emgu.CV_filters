@@ -10,7 +10,10 @@ namespace Introduction
         private ImageFilter filter;
         private ImageTransform transform;
         private PointManager manager = new PointManager();
-        public Data Data; 
+        public Data Data = new Data();
+
+        public Detector detector;
+
         private string filterParam = "File Image (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
 
         public int ImageWidth { get; set; } = 640;
@@ -54,6 +57,7 @@ namespace Introduction
 
             transform = new ImageTransform(Data);
             filter = new ImageFilter(Data);
+            detector = new Detector(Data);
         }
 
         private void LoadI(bool isSource)
@@ -315,14 +319,6 @@ namespace Introduction
             imageBoxRs.Image = filter.ChannelSplit(BGR.Green);
         }
 
-        /// <summary>
-        /// Temporary event to test new Transform functional
-        /// </summary>
-        private void TestEvent(object sender, EventArgs e)
-        {
-            
-        }
-
         private void SetDotEvent(object sender, MouseEventArgs e)
         {
             int x = (int)(e.Location.X / imageBox.ZoomScale);
@@ -470,6 +466,19 @@ namespace Introduction
                     manager.Points.ToArray()
                     )
                 );
+        }
+
+        /// <summary>
+        /// Temporary event to test new Transform functional
+        /// </summary>
+        private void TestEvent(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = detector
+                .GaussianBlur()
+                .GetInterestArea()
+                .DetectContours()
+                .GetContours()
+                .GetContImage;
         }
     }
 }

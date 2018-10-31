@@ -144,6 +144,8 @@
             this.label28 = new System.Windows.Forms.Label();
             this.RotateCenterPoint = new System.Windows.Forms.RadioButton();
             this.HomographyApplyButton = new System.Windows.Forms.Button();
+            this.detectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trianglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -301,7 +303,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.FilterMenuStrip,
-            this.TransformMenuStrip});
+            this.TransformMenuStrip,
+            this.detectToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(824, 24);
@@ -1336,6 +1339,21 @@
             this.HomographyApplyButton.UseVisualStyleBackColor = false;
             this.HomographyApplyButton.Click += new System.EventHandler(this.HomogrApply);
             // 
+            // detectToolStripMenuItem
+            // 
+            this.detectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trianglesToolStripMenuItem});
+            this.detectToolStripMenuItem.Name = "detectToolStripMenuItem";
+            this.detectToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.detectToolStripMenuItem.Text = "Detect";
+            // 
+            // trianglesToolStripMenuItem
+            // 
+            this.trianglesToolStripMenuItem.Name = "trianglesToolStripMenuItem";
+            this.trianglesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.trianglesToolStripMenuItem.Text = "Triangles";
+            this.trianglesToolStripMenuItem.Click += new System.EventHandler(this.TestEvent);
+            // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1525,6 +1543,8 @@
         private System.Windows.Forms.RadioButton RotateCenterPoint;
         private System.Windows.Forms.TextBox RotateAngleInput;
         private System.Windows.Forms.Button HomographyApplyButton;
+        private System.Windows.Forms.ToolStripMenuItem detectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trianglesToolStripMenuItem;
     }
 }
 

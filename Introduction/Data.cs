@@ -15,14 +15,30 @@ namespace Introduction
         public Image<Bgr, byte> SourceImage { get => _sourceImage; private set => _sourceImage = value; }
         public Image<Bgr, byte> TempImage { get => _tempImage; private set => _tempImage = value; }
 
-        public void OpenFile(string fileName)
+        /// <summary>
+        /// Opens new image
+        /// </summary>
+        /// <param name="fileName">Path to image</param>
+        /// <param name="IsSource">Where to put image. Use
+        /// true
+        /// to work with main sourse image. Use
+        /// false
+        /// to load temp image and work with booleans (e.g.)</param>
+        /// <overload>Opens new image and resizes it</overload>
+        public void OpenFile(string fileName, bool IsSource)
         {
-            SourceImage = new Image<Bgr, byte>(fileName);
+            if(IsSource)
+                SourceImage = new Image<Bgr, byte>(fileName);
+            else
+                TempImage = new Image<Bgr, byte>(fileName);
         }
 
-        public void OpenFile(string fileName, int width, int height)
+        public void OpenFile(string fileName, bool IsSource, int width, int height)
         {
-            SourceImage = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
+            if(IsSource)
+                SourceImage = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
+            else
+                TempImage = new Image<Bgr, byte>(fileName).Resize(width, height, Inter.Linear);
         }
 
         #region Enums

@@ -63,17 +63,20 @@ namespace Introduction
 
         public Detector Approx(double eps = 0.05, int minArea = 256)
         {
-            var contoursImage = Data.SourceImage.Copy();
+            var contoursImage = Data.SourceImage.Copy(); 
 
             for (int i = 0; i < Contours.Size; i++)
             {
-                var approxContour = new VectorOfPoint();
+                var approxContour = new VectorOfPoint(); 
 
                 CvInvoke.ApproxPolyDP(
-                    Contours[i],
+                    Contours[i],                         
                     approxContour,
                     CvInvoke.ArcLength(Contours[i], true) * eps,
                     true);
+
+                // Difference in factories => specific primitive detection 
+                // and its drawing method
 
                 if (approxContour.Size == 3 && 
                     CvInvoke.ContourArea(approxContour, false) > minArea)
@@ -89,6 +92,5 @@ namespace Introduction
 
             return this;
         }
-
     }
 }

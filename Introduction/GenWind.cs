@@ -473,12 +473,9 @@ namespace Introduction
         /// </summary>
         private void TestEvent(object sender, EventArgs e)
         {
-            imageBoxRs.Image = detector
-                .GaussianBlur()
-                .GetInterestArea()
-                .DetectContours()
-                .Approx()
-                .GetContImage;
+            var detector = new DetectionAssembler.PrimitiveDetector();
+
+            detector.FindPrimitive();
         }
     }
 }

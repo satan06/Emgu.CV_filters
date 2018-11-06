@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -13,7 +14,9 @@ namespace Introduction
         private Image<Bgr, byte> _contImage;
         private VectorOfVectorOfPoint _contours = new VectorOfVectorOfPoint();
 
-        public VectorOfVectorOfPoint Contours { get => _contours; private set => _contours = value; }
+        private Lazy<List<VectorOfPoint>> _approxContours = new Lazy<List<VectorOfPoint>>();
+
+        public List<VectorOfPoint> ApproxContours => _approxContours.Value;
 
         public Image<Bgr, byte> GetContImage => _contImage;
 
@@ -21,8 +24,6 @@ namespace Introduction
         {
             _contImage = value;
         }
-
-        public Image<Gray, byte> IterImage { get => _iterImage; private set => _iterImage = value; }
 
         public Data Data;
 
@@ -36,7 +37,7 @@ namespace Introduction
             Image<Gray, byte> grayImage = Data.SourceImage.Convert<Gray, byte>();
             Image<Gray, byte> bluredImage = grayImage.SmoothGaussian(radius);
 
-            IterImage = bluredImage;
+            _iterImage = bluredImage;
             return this;
         }
 
@@ -45,15 +46,15 @@ namespace Introduction
             var threshold = new Gray(thresval);
             var color = new Gray(cval);
 
-            IterImage = IterImage.ThresholdBinary(threshold, color);
+            _iterImage = _iterImage.ThresholdBinary(threshold, color);
             return this;
         }
 
         public Detector DetectContours()
         {
             CvInvoke.FindContours(
-                IterImage, 
-                Contours, 
+                _iterImage,
+                _contours, 
                 null, 
                 RetrType.List, 
                 ChainApproxMethod.ChainApproxSimple);
@@ -61,27 +62,23 @@ namespace Introduction
             return this;
         }
 
-        public Detector Approx(double eps = 0.05, int minArea = 256)
+        public Detector Approx(int minArea = 256, double eps = 0.05)
         {
             var contoursImage = Data.SourceImage.Copy(); 
 
-            for (int i = 0; i < Contours.Size; i++)
-            {
-                var approxContour = new VectorOfPoint(); 
-
+            for (int i = 0; i < _contours.Size; i++)
+            { 
                 CvInvoke.ApproxPolyDP(
-                    Contours[i],                         
-                    approxContour,
-                    CvInvoke.ArcLength(Contours[i], true) * eps,
+                    _contours[i],
+                    _contours[i],
+                    CvInvoke.ArcLength(_contours[i], true) * eps,
                     true);
 
-                // Difference in factories => specific primitive detection 
-                // and its drawing method
 
-                if (approxContour.Size == 3 && 
-                    CvInvoke.ContourArea(approxContour, false) > minArea)
+                if (_contours[i].Size == 3 && 
+                    CvInvoke.ContourArea(_contours[i], false) > minArea)
                 {
-                    var points = approxContour.ToArray();
+                    var points = _contours[i].ToArray();
 
                     contoursImage.Draw(new Triangle2DF(points[0], points[1], points[2]),
                     new Bgr(Color.GreenYellow), 2);

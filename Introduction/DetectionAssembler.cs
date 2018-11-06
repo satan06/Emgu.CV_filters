@@ -13,28 +13,30 @@ namespace Introduction
     {
         public interface IPrimitive
         {
-            void Create();
+            Detector Create(Data data);
         }
 
         internal class Triangle : IPrimitive
         {
-            public void Create()
+            public Detector Create(Data data)
             {
-                Console.WriteLine("Creating tringle detections on image");
+                return new Detector(data)
+                    .GaussianBlur()
+                    .GetInterestArea()
+                    .DetectContours();
             }
         }
 
         public interface IPrimitiveFactory
         {
-            IPrimitive Detect(VectorOfPoint vector, int minArea);
+            IPrimitive Detect(Detector detector);
         }
 
         internal class TrianglesFactory : IPrimitiveFactory
         {
-            public IPrimitive Detect(VectorOfPoint vector, int minArea)
+            public IPrimitive Detect(Detector detector)
             {
-                Console.WriteLine($"Detecting triangles on minimum area {minArea}");
-                return new Triangle();
+                throw new NotImplementedException();
             }
         }
 
@@ -57,7 +59,7 @@ namespace Introduction
                 }
             }
 
-            public void FindPrimitive()
+            public void FindAllPrimitives()
             {
                 for (var i = 0; i < factories.Count; i++)
                 {

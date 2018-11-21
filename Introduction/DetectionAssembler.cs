@@ -5,66 +5,70 @@ using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using System.Windows.Forms;
 
 namespace Introduction
 {
     class DetectionAssembler
     {
+        public static int MinArea { get; set; } = 256;
+
         public interface IPrimitive
         {
-            Detector Create(Data data);
+            Image<Bgr, byte> Detect(Data data);
         }
 
-        internal class Triangle : IPrimitive
+        public abstract class BaseCreator
         {
-            public Detector Create(Data data)
+            public virtual Detector Create(Data data)
             {
                 return new Detector(data)
                     .GaussianBlur()
                     .GetInterestArea()
-                    .DetectContours();
+                    .DetectContours()
+                    .Approx();
             }
         }
 
-        public interface IPrimitiveFactory
+        internal class Triangle : BaseCreator, IPrimitive
         {
-            IPrimitive Detect(Detector detector);
-        }
-
-        internal class TrianglesFactory : IPrimitiveFactory
-        {
-            public IPrimitive Detect(Detector detector)
+            public Image<Bgr, byte> Detect(Data data)
             {
-                throw new NotImplementedException();
-            }
-        }
+                Detector detector = new Triangle().Create(data);
 
-        public class PrimitiveDetector
-        {
-            private List<Tuple<string, IPrimitiveFactory>> factories =
-                new List<Tuple<string, IPrimitiveFactory>>();
-
-            public PrimitiveDetector()
-            {
-                foreach(var t in typeof(PrimitiveDetector).Assembly.GetTypes())
+                for (int i = 0; i < detector.ApproxContours.Size; i++)
                 {
-                    if(typeof(IPrimitiveFactory).IsAssignableFrom(t) &&
-                        !t.IsInterface)
+                    if (detector.ApproxContours[i].Size == 3 &&
+                        CvInvoke.ContourArea(detector.ApproxContours[i], false) > MinArea)
                     {
-                        factories.Add(Tuple.Create(
-                            t.Name.Replace("Factory", string.Empty),
-                            (IPrimitiveFactory)Activator.CreateInstance(t)));
+                        var points = detector.ApproxContours[i].ToArray();
+
+                        detector.ImageCopy.Draw(new Triangle2DF(points[0], points[1], points[2]),
+                        new Bgr(Color.GreenYellow), 2);
                     }
                 }
+
+                return detector.ImageCopy;
+            }
+        }
+
+        internal class Circle : BaseCreator, IPrimitive
+        {
+            public Image<Bgr, byte> Detect(Data data)
+            {
+                Detector detector = new Circle().Create(data);
+
+                foreach (CircleF circle in detector.Circles)
+                {
+                    detector.ImageCopy.Draw(circle, new Bgr(Color.Blue), 2);                }
+
+                return detector.ImageCopy;
             }
 
-            public void FindAllPrimitives()
+            public override Detector Create(Data data)
             {
-                for (var i = 0; i < factories.Count; i++)
-                {
-                    // Run through array of factories and use each detector
-                }
+                return new Detector(data)
+                    .GaussianBlur()
+                    .DetectContours(250, 36, 50, 150);
             }
         }
     }

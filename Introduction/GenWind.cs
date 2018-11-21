@@ -12,8 +12,6 @@ namespace Introduction
         private PointManager manager = new PointManager();
         public Data Data = new Data();
 
-        public Detector detector;
-
         private string filterParam = "File Image (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
 
         public int ImageWidth { get; set; } = 640;
@@ -51,13 +49,12 @@ namespace Introduction
 
         private void LoaderCheck(string fileName, bool isSource)
         {
-            Data.OpenFile(fileName, isSource, imageBox.Width, imageBox.Height);
+            Data.OpenFile(fileName, isSource);
             manager.Points.Clear();
             PrepareHomogrButton();
 
             transform = new ImageTransform(Data);
             filter = new ImageFilter(Data);
-            detector = new Detector(Data);
         }
 
         private void LoadI(bool isSource)
@@ -473,12 +470,7 @@ namespace Introduction
         /// </summary>
         private void TestEvent(object sender, EventArgs e)
         {
-            imageBoxRs.Image = detector
-                .GaussianBlur()
-                .GetInterestArea()
-                .DetectContours()
-                .Approx()
-                .GetContImage;
+            imageBoxRs.Image = new DetectionAssembler.Circle().Detect(Data);
         }
     }
 }

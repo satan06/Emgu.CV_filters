@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using System.Collections.Generic;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
@@ -10,33 +10,27 @@ namespace Introduction
     public class Detector
     {
         private Image<Gray, byte> _iterImage;
-        private Image<Bgr, byte> _contImage;
         private VectorOfVectorOfPoint _contours = new VectorOfVectorOfPoint();
+        public VectorOfVectorOfPoint ApproxContours;
+        public Image<Bgr, byte> ImageCopy { get; private set; }
 
-        public VectorOfVectorOfPoint Contours { get => _contours; private set => _contours = value; }
+        private Lazy<List<CircleF>> _circles = new Lazy<List<CircleF>>();
+        public List<CircleF> Circles => _circles.Value;
 
-        public Image<Bgr, byte> GetContImage => _contImage;
-
-        private void SetContImage(Image<Bgr, byte> value)
-        {
-            _contImage = value;
-        }
-
-        public Image<Gray, byte> IterImage { get => _iterImage; private set => _iterImage = value; }
-
-        public Data Data;
+        private Data _data;
 
         public Detector(Data data)
         {
-            Data = data;
+            _data = data;
+            ImageCopy = data.SourceImage.Copy();
         }
 
         public Detector GaussianBlur(int radius = 5)
         {
-            Image<Gray, byte> grayImage = Data.SourceImage.Convert<Gray, byte>();
+            Image<Gray, byte> grayImage = _data.SourceImage.Convert<Gray, byte>();
             Image<Gray, byte> bluredImage = grayImage.SmoothGaussian(radius);
 
-            IterImage = bluredImage;
+            _iterImage = bluredImage;
             return this;
         }
 
@@ -45,15 +39,25 @@ namespace Introduction
             var threshold = new Gray(thresval);
             var color = new Gray(cval);
 
-            IterImage = IterImage.ThresholdBinary(threshold, color);
+            _iterImage = _iterImage.ThresholdBinary(threshold, color);
+            return this;
+        }
+
+        public Detector GetInterestAreaByColor(byte color, byte rangeDelta = 10)
+        {
+            var hsvImage = _data.SourceImage.Convert<Hsv, byte>();
+            var hueChannel = hsvImage.Split()[0];
+            var resultImage = hueChannel.InRange(new Gray(color - rangeDelta), 
+                new Gray(color + rangeDelta));
+
             return this;
         }
 
         public Detector DetectContours()
         {
             CvInvoke.FindContours(
-                IterImage, 
-                Contours, 
+                _iterImage,
+                _contours, 
                 null, 
                 RetrType.List, 
                 ChainApproxMethod.ChainApproxSimple);
@@ -61,34 +65,38 @@ namespace Introduction
             return this;
         }
 
-        public Detector Approx(double eps = 0.05, int minArea = 256)
+        public Detector DetectContours(double minDistance, double acTreshold, int minRadius, int maxRadius)
         {
-            var contoursImage = Data.SourceImage.Copy();
-
-            for (int i = 0; i < Contours.Size; i++)
-            {
-                var approxContour = new VectorOfPoint();
-
-                CvInvoke.ApproxPolyDP(
-                    Contours[i],
-                    approxContour,
-                    CvInvoke.ArcLength(Contours[i], true) * eps,
-                    true);
-
-                if (approxContour.Size == 3 && 
-                    CvInvoke.ContourArea(approxContour, false) > minArea)
-                {
-                    var points = approxContour.ToArray();
-
-                    contoursImage.Draw(new Triangle2DF(points[0], points[1], points[2]),
-                    new Bgr(Color.GreenYellow), 2);
-                }
-            }
-
-            SetContImage(contoursImage);
-
+            Circles.AddRange(
+                new List<CircleF>(
+                    CvInvoke.HoughCircles(_iterImage,
+                        HoughType.Gradient,
+                        1.0,
+                        minDistance,
+                        100,
+                        acTreshold,
+                        minRadius,
+                        maxRadius)
+                        )
+                    );
+            
             return this;
         }
 
+        public Detector Approx(double eps = 0.05)
+        {
+            ApproxContours = new VectorOfVectorOfPoint(_contours.Size);
+
+            for (int i = 0; i < _contours.Size; i++)
+            { 
+                CvInvoke.ApproxPolyDP(
+                    _contours[i],
+                    ApproxContours[i],
+                    CvInvoke.ArcLength(_contours[i], true) * eps,
+                    true);
+            }
+
+            return this;
+        }
     }
 }

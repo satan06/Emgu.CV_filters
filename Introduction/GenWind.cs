@@ -470,7 +470,13 @@ namespace Introduction
         /// </summary>
         private void TestEvent(object sender, EventArgs e)
         {
-            imageBoxRs.Image = new DetectionAssembler.Circle().Detect(Data);
+            Detector det = new Detector(Data)
+                .GaussianBlur()
+                .GetInterestArea()
+                .DetectContours()
+                .Approx();
+
+            imageBoxRs.Image = new DetectionAssembler.Triangle(det).Detect(Data);
         }
     }
 }

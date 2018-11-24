@@ -43,6 +43,16 @@ namespace Introduction
             return this;
         }
 
+        public Detector GetInterestAreaByColor(byte color, byte rangeDelta = 10)
+        {
+            var hsvImage = _data.SourceImage.Convert<Hsv, byte>();
+            var hueChannel = hsvImage.Split()[0];
+            var resultImage = hueChannel.InRange(new Gray(color - rangeDelta), 
+                new Gray(color + rangeDelta));
+
+            return this;
+        }
+
         public Detector DetectContours()
         {
             CvInvoke.FindContours(
@@ -56,7 +66,8 @@ namespace Introduction
         }
 
         public Detector DetectContours(double minDistance, double acTreshold, int minRadius, int maxRadius)
-        {            Circles.AddRange(
+        {
+            Circles.AddRange(
                 new List<CircleF>(
                     CvInvoke.HoughCircles(_iterImage,
                         HoughType.Gradient,
@@ -65,7 +76,11 @@ namespace Introduction
                         100,
                         acTreshold,
                         minRadius,
-                        maxRadius)                        )                    );                        return this;
+                        maxRadius)
+                        )
+                    );
+            
+            return this;
         }
 
         public Detector Approx(double eps = 0.05)

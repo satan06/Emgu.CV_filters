@@ -34,7 +34,7 @@ namespace Introduction
             return this;
         }
 
-        public Detector GetInterestArea(double thresval = 80, double cval = 255)
+        public Detector GetInterestStandart(double thresval = 80, double cval = 255)
         {
             var threshold = new Gray(thresval);
             var color = new Gray(cval);
@@ -43,9 +43,14 @@ namespace Introduction
             return this;
         }
 
-        public Detector GetInterestAreaByColor(byte color, byte rangeDelta = 10)
+        public Detector GetInterestCanny(double thresh, double threshLinking)
         {
-            var hsvImage = _data.SourceImage.Convert<Hsv, byte>();
+            _iterImage = _iterImage.Canny(thresh, threshLinking);            return this;
+        }
+
+        public Detector GetInterestByColor(byte color, byte rangeDelta = 10)
+        {
+            var hsvImage = _data.SourceImage.Convert<Hsv, byte>();  
             var hueChannel = hsvImage.Split()[0];
             var resultImage = hueChannel.InRange(new Gray(color - rangeDelta), 
                 new Gray(color + rangeDelta));

@@ -472,11 +472,14 @@ namespace Introduction
         {
             Detector det = new Detector(Data)
                 .GaussianBlur()
-                .GetInterestArea()
+                .GetInterestStandart()
                 .DetectContours()
                 .Approx();
 
-            imageBoxRs.Image = new DetectionAssembler.Triangle(det).Detect(Data);
+            DetectionAssembler.Triangle assembler = new DetectionAssembler.Triangle(det);
+            imageBoxRs.Image = assembler.Detect(Data);
+
+            MessageBox.Show($"Trinagles detected: {assembler.PrimitiveCount}");
         }
     }
 }

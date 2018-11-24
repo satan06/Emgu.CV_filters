@@ -12,9 +12,10 @@ namespace Introduction
             Image<Bgr, byte> Detect(Data data);
         }
 
-        internal abstract class Constructive
+        public abstract class Constructive
         {
             public Detector Detector { get; }
+            public int PrimitiveCount { get; set; }
             public Constructive(Detector detector) => Detector = detector;
         }
 
@@ -37,6 +38,8 @@ namespace Introduction
 
                         Detector.ImageCopy.Draw(new Triangle2DF(points[0], points[1], points[2]),
                         new Bgr(Color.GreenYellow), 2);
+
+                        PrimitiveCount++;
                     }
                 }
 
@@ -55,6 +58,7 @@ namespace Introduction
                 foreach (CircleF circle in Detector.Circles)
                 {
                     Detector.ImageCopy.Draw(circle, new Bgr(Color.Blue), 2);
+                    PrimitiveCount++;
                 }
 
                 return Detector.ImageCopy;
@@ -75,6 +79,7 @@ namespace Introduction
                     {
                         Detector.ImageCopy.Draw(CvInvoke.MinAreaRect(
                             Detector.ApproxContours[i]), new Bgr(Color.GreenYellow), 2);
+                        PrimitiveCount++;
                     }
                 }
 

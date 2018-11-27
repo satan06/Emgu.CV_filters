@@ -43,9 +43,10 @@ namespace Introduction
             return this;
         }
 
-        public Detector GetInterestCanny(double thresh, double threshLinking)
+        public Detector GetInterestCanny(double thresh = 80, double threshLinking = 255)
         {
-            _iterImage = _iterImage.Canny(thresh, threshLinking);            return this;
+            _iterImage = _iterImage.Canny(thresh, threshLinking);
+            return this;
         }
 
         public Detector GetInterestByColor(byte color, byte rangeDelta = 10)
@@ -74,7 +75,7 @@ namespace Introduction
         {
             Circles.AddRange(
                 new List<CircleF>(
-                    CvInvoke.HoughCircles(_iterImage,
+                    collection: CvInvoke.HoughCircles(_iterImage,
                         HoughType.Gradient,
                         1.0,
                         minDistance,

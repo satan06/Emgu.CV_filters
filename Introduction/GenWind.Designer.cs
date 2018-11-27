@@ -69,6 +69,11 @@
             this.diagonalyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rotateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.homographToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DetectionTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.trianglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rectanglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.circlesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.byColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BrContrPanel = new System.Windows.Forms.Panel();
             this.BrContrCloseButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
@@ -144,8 +149,10 @@
             this.label28 = new System.Windows.Forms.Label();
             this.RotateCenterPoint = new System.Windows.Forms.RadioButton();
             this.HomographyApplyButton = new System.Windows.Forms.Button();
-            this.detectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.trianglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ThrsDetValue = new System.Windows.Forms.NumericUpDown();
+            this.MinAreaDetValue = new System.Windows.Forms.NumericUpDown();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -180,6 +187,8 @@
             this.ShearPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ShearAmount)).BeginInit();
             this.RotatePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ThrsDetValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MinAreaDetValue)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox
@@ -304,7 +313,7 @@
             this.fileToolStripMenuItem,
             this.FilterMenuStrip,
             this.TransformMenuStrip,
-            this.detectToolStripMenuItem});
+            this.DetectionTool});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(824, 24);
@@ -532,6 +541,45 @@
             this.homographToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.homographToolStripMenuItem.Text = "Homograph";
             this.homographToolStripMenuItem.Click += new System.EventHandler(this.HomographTransform);
+            // 
+            // DetectionTool
+            // 
+            this.DetectionTool.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trianglesToolStripMenuItem,
+            this.rectanglesToolStripMenuItem,
+            this.circlesToolStripMenuItem,
+            this.byColorToolStripMenuItem});
+            this.DetectionTool.Name = "DetectionTool";
+            this.DetectionTool.Size = new System.Drawing.Size(53, 20);
+            this.DetectionTool.Text = "Detect";
+            // 
+            // trianglesToolStripMenuItem
+            // 
+            this.trianglesToolStripMenuItem.Name = "trianglesToolStripMenuItem";
+            this.trianglesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.trianglesToolStripMenuItem.Text = "Triangles";
+            this.trianglesToolStripMenuItem.Click += new System.EventHandler(this.DetTrig);
+            // 
+            // rectanglesToolStripMenuItem
+            // 
+            this.rectanglesToolStripMenuItem.Name = "rectanglesToolStripMenuItem";
+            this.rectanglesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rectanglesToolStripMenuItem.Text = "Rectangles";
+            this.rectanglesToolStripMenuItem.Click += new System.EventHandler(this.DetRect);
+            // 
+            // circlesToolStripMenuItem
+            // 
+            this.circlesToolStripMenuItem.Name = "circlesToolStripMenuItem";
+            this.circlesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.circlesToolStripMenuItem.Text = "Circles";
+            this.circlesToolStripMenuItem.Click += new System.EventHandler(this.DetCircl);
+            // 
+            // byColorToolStripMenuItem
+            // 
+            this.byColorToolStripMenuItem.Name = "byColorToolStripMenuItem";
+            this.byColorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.byColorToolStripMenuItem.Text = "By Color";
+            this.byColorToolStripMenuItem.Click += new System.EventHandler(this.DetByColor);
             // 
             // BrContrPanel
             // 
@@ -1339,26 +1387,57 @@
             this.HomographyApplyButton.UseVisualStyleBackColor = false;
             this.HomographyApplyButton.Click += new System.EventHandler(this.HomogrApply);
             // 
-            // detectToolStripMenuItem
+            // ThrsDetValue
             // 
-            this.detectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.trianglesToolStripMenuItem});
-            this.detectToolStripMenuItem.Name = "detectToolStripMenuItem";
-            this.detectToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
-            this.detectToolStripMenuItem.Text = "Detect";
+            this.ThrsDetValue.Location = new System.Drawing.Point(349, 0);
+            this.ThrsDetValue.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.ThrsDetValue.Name = "ThrsDetValue";
+            this.ThrsDetValue.Size = new System.Drawing.Size(120, 20);
+            this.ThrsDetValue.TabIndex = 32;
             // 
-            // trianglesToolStripMenuItem
+            // MinAreaDetValue
             // 
-            this.trianglesToolStripMenuItem.Name = "trianglesToolStripMenuItem";
-            this.trianglesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.trianglesToolStripMenuItem.Text = "Triangles";
-            this.trianglesToolStripMenuItem.Click += new System.EventHandler(this.TestEvent);
+            this.MinAreaDetValue.Location = new System.Drawing.Point(544, 0);
+            this.MinAreaDetValue.Maximum = new decimal(new int[] {
+            400,
+            0,
+            0,
+            0});
+            this.MinAreaDetValue.Name = "MinAreaDetValue";
+            this.MinAreaDetValue.Size = new System.Drawing.Size(120, 20);
+            this.MinAreaDetValue.TabIndex = 33;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(290, 4);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(54, 13);
+            this.label29.TabIndex = 34;
+            this.label29.Text = "Threshold";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(484, 4);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(49, 13);
+            this.label30.TabIndex = 35;
+            this.label30.Text = "Min Area";
             // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 319);
+            this.Controls.Add(this.label30);
+            this.Controls.Add(this.label29);
+            this.Controls.Add(this.MinAreaDetValue);
+            this.Controls.Add(this.ThrsDetValue);
             this.Controls.Add(this.ShearPanel);
             this.Controls.Add(this.HomographyApplyButton);
             this.Controls.Add(this.RotateCenterPoint);
@@ -1421,6 +1500,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ShearAmount)).EndInit();
             this.RotatePanel.ResumeLayout(false);
             this.RotatePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ThrsDetValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MinAreaDetValue)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1543,8 +1624,16 @@
         private System.Windows.Forms.RadioButton RotateCenterPoint;
         private System.Windows.Forms.TextBox RotateAngleInput;
         private System.Windows.Forms.Button HomographyApplyButton;
-        private System.Windows.Forms.ToolStripMenuItem detectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DetectionTool;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem trianglesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rectanglesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem circlesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem byColorToolStripMenuItem;
+        private System.Windows.Forms.NumericUpDown ThrsDetValue;
+        private System.Windows.Forms.NumericUpDown MinAreaDetValue;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label30;
     }
 }
 

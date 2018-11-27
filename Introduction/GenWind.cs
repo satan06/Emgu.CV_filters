@@ -470,13 +470,58 @@ namespace Introduction
         /// </summary>
         private void TestEvent(object sender, EventArgs e)
         {
+        }
+
+        private void DetTrig(object sender, EventArgs e)
+        {
             Detector det = new Detector(Data)
                 .GaussianBlur()
-                .GetInterestArea()
+                .GetInterestStandart((double)ThrsDetValue.Value, (double)MinAreaDetValue.Value)
                 .DetectContours()
                 .Approx();
 
-            imageBoxRs.Image = new DetectionAssembler.Triangle(det).Detect(Data);
+            DetectionAssembler.Triangle assembler = new DetectionAssembler.Triangle(det);
+            imageBoxRs.Image = assembler.Detect(Data);
+
+            MessageBox.Show($"Trinagles detected: {assembler.PrimitiveCount}");
+        }
+
+        private void DetRect(object sender, EventArgs e)
+        {
+            Detector det = new Detector(Data)
+                .GaussianBlur()
+                .GetInterestStandart((double)ThrsDetValue.Value, (double)MinAreaDetValue.Value)
+                .DetectContours()
+                .Approx();
+
+            DetectionAssembler.Rectangle assembler = new DetectionAssembler.Rectangle(det);
+            imageBoxRs.Image = assembler.Detect(Data);
+
+            MessageBox.Show($"Rectangles detected: {assembler.PrimitiveCount}");
+        }
+
+        private void DetCircl(object sender, EventArgs e)
+        {
+            Detector det = new Detector(Data)
+                .GaussianBlur()
+                .DetectContours(250, 36, 50, 150);
+    
+
+            DetectionAssembler.Circle assembler = new DetectionAssembler.Circle(det);
+            imageBoxRs.Image = assembler.Detect(Data);
+
+            MessageBox.Show($"Circles detected: {assembler.PrimitiveCount}");
+        }
+
+        private void DetByColor(object sender, EventArgs e)
+        {
+            Detector det = new Detector(Data)
+                .GetInterestByColor(30)
+                .DetectContours()
+                .Approx();
+
+            DetectionAssembler.Rectangle assembler = new DetectionAssembler.Rectangle(det);
+            imageBoxRs.Image = assembler.Detect(Data);
         }
     }
 }

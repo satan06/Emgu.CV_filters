@@ -76,6 +76,7 @@ namespace Introduction
 
                 FilterMenuStrip.Enabled = true;
                 TransformMenuStrip.Enabled = true;
+                DetectionTool.Enabled = true;
             }
         }
 
@@ -473,16 +474,6 @@ namespace Introduction
         /// </summary>
         private void TestEvent(object sender, EventArgs e)
         {
-            capture = new Capture(Data)
-                .Binary()
-                .Impact(5)
-                .GetContours()
-                .GetCaptures();
-
-            imageBoxRs.Image = capture.DrawContours();
-            CaptionsList.DataSource = capture.Captions;
-
-            //MessageBox.Show($"Captions detected: {capture.Rects.Count}");
         }
 
         private void DetTrig(object sender, EventArgs e)
@@ -536,8 +527,8 @@ namespace Introduction
         {
             Detector det = new Detector(Data)
                 .GaussianBlur()
-                .GetInterestByColor(30)
-                .RemoveArtefacts(4)
+                .GetInterestByColor(color: 30)
+                .RemoveArtefacts(iterations: 4)
                 .DetectContours()
                 .Approx();
 
@@ -559,6 +550,52 @@ namespace Introduction
             grabber.GetText();
 
             MessageBox.Show(grabber.Text);
+        }
+
+        private void StartFaceDet(object sender, EventArgs e)
+        {
+            CaptureWebCam cam = new CaptureWebCam(imageBoxRs);
+            cam.GrabCameraFace();
+        }
+
+        private void StartTextDet(object sender, EventArgs e)
+        {
+            CaptureWebCam cam = new CaptureWebCam(imageBoxRs);
+            cam.GrabCameraWords();
+        }
+
+        private void DetFacesImg(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = new FaceGrabber(Data).GetFrontal().DrawFaces();
+        }
+
+        private void DetTextImg(object sender, EventArgs e)
+        {
+            CompleteDisplayDetText.Visible = true;
+            CaptionsList.Visible = true;
+            ClearCaptElems.Visible = true;
+
+            capture = new Capture(Data)
+                .Binary()
+                .Impact(iterations: 5)
+                .GetContours()
+                .GetCaptures();
+
+            imageBoxRs.Image = capture.DrawContours();
+            CaptionsList.DataSource = capture.Captions;
+
+            MessageBox.Show($"Captions detected: {capture.Rects.Count}");
+        }
+
+        private void GetTextDispayComplete(object sender, EventArgs e)
+        {
+            imageBoxRs.Image = capture.DrawContours();
+        }
+
+        private void DeleteElems(object sender, EventArgs e)
+        {
+            CaptionsList.DataSource = new string[1] { string.Empty };
+            capture.Captions.Clear();
         }
     }
 }

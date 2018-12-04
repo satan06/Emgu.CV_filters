@@ -2,8 +2,6 @@ language: csharp
 solution: Introduction.sln
 script:
   - grep "Test Results" build.log
-dotnet: 2.0.0
-dist: trusty
 install:
   - nuget restore Introduction.sln
   - nuget install NUnit.Runners -Version 3.7.0 -OutputDirectory testrunner

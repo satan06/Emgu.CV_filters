@@ -23,7 +23,7 @@ namespace Introduction
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentException("message", nameof(path));
+                throw new ArgumentException("String cattot be null or empty", nameof(path));
             }
             
             ocr = new Tesseract(path, lang.ToString().ToLower(), OcrEngineMode.Default);
@@ -37,8 +37,5 @@ namespace Introduction
             ocr.SetImage(roiImage);
             ocr.Recognize();
         }
-
     }
-
-
 }

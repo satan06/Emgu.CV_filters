@@ -89,6 +89,7 @@
     <Compile Include="Data.cs" />
     <Compile Include="DetectionAssembler.cs" />
     <Compile Include="Detector.cs" />
+    <Compile Include="FaceGrabber.cs" />
     <Compile Include="GenWind.cs">
       <SubType>Form</SubType>
     </Compile>

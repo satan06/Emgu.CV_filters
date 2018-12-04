@@ -473,16 +473,19 @@ namespace Introduction
         /// </summary>
         private void TestEvent(object sender, EventArgs e)
         {
-            capture = new Capture(Data)
-                .Binary()
-                .Impact(5)
-                .GetContours()
-                .GetCaptures();
+            //capture = new Capture(Data)
+            //    .Binary()
+            //    .Impact(iterations: 5)
+            //    .GetContours()
+            //    .GetCaptures();
 
-            imageBoxRs.Image = capture.DrawContours();
-            CaptionsList.DataSource = capture.Captions;
+            //imageBoxRs.Image = capture.DrawContours();
+            //CaptionsList.DataSource = capture.Captions;
 
             //MessageBox.Show($"Captions detected: {capture.Rects.Count}");
+
+            imageBoxRs.Image = new FaceGrabber(Data).GetFrontal().DrawFaces();
+
         }
 
         private void DetTrig(object sender, EventArgs e)
@@ -536,8 +539,8 @@ namespace Introduction
         {
             Detector det = new Detector(Data)
                 .GaussianBlur()
-                .GetInterestByColor(30)
-                .RemoveArtefacts(4)
+                .GetInterestByColor(color: 30)
+                .RemoveArtefacts(iterations: 4)
                 .DetectContours()
                 .Approx();
 

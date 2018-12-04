@@ -84,6 +84,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Capture.cs" />
     <Compile Include="CaptureWebCam.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DetectionAssembler.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="ImageTransform.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextGrabber.cs" />
     <EmbeddedResource Include="GenWind.resx">
       <DependentUpon>GenWind.cs</DependentUpon>
     </EmbeddedResource>

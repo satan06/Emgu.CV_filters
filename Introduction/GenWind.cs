@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using static Introduction.Data;
@@ -8,6 +10,7 @@ namespace Introduction
     public partial class Filter : Form
     {
         private ImageFilter filter;
+        private Capture capture;
         private ImageTransform transform;
         private PointManager manager = new PointManager();
         public Data Data = new Data();
@@ -470,10 +473,23 @@ namespace Introduction
         /// </summary>
         private void TestEvent(object sender, EventArgs e)
         {
+            capture = new Capture(Data)
+                .Binary()
+                .Impact(5)
+                .GetContours()
+                .GetCaptures();
+
+            imageBoxRs.Image = capture.DrawContours();
+            CaptionsList.DataSource = capture.Captions;
+
+            //MessageBox.Show($"Captions detected: {capture.Rects.Count}");
         }
 
         private void DetTrig(object sender, EventArgs e)
         {
+            ThrsDetValue.Value = 80;
+            MinAreaDetValue.Value = 256;
+
             Detector det = new Detector(Data)
                 .GaussianBlur()
                 .GetInterestStandart((double)ThrsDetValue.Value, (double)MinAreaDetValue.Value)
@@ -483,11 +499,14 @@ namespace Introduction
             DetectionAssembler.Triangle assembler = new DetectionAssembler.Triangle(det);
             imageBoxRs.Image = assembler.Detect(Data);
 
-            MessageBox.Show($"Trinagles detected: {assembler.PrimitiveCount}");
+            MessageBox.Show($"Triangles detected: {assembler.PrimitiveCount}");
         }
 
         private void DetRect(object sender, EventArgs e)
         {
+            ThrsDetValue.Value = 120;
+            MinAreaDetValue.Value = 99;
+
             Detector det = new Detector(Data)
                 .GaussianBlur()
                 .GetInterestStandart((double)ThrsDetValue.Value, (double)MinAreaDetValue.Value)
@@ -516,12 +535,30 @@ namespace Introduction
         private void DetByColor(object sender, EventArgs e)
         {
             Detector det = new Detector(Data)
+                .GaussianBlur()
                 .GetInterestByColor(30)
+                .RemoveArtefacts(4)
                 .DetectContours()
                 .Approx();
 
-            DetectionAssembler.Rectangle assembler = new DetectionAssembler.Rectangle(det);
+            DetectionAssembler.Unfiltered assembler = new DetectionAssembler.Unfiltered(det);
             imageBoxRs.Image = assembler.Detect(Data);
+
+            MessageBox.Show($"Primitives detected: {assembler.PrimitiveCount}");
+        }
+
+        private void DrawSelectedCaption(object sender, EventArgs e)
+        {
+            var item = (Image<Bgr, byte>)CaptionsList.SelectedItem;
+            imageBoxRs.Image = item;
+
+            string path = "C:/githb/tessdata";
+
+            TextGrabber grabber = new TextGrabber(path, Language.ENG);
+            grabber.Detect(item);
+            grabber.GetText();
+
+            MessageBox.Show(grabber.Text);
         }
     }
 }

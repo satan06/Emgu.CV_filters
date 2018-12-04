@@ -19,6 +19,25 @@ namespace Introduction
             public Constructive(Detector detector) => Detector = detector;
         }
 
+        public class Unfiltered : Constructive, IPrimitive
+        {
+            public Unfiltered(Detector detector) : base(detector)
+            {
+            }
+
+            public Image<Bgr, byte> Detect(Data data)
+            {
+                for (int i = 0; i < Detector.ApproxContours.Size; i++)
+                {
+                    var points = Detector.ApproxContours[i].ToArray();
+
+                    Detector.ImageCopy.Draw(points, new Bgr(Color.Blue), 2);
+                    PrimitiveCount++;
+                }
+                return Detector.ImageCopy;
+            }
+        }
+
         public class Triangle : Constructive, IPrimitive
         {
             public Triangle(Detector detector) : base(detector)

@@ -62,6 +62,12 @@ namespace Introduction
             Substract
         }
 
+        public enum Language
+        {
+            ENG,
+            RUS
+        }
+
         /// <summary>
         /// BGR channels 
         /// </summary>

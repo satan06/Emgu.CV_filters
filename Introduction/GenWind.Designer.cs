@@ -153,6 +153,8 @@
             this.MinAreaDetValue = new System.Windows.Forms.NumericUpDown();
             this.label29 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
+            this.button13 = new System.Windows.Forms.Button();
+            this.CaptionsList = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxRs)).BeginInit();
             this.HSVPanel.SuspendLayout();
@@ -195,9 +197,9 @@
             // 
             this.imageBox.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.imageBox.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
-            this.imageBox.Location = new System.Drawing.Point(12, 27);
+            this.imageBox.Location = new System.Drawing.Point(12, 60);
             this.imageBox.Name = "imageBox";
-            this.imageBox.Size = new System.Drawing.Size(320, 274);
+            this.imageBox.Size = new System.Drawing.Size(320, 284);
             this.imageBox.TabIndex = 2;
             this.imageBox.TabStop = false;
             this.imageBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SetDotEvent);
@@ -205,9 +207,9 @@
             // imageBoxRs
             // 
             this.imageBoxRs.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.imageBoxRs.Location = new System.Drawing.Point(349, 27);
+            this.imageBoxRs.Location = new System.Drawing.Point(349, 60);
             this.imageBoxRs.Name = "imageBoxRs";
-            this.imageBoxRs.Size = new System.Drawing.Size(315, 274);
+            this.imageBoxRs.Size = new System.Drawing.Size(315, 284);
             this.imageBoxRs.TabIndex = 3;
             this.imageBoxRs.TabStop = false;
             // 
@@ -223,9 +225,9 @@
             this.HSVPanel.Controls.Add(this.label2);
             this.HSVPanel.Controls.Add(this.HueTrackbar);
             this.HSVPanel.Controls.Add(this.label1);
-            this.HSVPanel.Location = new System.Drawing.Point(670, 27);
+            this.HSVPanel.Location = new System.Drawing.Point(670, 60);
             this.HSVPanel.Name = "HSVPanel";
-            this.HSVPanel.Size = new System.Drawing.Size(149, 274);
+            this.HSVPanel.Size = new System.Drawing.Size(149, 284);
             this.HSVPanel.TabIndex = 4;
             this.HSVPanel.Visible = false;
             // 
@@ -556,28 +558,28 @@
             // trianglesToolStripMenuItem
             // 
             this.trianglesToolStripMenuItem.Name = "trianglesToolStripMenuItem";
-            this.trianglesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.trianglesToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.trianglesToolStripMenuItem.Text = "Triangles";
             this.trianglesToolStripMenuItem.Click += new System.EventHandler(this.DetTrig);
             // 
             // rectanglesToolStripMenuItem
             // 
             this.rectanglesToolStripMenuItem.Name = "rectanglesToolStripMenuItem";
-            this.rectanglesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rectanglesToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.rectanglesToolStripMenuItem.Text = "Rectangles";
             this.rectanglesToolStripMenuItem.Click += new System.EventHandler(this.DetRect);
             // 
             // circlesToolStripMenuItem
             // 
             this.circlesToolStripMenuItem.Name = "circlesToolStripMenuItem";
-            this.circlesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.circlesToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.circlesToolStripMenuItem.Text = "Circles";
             this.circlesToolStripMenuItem.Click += new System.EventHandler(this.DetCircl);
             // 
             // byColorToolStripMenuItem
             // 
             this.byColorToolStripMenuItem.Name = "byColorToolStripMenuItem";
-            this.byColorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.byColorToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.byColorToolStripMenuItem.Text = "By Color";
             this.byColorToolStripMenuItem.Click += new System.EventHandler(this.DetByColor);
             // 
@@ -591,9 +593,9 @@
             this.BrContrPanel.Controls.Add(this.label7);
             this.BrContrPanel.Controls.Add(this.BrTrackbar);
             this.BrContrPanel.Controls.Add(this.label8);
-            this.BrContrPanel.Location = new System.Drawing.Point(670, 27);
+            this.BrContrPanel.Location = new System.Drawing.Point(670, 60);
             this.BrContrPanel.Name = "BrContrPanel";
-            this.BrContrPanel.Size = new System.Drawing.Size(149, 274);
+            this.BrContrPanel.Size = new System.Drawing.Size(149, 284);
             this.BrContrPanel.TabIndex = 8;
             this.BrContrPanel.Visible = false;
             // 
@@ -679,9 +681,9 @@
             this.WindowFilterPanel.Controls.Add(this.button3);
             this.WindowFilterPanel.Controls.Add(this.button2);
             this.WindowFilterPanel.Controls.Add(this.label10);
-            this.WindowFilterPanel.Location = new System.Drawing.Point(670, 27);
+            this.WindowFilterPanel.Location = new System.Drawing.Point(670, 60);
             this.WindowFilterPanel.Name = "WindowFilterPanel";
-            this.WindowFilterPanel.Size = new System.Drawing.Size(149, 274);
+            this.WindowFilterPanel.Size = new System.Drawing.Size(149, 284);
             this.WindowFilterPanel.TabIndex = 9;
             this.WindowFilterPanel.Visible = false;
             // 
@@ -839,9 +841,9 @@
             this.CartnFilterPanel.Controls.Add(this.label12);
             this.CartnFilterPanel.Controls.Add(this.CartnFilterCloseButton);
             this.CartnFilterPanel.Controls.Add(this.label13);
-            this.CartnFilterPanel.Location = new System.Drawing.Point(670, 27);
+            this.CartnFilterPanel.Location = new System.Drawing.Point(670, 60);
             this.CartnFilterPanel.Name = "CartnFilterPanel";
-            this.CartnFilterPanel.Size = new System.Drawing.Size(149, 146);
+            this.CartnFilterPanel.Size = new System.Drawing.Size(149, 156);
             this.CartnFilterPanel.TabIndex = 23;
             this.CartnFilterPanel.Visible = false;
             // 
@@ -902,9 +904,9 @@
             this.WaterColorPanel.Controls.Add(this.label11);
             this.WaterColorPanel.Controls.Add(this.button7);
             this.WaterColorPanel.Controls.Add(this.label14);
-            this.WaterColorPanel.Location = new System.Drawing.Point(668, 27);
+            this.WaterColorPanel.Location = new System.Drawing.Point(668, 60);
             this.WaterColorPanel.Name = "WaterColorPanel";
-            this.WaterColorPanel.Size = new System.Drawing.Size(149, 240);
+            this.WaterColorPanel.Size = new System.Drawing.Size(149, 250);
             this.WaterColorPanel.TabIndex = 24;
             this.WaterColorPanel.Visible = false;
             // 
@@ -1025,9 +1027,9 @@
             this.BooleansPanel.Controls.Add(this.label19);
             this.BooleansPanel.Controls.Add(this.button9);
             this.BooleansPanel.Controls.Add(this.label22);
-            this.BooleansPanel.Location = new System.Drawing.Point(670, 27);
+            this.BooleansPanel.Location = new System.Drawing.Point(670, 60);
             this.BooleansPanel.Name = "BooleansPanel";
-            this.BooleansPanel.Size = new System.Drawing.Size(149, 223);
+            this.BooleansPanel.Size = new System.Drawing.Size(149, 233);
             this.BooleansPanel.TabIndex = 30;
             this.BooleansPanel.Visible = false;
             // 
@@ -1133,9 +1135,9 @@
             this.ScalePanel.Controls.Add(this.label21);
             this.ScalePanel.Controls.Add(this.ScaleCloseButton);
             this.ScalePanel.Controls.Add(this.label23);
-            this.ScalePanel.Location = new System.Drawing.Point(671, 23);
+            this.ScalePanel.Location = new System.Drawing.Point(671, 56);
             this.ScalePanel.Name = "ScalePanel";
-            this.ScalePanel.Size = new System.Drawing.Size(149, 274);
+            this.ScalePanel.Size = new System.Drawing.Size(149, 284);
             this.ScalePanel.TabIndex = 24;
             this.ScalePanel.Visible = false;
             // 
@@ -1213,9 +1215,9 @@
             this.ShearPanel.Controls.Add(this.label25);
             this.ShearPanel.Controls.Add(this.button11);
             this.ShearPanel.Controls.Add(this.label27);
-            this.ShearPanel.Location = new System.Drawing.Point(670, 27);
+            this.ShearPanel.Location = new System.Drawing.Point(670, 60);
             this.ShearPanel.Name = "ShearPanel";
-            this.ShearPanel.Size = new System.Drawing.Size(149, 274);
+            this.ShearPanel.Size = new System.Drawing.Size(149, 284);
             this.ShearPanel.TabIndex = 25;
             this.ShearPanel.Visible = false;
             // 
@@ -1294,9 +1296,9 @@
             this.RotatePanel.Controls.Add(this.label26);
             this.RotatePanel.Controls.Add(this.button15);
             this.RotatePanel.Controls.Add(this.label28);
-            this.RotatePanel.Location = new System.Drawing.Point(674, 19);
+            this.RotatePanel.Location = new System.Drawing.Point(674, 52);
             this.RotatePanel.Name = "RotatePanel";
-            this.RotatePanel.Size = new System.Drawing.Size(149, 274);
+            this.RotatePanel.Size = new System.Drawing.Size(149, 284);
             this.RotatePanel.TabIndex = 26;
             this.RotatePanel.Visible = false;
             // 
@@ -1368,7 +1370,7 @@
             this.RotateCenterPoint.BackColor = System.Drawing.Color.Maroon;
             this.RotateCenterPoint.Checked = true;
             this.RotateCenterPoint.Enabled = false;
-            this.RotateCenterPoint.Location = new System.Drawing.Point(167, 160);
+            this.RotateCenterPoint.Location = new System.Drawing.Point(167, 193);
             this.RotateCenterPoint.Margin = new System.Windows.Forms.Padding(0);
             this.RotateCenterPoint.Name = "RotateCenterPoint";
             this.RotateCenterPoint.Size = new System.Drawing.Size(6, 6);
@@ -1379,9 +1381,9 @@
             // HomographyApplyButton
             // 
             this.HomographyApplyButton.BackColor = System.Drawing.Color.Red;
-            this.HomographyApplyButton.Location = new System.Drawing.Point(258, 278);
+            this.HomographyApplyButton.Location = new System.Drawing.Point(258, 311);
             this.HomographyApplyButton.Name = "HomographyApplyButton";
-            this.HomographyApplyButton.Size = new System.Drawing.Size(74, 23);
+            this.HomographyApplyButton.Size = new System.Drawing.Size(74, 33);
             this.HomographyApplyButton.TabIndex = 13;
             this.HomographyApplyButton.Text = "Set Points";
             this.HomographyApplyButton.UseVisualStyleBackColor = false;
@@ -1429,11 +1431,35 @@
             this.label30.TabIndex = 35;
             this.label30.Text = "Min Area";
             // 
+            // button13
+            // 
+            this.button13.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button13.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button13.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.button13.Location = new System.Drawing.Point(257, 60);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(75, 33);
+            this.button13.TabIndex = 36;
+            this.button13.Text = "Test Event";
+            this.button13.UseVisualStyleBackColor = false;
+            this.button13.Click += new System.EventHandler(this.TestEvent);
+            // 
+            // CaptionsList
+            // 
+            this.CaptionsList.FormattingEnabled = true;
+            this.CaptionsList.Location = new System.Drawing.Point(544, 26);
+            this.CaptionsList.Name = "CaptionsList";
+            this.CaptionsList.Size = new System.Drawing.Size(120, 30);
+            this.CaptionsList.TabIndex = 37;
+            this.CaptionsList.SelectedIndexChanged += new System.EventHandler(this.DrawSelectedCaption);
+            // 
             // Filter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(824, 319);
+            this.ClientSize = new System.Drawing.Size(824, 352);
+            this.Controls.Add(this.CaptionsList);
+            this.Controls.Add(this.button13);
             this.Controls.Add(this.label30);
             this.Controls.Add(this.label29);
             this.Controls.Add(this.MinAreaDetValue);
@@ -1634,6 +1660,8 @@
         private System.Windows.Forms.NumericUpDown MinAreaDetValue;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.ListBox CaptionsList;
     }
 }
 

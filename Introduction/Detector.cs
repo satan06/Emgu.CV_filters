@@ -34,6 +34,16 @@ namespace Introduction
             return this;
         }
 
+        public Detector RemoveArtefacts(int iterations = 5, int size = 5)
+        {
+            var kernel = CvInvoke.GetStructuringElement(ElementShape.Cross, new System.Drawing.Size(size, size),
+                new System.Drawing.Point(-1, -1));  
+            CvInvoke.MorphologyEx(_iterImage, _iterImage, MorphOp.Erode, kernel, new System.Drawing.Point(-1 , -1), 
+                iterations, BorderType.Default, new MCvScalar());
+
+            return this;
+        }
+
         public Detector GetInterestStandart(double thresval = 80, double cval = 255)
         {
             var threshold = new Gray(thresval);
@@ -53,8 +63,8 @@ namespace Introduction
         {
             var hsvImage = _data.SourceImage.Convert<Hsv, byte>();  
             var hueChannel = hsvImage.Split()[0];
-            var resultImage = hueChannel.InRange(new Gray(color - rangeDelta), 
-                new Gray(color + rangeDelta));
+            _iterImage = hueChannel.InRange(new Gray(color - rangeDelta), 
+                new Gray(color + rangeDelta)).PyrDown().PyrUp();
 
             return this;
         }
@@ -75,7 +85,7 @@ namespace Introduction
         {
             Circles.AddRange(
                 new List<CircleF>(
-                    collection: CvInvoke.HoughCircles(_iterImage,
+                        CvInvoke.HoughCircles(_iterImage,
                         HoughType.Gradient,
                         1.0,
                         minDistance,

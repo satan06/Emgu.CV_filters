@@ -15,12 +15,10 @@ namespace Introduction
     {
         public Rectangle[] DetectedFaces;
         public string PackDirectory { get; set; } = "C:/githb/haarcascades/";
-        private readonly Data _data;
+        public Image<Bgr, byte> Image;
 
-        public FaceGrabber(Data data)
-        {
-            _data = data;
-        }
+        public FaceGrabber(Data data) => Image = data.SourceImage;
+        public FaceGrabber(Mat image) => Image = new Image<Bgr, byte>(image.Bitmap);
 
         public FaceGrabber GetFrontal(double scaleFactor = 1.1, int neighbours = 10)
         {
@@ -29,7 +27,7 @@ namespace Introduction
             using (CascadeClassifier cascadeClassifier = 
                 new CascadeClassifier(PackDirectory + name))
             {
-                var grayImage = _data.SourceImage.Convert<Gray, byte>();
+                var grayImage = Image.Convert<Gray, byte>();
                 DetectedFaces = cascadeClassifier.DetectMultiScale(grayImage, 
                     scaleFactor, neighbours, new Size(20, 20));
             }
@@ -39,7 +37,7 @@ namespace Introduction
 
         public Image<Bgr, byte> DrawFaces(int thickness = 2)
         {
-            var copy = _data.SourceImage.Copy();
+            var copy = Image.Copy();
 
             foreach (Rectangle face in DetectedFaces)
             {

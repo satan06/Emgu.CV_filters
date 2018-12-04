@@ -1,26 +1,31 @@
 ﻿using System;
 using Emgu.CV;
+using Emgu.CV.UI;
 
 namespace Introduction
 {
     class CaptureWebCam
     {
         private VideoCapture capture;
-        public delegate void OnCaptureEvent();
-        //public OnCaptureEvent OnCaptureEventCallback;
+        private Mat _frame;
+        private ImageBox container;
 
-        public void GrabCamera()
+        public CaptureWebCam(ImageBox container) => this.container = container;
+
+        public Mat Frame => _frame;
+
+        public void GrabCameraFace()
         {
             capture = new VideoCapture();
-            capture.ImageGrabbed += ProcessFrame;
+            capture.ImageGrabbed += ProcessFrameFace;
             capture.Start(null);
         }
 
-        public void GrabVideo(string fileName)
+        public void GrabCameraWords()
         {
-             capture = new VideoCapture(fileName);
-             capture.ImageGrabbed += ProcessFrame;
-             capture.Start(null);
+            capture = new VideoCapture();
+            capture.ImageGrabbed += ProcessFrameText;
+            capture.Start(null);
         }
 
         public void Stop()
@@ -28,14 +33,32 @@ namespace Introduction
             capture.Stop();
         }
 
-        private void ProcessFrame(object sender, EventArgs e)
+        private void ProcessFrameText(object sender, EventArgs e)
         {
-            var frame = new Mat();
+            _frame = new Mat();
+            capture.Retrieve(_frame);
+            GetText();
+        }
 
-            capture.Retrieve(frame);
+        private void ProcessFrameFace(object sender, EventArgs e)
+        {
+            _frame = new Mat();
+            capture.Retrieve(_frame);
+            GetFaces();
+        }
 
-           // if (OnCaptureEventCallback != null)
-           //     OnCaptureEventCallback.Invoke();
+        private void GetText()
+        {
+            container.Image = new Capture(_frame)
+                .Binary()
+                .Impact(iterations: 5)
+                .GetContours()
+                .DrawContours();
+        }
+
+        private void GetFaces()
+        {
+            container.Image = new FaceGrabber(_frame).GetFrontal().DrawFaces();
         }
     }
 }

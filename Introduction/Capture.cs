@@ -11,24 +11,20 @@ namespace Introduction
 {
     public class Capture
     {
-        private readonly Data _data;
-        public Image<Gray, byte> _iterImage;
+        public Image<Bgr, byte> Image;
+        private Image<Gray, byte> _iterImage;
         private VectorOfVectorOfPoint _contours = new VectorOfVectorOfPoint();
-        public Image<Bgr, byte> ImageCopy { get; private set; }
         public List<Rectangle> Rects = new List<Rectangle>();
 
         private Lazy<List<Image<Bgr, byte>>> _captions = new Lazy<List<Image<Bgr, byte>>>();
         public List<Image<Bgr, byte>> Captions => _captions.Value;
 
-        public Capture(Data data)
-        {
-            _data = data;
-            ImageCopy = data.SourceImage.Copy();
-        }
+        public Capture(Data data) => Image = data.SourceImage;
+        public Capture(Mat image) => Image = new Image<Bgr, byte>(image.Bitmap);
 
         public Capture Binary(double thresval = 80, double cval = 255)
         {
-            Image<Gray, byte> grayImage = _data.SourceImage.Convert<Gray, byte>();
+            Image<Gray, byte> grayImage = Image.Convert<Gray, byte>();
             _iterImage = grayImage.ThresholdBinaryInv(new Gray(thresval), new Gray(cval));
             return this;
         }
@@ -58,20 +54,22 @@ namespace Introduction
 
         public Image<Bgr, byte> DrawContours(int thickness = 1)
         {
+            var copy = Image.Copy();
+
             foreach(Rectangle rect in Rects)
             {
-                ImageCopy.Draw(rect, new Bgr(Color.Blue), thickness);
+                copy.Draw(rect, new Bgr(Color.Red), thickness);
             }
-            return ImageCopy;
+            return copy;
         }
 
         public Capture GetCaptures()
         {
             for(int i = 0; i < Rects.Count; i++)
             {
-                _data.SourceImage.ROI = Rects[i];
-                Captions.Add(_data.SourceImage.Copy());
-                _data.SourceImage.ROI = Rectangle.Empty;
+                Image.ROI = Rects[i];
+                Captions.Add(Image.Copy());
+                Image.ROI = Rectangle.Empty;
             }
 
             return this;

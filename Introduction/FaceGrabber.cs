@@ -18,7 +18,7 @@ namespace Introduction
         public Image<Bgr, byte> Image;
 
         public FaceGrabber(Data data) => Image = data.SourceImage;
-        public FaceGrabber(Mat image) => Image = new Image<Bgr, byte>(image.Bitmap);
+        public FaceGrabber(Image<Bgr, byte> image) => Image = image;
 
         public FaceGrabber GetFrontal(double scaleFactor = 1.1, int neighbours = 10)
         {

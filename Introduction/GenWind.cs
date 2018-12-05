@@ -543,7 +543,7 @@ namespace Introduction
             var item = (Image<Bgr, byte>)CaptionsList.SelectedItem;
             imageBoxRs.Image = item;
 
-            string path = "C:/githb/tessdata";
+            string path = "C:\\githb\\tessdata";
 
             TextGrabber grabber = new TextGrabber(path, Language.ENG);
             grabber.Detect(item);
@@ -554,14 +554,31 @@ namespace Introduction
 
         private void StartFaceDet(object sender, EventArgs e)
         {
-            CaptureWebCam cam = new CaptureWebCam(imageBoxRs);
-            cam.GrabCameraFace();
+            CaptureWebCam cam = new CaptureWebCam();
+            cam.GrabCamera();
+            cam.ImageGrabbed += Cam_ImageGrabbed;
+        }
+
+        private void Cam_ImageGrabbed(object sender, CaptureFrameEv e)
+        {
+            imageBoxRs.Image = new FaceGrabber(e.CurFrame).GetFrontal().DrawFaces();
         }
 
         private void StartTextDet(object sender, EventArgs e)
         {
-            CaptureWebCam cam = new CaptureWebCam(imageBoxRs);
-            cam.GrabCameraWords();
+            CaptureWebCam cam = new CaptureWebCam();
+            cam.GrabCamera();
+            cam.ImageGrabbed += Cam_TextOnImgGrab;
+        }
+
+        private void Cam_TextOnImgGrab(object sender, CaptureFrameEv e)
+        {
+            capture = new Capture(e.CurFrame)
+                .Binary()
+                .Impact(iterations: 5)
+                .GetContours();
+
+            imageBoxRs.Image = capture.DrawContours();
         }
 
         private void DetFacesImg(object sender, EventArgs e)

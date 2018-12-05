@@ -20,7 +20,7 @@ namespace Introduction
         public List<Image<Bgr, byte>> Captions => _captions.Value;
 
         public Capture(Data data) => Image = data.SourceImage;
-        public Capture(Mat image) => Image = new Image<Bgr, byte>(image.Bitmap);
+        public Capture(Image<Bgr, byte> image) => Image = image;
 
         public Capture Binary(double thresval = 80, double cval = 255)
         {

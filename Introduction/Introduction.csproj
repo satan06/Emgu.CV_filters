@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Capture.cs" />
+    <Compile Include="CaptureFrameEv.cs" />
     <Compile Include="CaptureWebCam.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DetectionAssembler.cs" />

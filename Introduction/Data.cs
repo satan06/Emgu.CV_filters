@@ -9,11 +9,8 @@ namespace Introduction
 {
     public class Data
     {
-        private Image<Bgr, byte> _sourceImage;
-        private Image<Bgr, byte> _tempImage;
-
-        public Image<Bgr, byte> SourceImage { get => _sourceImage; private set => _sourceImage = value; }
-        public Image<Bgr, byte> TempImage { get => _tempImage; private set => _tempImage = value; }
+        public Image<Bgr, byte> SourceImage { get; private set; }
+        public Image<Bgr, byte> TempImage { get; private set; }
 
         /// <summary>
         /// Opens new image
@@ -51,6 +48,12 @@ namespace Introduction
             Hue,
             Saturation,
             Value
+        }
+
+        public enum CurrentFrame
+        {
+            BaseImage,
+            TwistedImage
         }
 
         /// <summary>

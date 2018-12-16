@@ -9,6 +9,7 @@ namespace Introduction
 {
     public partial class Filter : Form
     {
+        private CaptureCamera cam = new CaptureCamera();
         private ImageFilter filter;
         private Capture capture;
         private ImageTransform transform;
@@ -30,6 +31,7 @@ namespace Introduction
 
         public bool IsHomographyActive { get; set; } = false;
         public CstPoint RotateAnchor;
+        public bool IsCameraActive = false;
 
         public Filter()
         {
@@ -41,6 +43,8 @@ namespace Introduction
             HomographyApplyButton.Visible = false;
 
             RotateAnchor = CstPoint.Factory.NewCenterPoint(imageBox.Width, imageBox.Height);
+
+            Console.WriteLine($"Width: {imageBoxRs.Width}, Height: {imageBoxRs.Height}");
         }
 
         private void PrepareHomogrButton()
@@ -514,7 +518,7 @@ namespace Introduction
         {
             Detector det = new Detector(Data)
                 .GaussianBlur()
-                .DetectContours(250, 36, 50, 150);
+                .DetectContours(minDistance: 250, acTreshold: 36, minRadius: 50, maxRadius: 150);
     
 
             DetectionAssembler.Circle assembler = new DetectionAssembler.Circle(det);
@@ -554,9 +558,17 @@ namespace Introduction
 
         private void StartFaceDet(object sender, EventArgs e)
         {
-            CaptureWebCam cam = new CaptureWebCam();
-            cam.GrabCamera();
-            cam.ImageGrabbed += Cam_ImageGrabbed;
+            IsCameraActive = !IsCameraActive;
+
+            if (!IsCameraActive)
+            {
+                cam.Stop();
+            }
+            else
+            {
+                cam.GrabCamera();
+                cam.FrameGrabbed += Cam_ImageGrabbed;
+            }
         }
 
         private void Cam_ImageGrabbed(object sender, CaptureFrameEv e)
@@ -566,9 +578,8 @@ namespace Introduction
 
         private void StartTextDet(object sender, EventArgs e)
         {
-            CaptureWebCam cam = new CaptureWebCam();
             cam.GrabCamera();
-            cam.ImageGrabbed += Cam_TextOnImgGrab;
+            cam.FrameGrabbed += Cam_TextOnImgGrab;
         }
 
         private void Cam_TextOnImgGrab(object sender, CaptureFrameEv e)
@@ -613,6 +624,63 @@ namespace Introduction
         {
             CaptionsList.DataSource = new string[1] { string.Empty };
             capture.Captions.Clear();
+        }
+
+        private void CaptureObjectsFromFile(object sender, EventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog()
+            {
+                Filter = "MP4|*.mp4"
+
+            };
+            var result = openFileDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                string fileName = openFileDialog.FileName;
+
+                CaptureCamera capture = new CaptureCamera();
+                capture.GrabCameraSimple(fileName);
+                capture.FrameGrabbed += CaptureVideo;
+            }
+        }
+
+        private void CaptureVideo(object sender, CaptureFrameEv e)
+        {
+            imageBox.Image = e.CurFrame;
+            imageBoxRs.Image = new Capture(e.CurFrame, e.CurFrameGray)
+                .FindContoursOnRetrivedFrame()
+                .DrawContours();
+        }
+
+        private void GetStabPoints(object sender, EventArgs e)
+        {
+            LoadI(true);
+            LoadI(false);
+            ImageStabilizator stabilizator = new ImageStabilizator(Data)
+                .DetectPoints()
+                .GetBasePointsOnTwisted();
+
+            imageBox.Image = stabilizator.DrawPoints(frame: CurrentFrame.BaseImage);
+            imageBoxRs.Image = stabilizator.DrawPoints(CurrentFrame.TwistedImage);
+        }
+
+        private void DrawStabMatches(object sender, EventArgs e)
+        {
+            LoadI(true);
+            LoadI(false);
+            imageBoxRs.Image = new ImageStabilizator(Data)
+                .DetectCharactPoints()
+                .DrawMatches();
+        }
+
+        private void StabilizeFrame(object sender, EventArgs e)
+        {
+            LoadI(true);
+            LoadI(false);
+            imageBoxRs.Image = new ImageStabilizator(Data)
+                .DetectCharactPoints()
+                .StabilizedImage;
         }
     }
 }

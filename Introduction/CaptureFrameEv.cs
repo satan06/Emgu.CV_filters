@@ -10,6 +10,7 @@ namespace Introduction
 {
     public class CaptureFrameEv : EventArgs
     {
-        public Image<Bgr, byte> CurFrame { get; set; }
+        public Image<Bgr, byte> CurFrame { get; set; } 
+        public Image<Gray, byte> CurFrameGray { get; set; }
     }
 }

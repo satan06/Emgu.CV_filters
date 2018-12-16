@@ -86,7 +86,7 @@
   <ItemGroup>
     <Compile Include="Capture.cs" />
     <Compile Include="CaptureFrameEv.cs" />
-    <Compile Include="CaptureWebCam.cs" />
+    <Compile Include="CaptureCamera.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DetectionAssembler.cs" />
     <Compile Include="Detector.cs" />
@@ -98,6 +98,7 @@
       <DependentUpon>GenWind.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageFilter.cs" />
+    <Compile Include="ImageStabilizator.cs" />
     <Compile Include="ImageTransform.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -12,7 +12,7 @@ namespace Introduction
     public class Capture
     {
         public Image<Bgr, byte> Image;
-        private Image<Gray, byte> _iterImage;
+        public Image<Gray, byte> _iterImage;
         private VectorOfVectorOfPoint _contours = new VectorOfVectorOfPoint();
         public List<Rectangle> Rects = new List<Rectangle>();
 
@@ -21,6 +21,12 @@ namespace Introduction
 
         public Capture(Data data) => Image = data.SourceImage;
         public Capture(Image<Bgr, byte> image) => Image = image;
+
+        public Capture(Image<Bgr, byte> image, Image<Gray, byte> mask)
+        {
+            Image = image;
+            _iterImage = mask;
+        }
 
         public Capture Binary(double thresval = 80, double cval = 255)
         {
@@ -52,13 +58,34 @@ namespace Introduction
             return this;
         }
 
+        public Capture FindContoursOnRetrivedFrame(int limit = 700)
+        {
+            CvInvoke.FindContours(
+                _iterImage, 
+                _contours, 
+                null, 
+                RetrType.External,
+                ChainApproxMethod.ChainApproxTc89L1);
+
+            for (int i = 0; i < _contours.Size; i++)
+            {
+                if (CvInvoke.ContourArea(_contours[i], false) > limit)
+                {
+                    Rectangle rect = CvInvoke.BoundingRectangle(_contours[i]);
+                    Rects.Add(rect);
+                }
+            }
+
+            return this;
+        }
+
         public Image<Bgr, byte> DrawContours(int thickness = 1)
         {
             var copy = Image.Copy();
 
             foreach(Rectangle rect in Rects)
             {
-                copy.Draw(rect, new Bgr(Color.Red), thickness);
+                copy.Draw(rect, new Bgr(Color.Yellow), thickness);
             }
             return copy;
         }
